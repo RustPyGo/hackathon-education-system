@@ -1,0 +1,63 @@
+services:
+  database:
+    container_name: education-system-database
+    image: postgres:latest
+    ports:
+      - 5433:5432
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_DB: ${PG_DB}
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - network
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: education-system-cloudbeaver
+    restart: always
+    ports:
+      - 8978:8978
+    volumes:
+      - cloudbeaver:/opt/cloudbeaver/workspace
+    networks:
+      - network
+
+  backend:
+    container_name: education-system-backend
+    environment:
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
+    image: ${REGISTRY}/backend:latest
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - network
+    profiles:
+      - backend
+      - deploy
+  frontend:
+    container_name: education-system-frontend
+    image: ${REGISTRY}/frontend:latest
+    restart: always
+    ports:
+      - 5173:80
+    networks:
+      - network
+    profiles:
+      - frontend
+      - deploy
+networks:
+  network:
+    name: education-system-network
+    external: true
+
+volumes:
+  database:
+    name: education-system-database
+    external: true
+  cloudbeaver:
+    name: education-system-cloudbeaver
+    driver: local
