@@ -22,3 +22,8 @@
 **/*.njsproj
 **/*.sln
 **/*.sw?
+
+**/log
+**/tmp
+**/configs
+**/.env

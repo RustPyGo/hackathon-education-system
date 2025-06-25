@@ -1,1 +1,0 @@
-{"level":"INFO","time":"2025-05-04T11:18:59.449+0700","caller":"cli/main.log.go:17","msg":"This is an info message"}
