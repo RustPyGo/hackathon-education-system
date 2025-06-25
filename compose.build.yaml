@@ -1,0 +1,19 @@
+services:
+  backend:
+    image: ${REGISTRY}/backend:latest
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    profiles:
+      - backend
+      - build
+  frontend:
+    image: ${REGISTRY}/frontend:latest
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    profiles:
+      - frontend
+      - build
