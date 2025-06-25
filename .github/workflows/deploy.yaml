@@ -15,17 +15,6 @@ jobs:
       PG_USER: ${{ secrets.PG_USER }}
       PG_PASS: ${{ secrets.PG_PASS }}
       PG_DB: ${{ secrets.PG_DB }}
-      API_URL: ${{ secrets.API_URL }}
-      FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      GOOGLE_REDIRECT_URL: ${{ secrets.GOOGLE_REDIRECT_URL }}
-      GOOGLE_ISSUER_URL: ${{ secrets.GOOGLE_ISSUER_URL }}
-      MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
-      MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
-      MICROSOFT_REDIRECT_URL: ${{ secrets.MICROSOFT_REDIRECT_URL }}
-      MICROSOFT_ISSUER_URL: ${{ secrets.MICROSOFT_ISSUER_URL }}
     steps:
       - name: Checkout Develop
         uses: actions/checkout@v3
