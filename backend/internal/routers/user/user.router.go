@@ -19,5 +19,7 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userPublicRouter := Router.Group("/user")
 	{
 		userPublicRouter.POST("/register", uc.Register)
+		userPublicRouter.POST("/login", uc.Login)
+		userPublicRouter.GET("/profile", uc.GetProfile)
 	}
 }
