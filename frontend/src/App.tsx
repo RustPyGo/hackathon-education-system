@@ -1,10 +1,21 @@
-import { Button } from '@/components/ui/button';
+import AppRouter from './routers/AppRouter';
+import { BrowserRouter } from 'react-router-dom';
+import Modal from 'react-modal';
+import { AuthProvider } from '@/contexts';
+import { Provider } from 'react-redux';
+import store from '@/app/store';
+
+Modal.setAppElement('#root');
 
 const App = () => {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center">
-            <Button>Click me</Button>
-        </div>
+        <Provider store={store}>
+            <BrowserRouter>
+                <AuthProvider>
+                    <AppRouter />
+                </AuthProvider>
+            </BrowserRouter>
+        </Provider>
     );
 };
 
