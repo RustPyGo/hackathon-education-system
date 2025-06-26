@@ -3,7 +3,8 @@ package initialize
 func Init() {
 	LoadConfig()
 	InitLogger()
-	InitMysql()
+	InitDatabase()
+	RunMigrations()
 	InitRedis()
 
 	r := InitRouter()
