@@ -18,6 +18,10 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 
 	userPublicRouter := Router.Group("/user")
 	{
-		userPublicRouter.POST("/register", uc.Register)
+		userPublicRouter.POST("/", uc.CreateUser)
+		userPublicRouter.GET("/", uc.GetAllUsers)
+		userPublicRouter.GET("/:id", uc.GetUserByID)
+		userPublicRouter.PUT("/:id", uc.UpdateUser)
+		userPublicRouter.DELETE("/:id", uc.DeleteUser)
 	}
 }
