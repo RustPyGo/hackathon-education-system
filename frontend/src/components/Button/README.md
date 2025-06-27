@@ -1,12 +1,12 @@
 # Button Component
 
-Button là một component UI cơ bản được tổ chức theo quy tắc PascalCase với cấu trúc modular và tái sử dụng.
+Button is a basic UI component organized according to PascalCase rules with a modular and reusable structure.
 
-## Cấu trúc thư mục
+## Directory Structure
 
 ```
 Button/
-├── index.tsx          # Component chính
+├── index.tsx          # Main component
 ├── index.ts           # Exports
 ├── types.ts           # Type definitions
 ├── variants.ts        # Button variants (CVA)
@@ -31,23 +31,23 @@ interface ButtonProps
 
 #### Mode
 
--   `contained` - Button có background và shadow
--   `outlined` - Button có border và transparent background
--   `none` - Button không có background, border, shadow
+-   `contained` - Button with background and shadow
+-   `outlined` - Button with border and transparent background
+-   `none` - Button without background, border, shadow
 
 #### Size
 
--   `small` - Chiều cao 32px, padding nhỏ
--   `medium` - Chiều cao 40px, padding vừa (default)
--   `large` - Chiều cao 48px, padding lớn
+-   `small` - Height 32px, small padding
+-   `medium` - Height 40px, medium padding (default)
+-   `large` - Height 48px, large padding
 
 #### ColorScheme
 
--   `primary` - Màu chính (default)
--   `secondary` - Màu phụ
--   `error` - Màu lỗi
+-   `primary` - Primary color (default)
+-   `secondary` - Secondary color
+-   `error` - Error color
 
-## Cách sử dụng
+## Usage
 
 ### Basic Usage
 
@@ -205,7 +205,7 @@ import { Link } from 'react-router-dom';
 
 ## Demo
 
-Xem file `Demo.tsx` để xem tất cả variants và examples.
+See `Demo.tsx` file to view all variants and examples.
 
 ## Constants
 
