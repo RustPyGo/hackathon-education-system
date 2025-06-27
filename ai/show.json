@@ -1,0 +1,35 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "```json\n{\n  \"cau_hoi\": \"Trong lĩnh vực Trí tuệ Nhân tạo (AI), thuật toán nào thường được sử dụng cho bài toán phân loại?\",\n  \"cac_lua_chon\": [\n    {\n      \"id\": \"A\",\n      \"noi_dung\": \"Gradient Descent\"\n    },\n    {\n      \"id\": \"B\",\n      \"noi_dung\": \"Support Vector Machine (SVM)\"\n    },\n    {\n      \"id\": \"C\",\n      \"noi_dung\": \"K-Means Clustering\"\n    },\n    {\n      \"id\": \"D\",\n      \"noi_dung\": \"Principal Component Analysis (PCA)\"\n    }\n  ],\n  \"dap_an_dung\": \"B\",\n  \"giai_thich\": \"Support Vector Machine (SVM) là một thuật toán học có giám sát thường được sử dụng cho các bài toán phân loại. Gradient Descent là thuật toán tối ưu hóa, K-Means Clustering là thuật toán phân cụm, và PCA là thuật toán giảm chiều dữ liệu.\"\n}\n```\n"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "avgLogprobs": -0.09699571681321914
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 32,
+    "candidatesTokenCount": 239,
+    "totalTokenCount": 271,
+    "promptTokensDetails": [
+      { 
+        "modality": "TEXT",
+        "tokenCount": 32
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 239
+      }
+    ]
+  },
+  "modelVersion": "gemini-2.0-flash",
+  "responseId": "xCBdaOuUJcSUsbQPorST6Qg"
+}
