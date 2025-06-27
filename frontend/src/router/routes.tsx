@@ -1,9 +1,16 @@
 import DemoPage from '@/pages/DemoPage';
+import MainLayout from '@/layouts/MainLayout';
 
 const routes = [
     {
         path: '/',
-        element: <DemoPage />,
+        element: <MainLayout />,
+        children: [
+            {
+                path: '/',
+                element: <DemoPage />,
+            },
+        ],
     },
 ];
 
