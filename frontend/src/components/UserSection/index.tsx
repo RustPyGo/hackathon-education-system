@@ -3,7 +3,7 @@ import { LogIn, UserPlus } from 'lucide-react';
 
 const UserSection = () => {
     return (
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 mr-0">
             <Button mode="none" colorScheme="primary" size="medium">
                 <LogIn className="w-4 h-4" />
                 Đăng nhập

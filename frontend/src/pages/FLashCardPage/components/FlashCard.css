@@ -1,0 +1,148 @@
+/* Card Flip Animation Styles */
+.perspective-1000 {
+    perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+    transform-style: preserve-3d;
+}
+
+.backface-hidden {
+    backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+    transform: rotateY(180deg);
+}
+
+/* Enhanced Card Hover Effects */
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.card-hover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%
+    );
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-hover:hover::before {
+    opacity: 1;
+}
+
+/* Card Container with 9:16 aspect ratio */
+.card-container {
+    width: 320px;
+    height: 569px; /* 320 * (16/9) = 569px */
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+/* Responsive Card Sizing */
+@media (max-width: 640px) {
+    .card-container {
+        width: 280px;
+        height: 498px; /* 280 * (16/9) = 498px */
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .card-container {
+        width: 360px;
+        height: 640px; /* 360 * (16/9) = 640px */
+    }
+}
+
+@media (min-width: 1025px) {
+    .card-container {
+        width: 400px;
+        height: 711px; /* 400 * (16/9) = 711px */
+    }
+}
+
+/* Focus states for accessibility */
+.card-hover:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+}
+
+/* Card content animations */
+.card-content {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Background pattern animation */
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(180deg);
+    }
+}
+
+.card-hover .absolute.inset-0.opacity-10 > div {
+    animation: float 8s ease-in-out infinite;
+}
+
+.card-hover .absolute.inset-0.opacity-10 > div:nth-child(2) {
+    animation-delay: -2s;
+}
+
+.card-hover .absolute.inset-0.opacity-10 > div:nth-child(3) {
+    animation-delay: -4s;
+}
+
+/* Glass morphism effect */
+.backdrop-blur-sm {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Smooth transitions for all interactive elements */
+button,
+.card-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced shadow effects */
+.shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient text effect */
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

@@ -4,20 +4,23 @@ const Navigation = () => {
             <a href="/" className="text-gray-700 hover:text-primary-600">
                 Trang chủ
             </a>
-            <a
-                href="/create-exam"
-                className="text-gray-700 hover:text-primary-600"
-            >
-                Tạo đề mới
+            <a href="/quiz" className="text-gray-700 hover:text-primary-600">
+                Quiz
             </a>
             <a
-                href="/practice"
+                href="/flash-card"
                 className="text-gray-700 hover:text-primary-600"
             >
-                Luyệt tập
+                Flash Card
             </a>
-            <a href="/contact" className="text-gray-700 hover:text-primary-600">
-                Liên hệ
+            <a
+                href="/video-summary"
+                className="text-gray-700 hover:text-primary-600"
+            >
+                Video Summary
+            </a>
+            <a href="/profile" className="text-gray-700 hover:text-primary-600">
+                Profile
             </a>
         </nav>
     );
