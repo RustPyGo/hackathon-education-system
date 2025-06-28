@@ -1,6 +1,9 @@
+import { delay } from '@/lib/utils';
 import { Project } from './type';
 
 export const getProjects = async (): Promise<Project[]> => {
+    await delay(3000);
+
     return [
         {
             id: '1',
