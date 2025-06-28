@@ -9,11 +9,9 @@ import (
 )
 
 type ProjectCreateResult struct {
-	Project        *models.Project `json:"project"`
-	ExtractedText  string          `json:"extracted_text,omitempty"`
-	ExtractedTexts []string        `json:"extracted_texts,omitempty"`
-	FileURLs       []string        `json:"file_urls,omitempty"`
-	FileCount      int             `json:"file_count,omitempty"`
+	Project   *models.Project `json:"project"`
+	FileURLs  []string        `json:"file_urls,omitempty"`
+	FileCount int             `json:"file_count,omitempty"`
 }
 
 type IProjectService interface {
@@ -29,7 +27,6 @@ type IProjectService interface {
 type ProjectService struct {
 	projectRepo  repositories.IProjectRepository
 	documentRepo repositories.IDocumentRepository
-	pdfService   IPDFService
 	s3Service    IS3Service
 }
 
@@ -37,7 +34,6 @@ func NewProjectService(projectRepo repositories.IProjectRepository, documentRepo
 	return &ProjectService{
 		projectRepo:  projectRepo,
 		documentRepo: documentRepo,
-		pdfService:   NewPDFService(),
 		s3Service:    NewS3Service(),
 	}
 }
@@ -63,17 +59,10 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 		return nil, fmt.Errorf("failed to create document record: %w", err)
 	}
 
-	// 4. Extract text from PDF (don't save to database, just return)
-	extractedText, err := ps.pdfService.ExtractTextFromPDF(pdfFile)
-	if err != nil {
-		return nil, fmt.Errorf("failed to extract text from PDF: %w", err)
-	}
-
 	return &ProjectCreateResult{
-		Project:       project,
-		ExtractedText: extractedText,
-		FileURLs:      []string{uploadResult.URL},
-		FileCount:     1,
+		Project:   project,
+		FileURLs:  []string{uploadResult.URL},
+		FileCount: 1,
 	}, nil
 }
 
@@ -102,21 +91,10 @@ func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project,
 		fileURLs = append(fileURLs, uploadResult.URL)
 	}
 
-	// 4. Extract text from all PDFs (don't save to database, just return)
-	var extractedTexts []string
-	for i, pdfFile := range pdfFiles {
-		extractedText, err := ps.pdfService.ExtractTextFromPDF(pdfFile)
-		if err != nil {
-			return nil, fmt.Errorf("failed to extract text from PDF %d (%s): %w", i+1, pdfFile.Filename, err)
-		}
-		extractedTexts = append(extractedTexts, extractedText)
-	}
-
 	return &ProjectCreateResult{
-		Project:        project,
-		ExtractedTexts: extractedTexts,
-		FileURLs:       fileURLs,
-		FileCount:      len(pdfFiles),
+		Project:   project,
+		FileURLs:  fileURLs,
+		FileCount: len(pdfFiles),
 	}, nil
 }
 
