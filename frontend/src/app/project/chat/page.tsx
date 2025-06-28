@@ -1,33 +1,43 @@
 'use client';
 
-import type React from 'react';
-
-import { useState, useEffect, useRef } from 'react';
+import BotMessage from '@/components/bot-message';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Send, Bot, User } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { ChatMessage } from '@/service/chat/type';
+import UserMessage from '@/components/user-message';
 import { fetchMessages, sendMessageApi } from '@/service/chat/api';
+import type { ChatMessage } from '@/service/chat/type';
+import { withAuth } from '@workos-inc/authkit-nextjs';
+import { Bot, Send, User } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
-interface ChatInterfaceProps {
-    projectId: string;
-}
-
-export default function ChatInterface({ projectId }: ChatInterfaceProps) {
+export default function Page() {
+    const [user, setUser] = useState<any>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
+    const projectId = '12345'; // You can get this from params if needed
 
     useEffect(() => {
-        fetchMessagesHandler();
-    }, [projectId]);
+        async function fetchUser() {
+            const { user } = await withAuth({ ensureSignedIn: true });
+            console.log('Fetched user:', user);
+            setUser(user);
+        }
+        fetchUser();
+    }, []);
 
     useEffect(() => {
-        // Scroll to bottom when new messages are added
+        if (user) {
+            fetchMessagesHandler();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [projectId, user]);
+
+    useEffect(() => {
         if (scrollAreaRef.current) {
             scrollAreaRef.current.scrollTop =
                 scrollAreaRef.current.scrollHeight;
@@ -35,8 +45,11 @@ export default function ChatInterface({ projectId }: ChatInterfaceProps) {
     }, [messages]);
 
     const fetchMessagesHandler = async () => {
+        if (!user) return;
         try {
-            const data = await fetchMessages(projectId);
+            console.log('Using projectId:', projectId, 'userId:', user.id);
+            const data = await fetchMessages(projectId, user.id);
+            console.log('Fetched messages:', data); // Log dữ liệu trả về
             setMessages(data);
         } catch (error) {
             console.error('Failed to fetch messages:', error);
@@ -46,12 +59,10 @@ export default function ChatInterface({ projectId }: ChatInterfaceProps) {
     };
 
     const sendMessage = async () => {
-        if (!newMessage.trim()) return;
-
+        if (!newMessage.trim() || !user) return;
         const messageText = newMessage.trim();
         setNewMessage('');
-
-        await sendMessageApi(projectId, messageText);
+        await sendMessageApi(projectId, user.id, messageText);
         await fetchMessagesHandler();
     };
 
@@ -62,7 +73,7 @@ export default function ChatInterface({ projectId }: ChatInterfaceProps) {
         }
     };
 
-    if (isInitialLoading) {
+    if (!user || isInitialLoading) {
         return (
             <Card className="h-[600px] flex flex-col">
                 <CardHeader>
@@ -93,43 +104,25 @@ export default function ChatInterface({ projectId }: ChatInterfaceProps) {
             <CardContent className="flex-1 flex flex-col p-0">
                 <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
                     <div className="space-y-4">
-                        {messages.map((message) => (
-                            <div
-                                key={message.id}
-                                className={`flex gap-3 ${
-                                    message.role === 'user'
-                                        ? 'justify-end'
-                                        : 'justify-start'
-                                }`}
-                            >
-                                {message.role === 'bot' && (
-                                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <Bot className="h-4 w-4 text-blue-600" />
-                                    </div>
-                                )}
-                                <div
-                                    className={`max-w-[80%] p-3 rounded-lg ${
-                                        message.role === 'user'
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-gray-100 text-gray-900'
-                                    }`}
-                                >
-                                    <p className="text-sm leading-relaxed">
-                                        {message.content}
-                                    </p>
-                                    <p className="text-xs opacity-70 mt-1">
-                                        {new Date(
-                                            message.created_at
-                                        ).toLocaleTimeString()}
-                                    </p>
-                                </div>
-                                {message.role === 'user' && (
-                                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <User className="h-4 w-4 text-gray-600" />
-                                    </div>
-                                )}
+                        {messages.length === 0 ? (
+                            <div className="text-center text-gray-400 text-sm mt-10">
+                                Chưa có tin nhắn nào.
                             </div>
-                        ))}
+                        ) : (
+                            messages.map((message) =>
+                                message.role === 'user' ? (
+                                    <UserMessage
+                                        key={message.id}
+                                        message={message}
+                                    />
+                                ) : (
+                                    <BotMessage
+                                        key={message.id}
+                                        message={message}
+                                    />
+                                )
+                            )
+                        )}
                     </div>
                 </ScrollArea>
                 <div className="p-4 border-t">
