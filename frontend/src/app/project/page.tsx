@@ -9,7 +9,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { fetchOverview, fetchPdfFiles } from '@/service/overview/api';
-import type { Overview } from '@/service/overview/type';
+import type { Overview3 as Overview } from '@/service/overview/type';
 import { Brain } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FileCard } from '@/components/file-card';
