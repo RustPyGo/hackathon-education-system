@@ -1,0 +1,9 @@
+# Gitignore cho AI module
+.env
+*.pyc
+__pycache__/
+show.json
+*.log
+cache_*.pkl
+conversation_history.json
+temp_pdf_content*.txt

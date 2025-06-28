@@ -1,8 +1,23 @@
 import requests
 import json
+import os
+from dotenv import load_dotenv
+
+# Load environment variables từ file .env
+load_dotenv()
+
+# Lấy API key từ environment variable
+api_key = os.getenv('GEMINI_API_KEY')
+if not api_key:
+    print("❌ Lỗi: Chưa cấu hình GEMINI_API_KEY")
+    print("💡 Hướng dẫn:")
+    print("   1. Kiểm tra file .env trong thư mục này")
+    print("   2. Đảm bảo có dòng: GEMINI_API_KEY=your_gemini_api_key")
+    print("   3. Nếu chưa có python-dotenv: pip install python-dotenv")
+    exit(1)
 
 url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-params = {"key": "AIzaSyBkwty3yhgfR3JE5YEaenQWZ0D7B8l1sdc"}
+params = {"key": api_key}
 headers = {"Content-Type": "application/json"}
 data = {
     "contents": [

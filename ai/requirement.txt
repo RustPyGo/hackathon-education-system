@@ -1,1 +1,1 @@
-pip install google-generativeai langchain-google-genai langchain pypdf chromadb sentence-transformers reportlab transformers langchain-openai
+pip install google-generativeai langchain-google-genai langchain pypdf chromadb sentence-transformers reportlab transformers langchain-openai python-dotenv requests PyPDF2 scikit-learn numpy
