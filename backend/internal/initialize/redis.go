@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/global"
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )

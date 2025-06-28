@@ -1,8 +1,8 @@
 package global
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/pkg/logger"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/pkg/setting"
+	"github.com/RustPyGo/hackathon-education-system/backend/pkg/logger"
+	"github.com/RustPyGo/hackathon-education-system/backend/pkg/setting"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )

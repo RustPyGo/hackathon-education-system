@@ -3,8 +3,8 @@ package initialize
 import (
 	"net/http"
 
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/global"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/routers"
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/routers"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,9 +1,9 @@
 package user
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/controllers"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/repositories"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/services"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/controllers"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/repositories"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/services"
 	"github.com/gin-gonic/gin"
 )
 

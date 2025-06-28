@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/global"
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
 	"github.com/spf13/viper"
 )
 
