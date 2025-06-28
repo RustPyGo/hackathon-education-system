@@ -1,20 +1,37 @@
-FROM oven/bun:canary-alpine AS build
+FROM oven/bun:latest AS base
 
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
+FROM base AS install
+WORKDIR /app
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+FROM base AS builder
+
+ENV NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /app
-
-COPY package*.json ./
-RUN bun install
-
+COPY --from=install /app/node_modules ./node_modules
 COPY . .
 RUN bun run build
 
-FROM nginx:alpine AS runner
 
-COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
-WORKDIR /usr/share/nginx/html
-COPY --from=build /app/dist .
+FROM base AS runner
+WORKDIR /app
 
-CMD ["nginx", "-g", "daemon off;"]
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+
+ENV HOSTNAME="0.0.0.0"
+CMD ["bun", "run", "server.js"]
