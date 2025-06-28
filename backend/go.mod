@@ -1,4 +1,4 @@
-module github.com/fpt-ai-innovation-hackathon/education-system/backend
+module github.com/RustPyGo/hackathon-education-system/backend
 
 go 1.24.2
 

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/models"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/services"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/pkg/response"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/models"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/services"
+	"github.com/RustPyGo/hackathon-education-system/backend/pkg/response"
 	"github.com/gin-gonic/gin"
 )
 

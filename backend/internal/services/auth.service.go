@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/repositories"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/repositories"
 )
 
 type IAuthService interface {

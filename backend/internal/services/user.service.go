@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/models"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/repositories"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/models"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/repositories"
 )
 
 type IUserService interface {

@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/global"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/pkg/logger"
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
+	"github.com/RustPyGo/hackathon-education-system/backend/pkg/logger"
 )
 
 func InitLogger() {

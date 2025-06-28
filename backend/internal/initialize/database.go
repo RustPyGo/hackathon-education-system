@@ -3,7 +3,7 @@ package initialize
 import (
 	"fmt"
 
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/global"
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

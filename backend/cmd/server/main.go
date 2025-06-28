@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/initialize"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/initialize"
 )
 
 func main() {
