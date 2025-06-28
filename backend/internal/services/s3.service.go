@@ -62,12 +62,13 @@ func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) 
 	extension := filepath.Ext(file.Filename)
 	key := fmt.Sprintf("pdfs/%s/%d%s", projectID, timestamp, extension)
 
-	// Upload to S3
+	// Upload to S3 with public read access
 	_, err = s.s3Client.PutObject(&s3.PutObjectInput{
 		Bucket:      aws.String(s.bucket),
 		Key:         aws.String(key),
 		Body:        src,
 		ContentType: aws.String("application/pdf"),
+		ACL:         aws.String("public-read"), // Make file publicly accessible
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to upload to S3: %w", err)
