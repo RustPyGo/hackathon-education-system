@@ -22,9 +22,9 @@ func NewProjectController(projectService services.IProjectService) *ProjectContr
 
 func (pc *ProjectController) CreateProject(c *gin.Context) {
 	// Get form data
-	accountID := c.PostForm("account_id")
-	if accountID == "" {
-		response.ErrorResponse(c, http.StatusBadRequest, "Account ID is required")
+	userID := c.PostForm("user_id")
+	if userID == "" {
+		response.ErrorResponse(c, http.StatusBadRequest, "User ID is required")
 		return
 	}
 
@@ -34,16 +34,35 @@ func (pc *ProjectController) CreateProject(c *gin.Context) {
 		return
 	}
 
+	name := c.PostForm("name")
+	if name == "" {
+		response.ErrorResponse(c, http.StatusBadRequest, "Name is required")
+		return
+	}
+
+	totalQuestionsStr := c.PostForm("total_questions")
+	if totalQuestionsStr == "" {
+		response.ErrorResponse(c, http.StatusBadRequest, "Total questions is required")
+		return
+	}
+
 	examDuration, err := strconv.Atoi(examDurationStr)
 	if err != nil {
 		response.ErrorResponse(c, http.StatusBadRequest, "Exam duration must be a valid number")
 		return
 	}
 
+	totalQuestions, err := strconv.Atoi(totalQuestionsStr)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "Total questions must be a valid number")
+		return
+	}
+
 	// Create project object
 	project := &models.Project{
-		AccountID:    accountID,
+		UserID:       userID,
 		ExamDuration: examDuration,
+		Name:         name,
 	}
 
 	// Check if single file or multiple files
@@ -71,21 +90,21 @@ func (pc *ProjectController) CreateProject(c *gin.Context) {
 
 	if len(files) == 1 {
 		// Single file upload
-		result, err = pc.projectService.CreateProject(project, files[0])
+		result, err = pc.projectService.CreateProject(project, files[0], totalQuestions)
 		if err != nil {
 			response.ErrorResponse(c, http.StatusInternalServerError, "Failed to create project: "+err.Error())
 			return
 		}
 	} else {
 		// Multiple files upload
-		result, err = pc.projectService.CreateProjectWithMultiplePDFs(project, files)
+		result, err = pc.projectService.CreateProjectWithMultiplePDFs(project, files, totalQuestions)
 		if err != nil {
 			response.ErrorResponse(c, http.StatusInternalServerError, "Failed to create project: "+err.Error())
 			return
 		}
 	}
 
-	// Return project info, extracted text(s), and file URLs
+	// Return project info, file URLs, questions, and summary
 	response.SuccessResponse(c, http.StatusCreated, result)
 }
 

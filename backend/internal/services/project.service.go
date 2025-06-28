@@ -9,14 +9,16 @@ import (
 )
 
 type ProjectCreateResult struct {
-	Project   *models.Project `json:"project"`
-	FileURLs  []string        `json:"file_urls,omitempty"`
-	FileCount int             `json:"file_count,omitempty"`
+	Project   *models.Project   `json:"project"`
+	FileURLs  []string          `json:"file_urls,omitempty"`
+	FileCount int               `json:"file_count,omitempty"`
+	Questions []models.Question `json:"questions,omitempty"`
+	Summary   string            `json:"summary,omitempty"`
 }
 
 type IProjectService interface {
-	CreateProject(project *models.Project, pdfFile *multipart.FileHeader) (*ProjectCreateResult, error)
-	CreateProjectWithMultiplePDFs(project *models.Project, pdfFiles []*multipart.FileHeader) (*ProjectCreateResult, error)
+	CreateProject(project *models.Project, pdfFile *multipart.FileHeader, totalQuestions int) (*ProjectCreateResult, error)
+	CreateProjectWithMultiplePDFs(project *models.Project, pdfFiles []*multipart.FileHeader, totalQuestions int) (*ProjectCreateResult, error)
 	GetProjectByID(id string) (*models.Project, error)
 	GetAllProjects() ([]models.Project, error)
 	GetProjectsByAccountID(accountID string) ([]models.Project, error)
@@ -27,18 +29,24 @@ type IProjectService interface {
 type ProjectService struct {
 	projectRepo  repositories.IProjectRepository
 	documentRepo repositories.IDocumentRepository
+	questionRepo repositories.IQuestionRepository
+	answerRepo   repositories.IAnswerRepository
 	s3Service    IS3Service
+	aiService    IAIService
 }
 
-func NewProjectService(projectRepo repositories.IProjectRepository, documentRepo repositories.IDocumentRepository) IProjectService {
+func NewProjectService(projectRepo repositories.IProjectRepository, documentRepo repositories.IDocumentRepository, questionRepo repositories.IQuestionRepository, answerRepo repositories.IAnswerRepository) IProjectService {
 	return &ProjectService{
 		projectRepo:  projectRepo,
 		documentRepo: documentRepo,
+		questionRepo: questionRepo,
+		answerRepo:   answerRepo,
 		s3Service:    NewS3Service(),
+		aiService:    NewAIService(),
 	}
 }
 
-func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multipart.FileHeader) (*ProjectCreateResult, error) {
+func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multipart.FileHeader, totalQuestions int) (*ProjectCreateResult, error) {
 	// 1. Create project in database first to get project ID
 	if err := ps.projectRepo.Create(project); err != nil {
 		return nil, fmt.Errorf("failed to create project: %w", err)
@@ -59,14 +67,64 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 		return nil, fmt.Errorf("failed to create document record: %w", err)
 	}
 
+	// 4. Call AI API to generate questions and summary
+	aiRequest := &AIQuestionRequest{
+		URL:            uploadResult.URL,
+		ProjectID:      project.ID,
+		TotalQuestions: totalQuestions,
+		Name:           project.Name,
+	}
+
+	aiResponse, err := ps.aiService.GenerateQuestionsAndSummary(aiRequest)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate questions and summary: %w", err)
+	}
+
+	// 5. Save questions and answers to database
+	var questions []models.Question
+	for _, aiQuestion := range aiResponse.Questions {
+		// Create question
+		question := &models.Question{
+			ProjectID:       project.ID,
+			Question:        aiQuestion.Question,
+			AnswerCorrect:   aiQuestion.AnswerCorrect,
+			DifficultyLevel: aiQuestion.DifficultyLevel,
+		}
+
+		if err := ps.questionRepo.Create(question); err != nil {
+			return nil, fmt.Errorf("failed to create question: %w", err)
+		}
+
+		// Create answers for this question
+		for _, answerText := range aiQuestion.Answers {
+			answer := &models.Answer{
+				QuestionID: question.ID,
+				Answer:     answerText,
+			}
+			if err := ps.answerRepo.Create(answer); err != nil {
+				return nil, fmt.Errorf("failed to create answer: %w", err)
+			}
+		}
+
+		questions = append(questions, *question)
+	}
+
+	// 6. Update project with summary
+	project.Summary = aiResponse.Summary
+	if err := ps.projectRepo.Update(project); err != nil {
+		return nil, fmt.Errorf("failed to update project with summary: %w", err)
+	}
+
 	return &ProjectCreateResult{
 		Project:   project,
 		FileURLs:  []string{uploadResult.URL},
 		FileCount: 1,
+		Questions: questions,
+		Summary:   aiResponse.Summary,
 	}, nil
 }
 
-func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project, pdfFiles []*multipart.FileHeader) (*ProjectCreateResult, error) {
+func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project, pdfFiles []*multipart.FileHeader, totalQuestions int) (*ProjectCreateResult, error) {
 	// 1. Create project in database first to get project ID
 	if err := ps.projectRepo.Create(project); err != nil {
 		return nil, fmt.Errorf("failed to create project: %w", err)
@@ -91,10 +149,60 @@ func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project,
 		fileURLs = append(fileURLs, uploadResult.URL)
 	}
 
+	// 4. Call AI API with the first file URL (or you can modify to use all URLs)
+	aiRequest := &AIQuestionRequest{
+		URL:            fileURLs[0], // Use first file for AI processing
+		ProjectID:      project.ID,
+		TotalQuestions: totalQuestions,
+		Name:           project.Name,
+	}
+
+	aiResponse, err := ps.aiService.GenerateQuestionsAndSummary(aiRequest)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate questions and summary: %w", err)
+	}
+
+	// 5. Save questions and answers to database
+	var questions []models.Question
+	for _, aiQuestion := range aiResponse.Questions {
+		// Create question
+		question := &models.Question{
+			ProjectID:       project.ID,
+			Question:        aiQuestion.Question,
+			AnswerCorrect:   aiQuestion.AnswerCorrect,
+			DifficultyLevel: aiQuestion.DifficultyLevel,
+		}
+
+		if err := ps.questionRepo.Create(question); err != nil {
+			return nil, fmt.Errorf("failed to create question: %w", err)
+		}
+
+		// Create answers for this question
+		for _, answerText := range aiQuestion.Answers {
+			answer := &models.Answer{
+				QuestionID: question.ID,
+				Answer:     answerText,
+			}
+			if err := ps.answerRepo.Create(answer); err != nil {
+				return nil, fmt.Errorf("failed to create answer: %w", err)
+			}
+		}
+
+		questions = append(questions, *question)
+	}
+
+	// 6. Update project with summary
+	project.Summary = aiResponse.Summary
+	if err := ps.projectRepo.Update(project); err != nil {
+		return nil, fmt.Errorf("failed to update project with summary: %w", err)
+	}
+
 	return &ProjectCreateResult{
 		Project:   project,
 		FileURLs:  fileURLs,
 		FileCount: len(pdfFiles),
+		Questions: questions,
+		Summary:   aiResponse.Summary,
 	}, nil
 }
 
