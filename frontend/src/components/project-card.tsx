@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Project } from '@/service/project';
 import {
     BookOpen,
@@ -23,27 +23,20 @@ export const ProjectCard = (project: Project) => {
                 router.push(`/projects/${project.id}`);
             }}
         >
-            <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-                    <FileText className="h-20 w-20 text-blue-500 group-hover:scale-110 transition-transform duration-300" />
-                </div>
-
-                <div className="absolute top-3 right-3">
-                    <Badge className="bg-blue-500 text-white border-blue-600 shadow-lg">
-                        <FileText className="h-3 w-3 mr-1" />
-                        PDF
-                    </Badge>
-                </div>
-
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="bg-white rounded-full p-3 shadow-lg">
-                            <BookOpen className="h-6 w-6 text-gray-700" />
-                        </div>
+            <CardHeader>
+                <CardTitle className="px-0 aspect-video relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+                        <FileText className="h-20 w-20 text-blue-500 group-hover:scale-110 transition-transform duration-300" />
                     </div>
-                </div>
-            </div>
 
+                    <div className="absolute top-3 right-3">
+                        <Badge className="bg-blue-500 text-white border-blue-600 shadow-lg">
+                            <FileText className="h-3 w-3 mr-1" />
+                            PDF
+                        </Badge>
+                    </div>
+                </CardTitle>
+            </CardHeader>
             <CardContent className="p-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
                     <Calendar className="h-4 w-4" />
