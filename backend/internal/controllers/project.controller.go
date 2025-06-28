@@ -21,20 +21,7 @@ func NewProjectController(projectService services.IProjectService) *ProjectContr
 }
 
 func (pc *ProjectController) CreateProject(c *gin.Context) {
-	// Get the PDF file from form data
-	pdfFile, err := c.FormFile("pdf")
-	if err != nil {
-		response.ErrorResponse(c, http.StatusBadRequest, "PDF file is required")
-		return
-	}
-
-	// Validate file type
-	if pdfFile.Header.Get("Content-Type") != "application/pdf" {
-		response.ErrorResponse(c, http.StatusBadRequest, "Only PDF files are allowed")
-		return
-	}
-
-	// Get other form data
+	// Get form data
 	accountID := c.PostForm("account_id")
 	if accountID == "" {
 		response.ErrorResponse(c, http.StatusBadRequest, "Account ID is required")
@@ -59,18 +46,47 @@ func (pc *ProjectController) CreateProject(c *gin.Context) {
 		ExamDuration: examDuration,
 	}
 
-	// Create project with PDF processing
-	extractedText, err := pc.projectService.CreateProject(project, pdfFile)
+	// Check if single file or multiple files
+	form, err := c.MultipartForm()
 	if err != nil {
-		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to create project: "+err.Error())
+		response.ErrorResponse(c, http.StatusBadRequest, "Failed to parse form data")
 		return
 	}
 
-	// Return project info and extracted text
-	response.SuccessResponse(c, http.StatusCreated, gin.H{
-		"project":        project,
-		"extracted_text": extractedText,
-	})
+	files := form.File["pdf"]
+	if len(files) == 0 {
+		response.ErrorResponse(c, http.StatusBadRequest, "At least one PDF file is required")
+		return
+	}
+
+	// Validate all files are PDFs
+	for _, file := range files {
+		if file.Header.Get("Content-Type") != "application/pdf" {
+			response.ErrorResponse(c, http.StatusBadRequest, "Only PDF files are allowed")
+			return
+		}
+	}
+
+	var result *services.ProjectCreateResult
+
+	if len(files) == 1 {
+		// Single file upload
+		result, err = pc.projectService.CreateProject(project, files[0])
+		if err != nil {
+			response.ErrorResponse(c, http.StatusInternalServerError, "Failed to create project: "+err.Error())
+			return
+		}
+	} else {
+		// Multiple files upload
+		result, err = pc.projectService.CreateProjectWithMultiplePDFs(project, files)
+		if err != nil {
+			response.ErrorResponse(c, http.StatusInternalServerError, "Failed to create project: "+err.Error())
+			return
+		}
+	}
+
+	// Return project info, extracted text(s), and file URLs
+	response.SuccessResponse(c, http.StatusCreated, result)
 }
 
 func (pc *ProjectController) GetProjectByID(c *gin.Context) {
