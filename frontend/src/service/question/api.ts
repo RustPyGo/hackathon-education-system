@@ -75,22 +75,26 @@ export const getQuestions = async (_projectId: string): Promise<Question[]> => {
             hint: 'Hint',
             choices: [
                 {
+                    id: '9',
                     content: 'When a model is too simple',
                     explanation: 'No explanation',
                     isCorrect: false,
                 },
                 {
+                    id: '10',
                     content:
                         'When a model performs well on training data but poorly on new data',
                     explanation: 'No explanation',
                     isCorrect: true,
                 },
                 {
+                    id: '11',
                     content: 'When training takes too long',
                     explanation: 'No explanation',
                     isCorrect: false,
                 },
                 {
+                    id: '12',
                     content: 'Anomaly detection',
                     explanation: 'No explanation',
                     isCorrect: false,
@@ -104,26 +108,26 @@ export const getQuestions = async (_projectId: string): Promise<Question[]> => {
             hint: 'Hint',
             choices: [
                 {
-                    id: '9',
+                    id: '13',
                     content: 'The probability that the null hypothesis is true',
                     explanation: 'No explanation',
                     isCorrect: false,
                 },
                 {
-                    id: '10',
+                    id: '14',
                     content:
                         'The probability of observing the data given that the null hypothesis is true',
                     explanation: 'No explanation',
                     isCorrect: true,
                 },
                 {
-                    id: '11',
+                    id: '15',
                     content: 'The probability of making a Type I error',
                     explanation: 'No explanation',
                     isCorrect: false,
                 },
                 {
-                    id: '12',
+                    id: '16',
                     content: 'The confidence level of the test',
                     explanation: 'No explanation',
                     isCorrect: false,

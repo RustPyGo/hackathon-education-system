@@ -5,7 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Label } from '@radix-ui/react-label';
-import { RotateCcw } from 'lucide-react';
+import {
+    CheckCircle,
+    ChevronLeft,
+    ChevronRight,
+    RotateCcw,
+} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Question } from '@/service/question';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -36,9 +41,20 @@ const getOptionStyle = (
     return optionClass;
 };
 
+const difficultyConfigs = {
+    hard: {
+        color: 'bg-rose-100 text-rose-800 border-rose-200',
+    },
+    medium: {
+        color: 'bg-amber-100 text-amber-800 border-amber-200',
+    },
+    easy: {
+        color: 'bg-blue-100 text-blue-800 border-blue-200',
+    },
+};
+
 interface Props {
     className?: string;
-    index: number;
     mode: Mode;
     question: Question;
     selected?: string;
@@ -48,7 +64,6 @@ interface Props {
 
 export const QuestionCard = ({
     className,
-    index,
     mode,
     question,
     selected,
@@ -64,15 +79,9 @@ export const QuestionCard = ({
                     <div className="flex items-center gap-2 mb-4">
                         <Badge
                             variant="outline"
-                            className="bg-blue-50 text-blue-700 border-blue-200"
+                            className={`capitalize bg-gray-50 text-gray-700 border-gray-200 ${difficultyConfigs[question.difficulty].color}`}
                         >
-                            Question {index + 1}
-                        </Badge>
-                        <Badge
-                            variant="outline"
-                            className="bg-gray-50 text-gray-700 border-gray-200"
-                        >
-                            Multiple Choice
+                            {question.difficulty}
                         </Badge>
                         {mode === 'practice' && attempts > 1 && (
                             <Badge
@@ -143,5 +152,55 @@ export const QuestionCard = ({
                 {/* )} */}
             </CardContent>
         </Card>
+    );
+};
+
+export const QuestionList = ({ questions }: { questions: Question[] }) => {
+    const [current, setCurrent] = useState(0);
+
+    return (
+        <div className="grid lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3 space-y-6">
+                <QuestionCard
+                    mode="practice"
+                    question={questions[current]}
+                    onSelect={() => {}}
+                    attempts={1}
+                />
+                <div className="flex items-center justify-between">
+                    <Button
+                        variant="outline"
+                        onClick={() => setCurrent((prev) => prev - 1)}
+                        disabled={current === 0}
+                        className="bg-white hover:bg-gray-50"
+                    >
+                        <ChevronLeft className="h-4 w-4 mr-2" />
+                        Previous
+                    </Button>
+
+                    <div className="text-sm text-gray-500">
+                        {current + 1} of {questions.length} questions
+                    </div>
+
+                    {current !== questions.length - 1 ? (
+                        <Button
+                            onClick={() => setCurrent((prev) => prev + 1)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                        >
+                            Next Question
+                            <ChevronRight className="h-4 w-4 ml-2" />
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={() => setCurrent((prev) => prev + 1)}
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                        >
+                            Finish Quiz
+                            <CheckCircle className="h-4 w-4 ml-2" />
+                        </Button>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 };
