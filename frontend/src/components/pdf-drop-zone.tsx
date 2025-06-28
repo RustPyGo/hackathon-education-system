@@ -15,130 +15,82 @@ import { Upload, X } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
-// Function để validate file PDF
-const validatePdfFile = (file: File): boolean => {
-    // Kiểm tra MIME type
-    const validMimeTypes = ['application/pdf'];
-    if (!validMimeTypes.includes(file.type)) {
-        return false;
-    }
-
-    // Kiểm tra extension
-    const fileName = file.name.toLowerCase();
-    if (!fileName.endsWith('.pdf')) {
-        return false;
-    }
-
-    return true;
-};
-
-// Function để filter chỉ file PDF
-const filterPdfFiles = (files: FileList | File[]): File[] => {
-    const fileArray = Array.from(files);
-    return fileArray.filter((file) => {
-        const isValid = validatePdfFile(file);
-        if (!isValid) {
-            toast.error(`File "${file.name}" không phải là file PDF hợp lệ`);
-        }
-        return isValid;
-    });
-};
-
-interface PdfDropZoneProps {
-    onFileSelect?: (file: File) => void;
-    onMultipleFileSelect?: (files: File[]) => void;
-    isLoading?: boolean;
-    disabled?: boolean;
-    compact?: boolean;
-}
-
 export function PdfDropZone({
-    onFileSelect,
-    onMultipleFileSelect,
-    isLoading = false,
-    disabled = false,
-    compact = false,
-}: PdfDropZoneProps) {
+    onFilesChange,
+}: { onFilesChange?: (files: File[]) => void } = {}) {
     const [files, setFiles] = React.useState<File[]>([]);
 
-    const handleValueChange = React.useCallback(
-        (newFiles: File[]) => {
-            // Filter chỉ file PDF hợp lệ
-            const pdfFiles = filterPdfFiles(newFiles);
+    React.useEffect(() => {
+        if (onFilesChange) onFilesChange(files);
+    }, [files, onFilesChange]);
 
-            // Loại bỏ file trùng (theo tên và size)
-            const uniqueFiles = pdfFiles.filter(
-                (file) =>
-                    !files.some(
-                        (f) => f.name === file.name && f.size === file.size
-                    )
-            );
-
-            if (uniqueFiles.length === 0) {
-                toast.info('Gỡ file PDF thành công');
-                return;
+    const onFileValidate = React.useCallback(
+        (file: File): string | null => {
+            // Validate max files
+            if (files.length >= 3) {
+                return 'You can only upload up to 3 files';
             }
 
-            const updatedFiles = [...files, ...uniqueFiles].slice(0, 3); // Giới hạn 3 file
-
-            setFiles(updatedFiles);
-
-            // Call the appropriate callback với file PDF đã được filter và loại trùng
-            if (updatedFiles.length === 1 && onFileSelect) {
-                onFileSelect(updatedFiles[0]);
-            } else if (updatedFiles.length > 1 && onMultipleFileSelect) {
-                onMultipleFileSelect(updatedFiles);
-            } else if (updatedFiles.length > 0 && onMultipleFileSelect) {
-                onMultipleFileSelect(updatedFiles);
+            // Validate file type (only PDF)
+            if (file.type !== 'application/pdf') {
+                return 'Only PDF files are allowed';
             }
+
+            // Validate file size (max 8MB)
+            const MAX_SIZE = 8 * 1024 * 1024; // 8MB
+            if (file.size > MAX_SIZE) {
+                return `File size must be less than ${
+                    MAX_SIZE / (1024 * 1024)
+                }MB`;
+            }
+
+            return null;
         },
-        [onFileSelect, onMultipleFileSelect, files]
+        [files]
     );
 
     const onFileReject = React.useCallback((file: File, message: string) => {
-        toast.error(message);
+        toast(message, {
+            description: `"${
+                file.name.length > 20
+                    ? `${file.name.slice(0, 20)}...`
+                    : file.name
+            }" has been rejected`,
+        });
     }, []);
 
     return (
         <FileUpload
-            maxFiles={3}
-            maxSize={5 * 1024 * 1024}
-            className="w-full"
             value={files}
-            onValueChange={handleValueChange}
+            onValueChange={setFiles}
+            onFileValidate={onFileValidate}
             onFileReject={onFileReject}
+            accept="application/pdf"
+            maxFiles={3}
+            className="w-full"
             multiple
-            disabled={disabled || isLoading}
-            accept=".pdf,application/pdf"
         >
             <FileUploadDropzone>
-                <div className="flex flex-col items-center justify-center gap-1 text-center w-full">
+                <div className="flex flex-col items-center gap-1">
                     <div className="flex items-center justify-center rounded-full border p-2.5">
                         <Upload className="size-6 text-muted-foreground" />
                     </div>
                     <p className="font-medium text-sm">
-                        {compact ? 'Thêm file PDF' : 'Kéo thả file PDF vào đây'}
+                        Drag & drop PDF files here
                     </p>
                     <p className="text-muted-foreground text-xs">
-                        {compact
-                            ? 'Hoặc click để chọn file PDF'
-                            : 'Hoặc click để chọn (tối đa 3 file PDF, mỗi file dưới 5MB)'}
+                        Or click to browse (max 3 files, 8MB each)
                     </p>
                 </div>
                 <FileUploadTrigger asChild>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="mt-2 w-fit mx-auto"
-                        disabled={disabled || isLoading}
-                    >
-                        {isLoading ? 'Đang xử lý...' : 'Chọn file PDF'}
+                    <Button variant="outline" size="sm" className="mt-2 w-fit">
+                        Browse files
                     </Button>
                 </FileUploadTrigger>
             </FileUploadDropzone>
             <FileUploadList>
-                {files.map((file, index) => (
-                    <FileUploadItem key={index} value={file}>
+                {files.map((file) => (
+                    <FileUploadItem key={file.name} value={file}>
                         <FileUploadItemPreview />
                         <FileUploadItemMetadata />
                         <FileUploadItemDelete asChild>
@@ -146,6 +98,15 @@ export function PdfDropZone({
                                 variant="ghost"
                                 size="icon"
                                 className="size-7"
+                                onClick={() => {
+                                    toast.success(
+                                        `"${
+                                            file.name.length > 20
+                                                ? `${file.name.slice(0, 20)}...`
+                                                : file.name
+                                        }" has been removed`
+                                    );
+                                }}
                             >
                                 <X />
                             </Button>
