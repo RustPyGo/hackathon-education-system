@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 type AIQuestionRequest struct {
@@ -70,15 +72,31 @@ func NewAIService() IAIService {
 }
 
 func (ai *AIService) GenerateQuestionsAndSummary(request *AIQuestionRequest) (*AIQuestionResponse, error) {
+	start := time.Now()
+
+	logEntry := logrus.WithFields(logrus.Fields{
+		"service":         "AIService",
+		"operation":       "GenerateQuestionsAndSummary",
+		"project_id":      request.ProjectID,
+		"project_name":    request.Name,
+		"total_questions": request.TotalQuestions,
+		"file_count":      len(request.Files),
+		"api_url":         ai.apiURL + "/api/generate-questions-sync",
+	})
+
+	logEntry.Info("Starting AI question generation request")
+
 	// Prepare request body
 	requestBody, err := json.Marshal(request)
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to marshal AI request")
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	// Create HTTP request
 	req, err := http.NewRequest("POST", ai.apiURL+"/api/generate-questions-sync", bytes.NewBuffer(requestBody))
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to create HTTP request")
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
@@ -87,8 +105,10 @@ func (ai *AIService) GenerateQuestionsAndSummary(request *AIQuestionRequest) (*A
 	req.Header.Set("Authorization", "Bearer "+ai.apiKey)
 
 	// Make the request
+	logEntry.Info("Making HTTP request to AI API")
 	resp, err := ai.client.Do(req)
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to make HTTP request to AI API")
 		return nil, fmt.Errorf("failed to make request: %w", err)
 	}
 	defer resp.Body.Close()
@@ -96,33 +116,62 @@ func (ai *AIService) GenerateQuestionsAndSummary(request *AIQuestionRequest) (*A
 	// Read response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to read AI API response body")
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
 	// Check response status
 	if resp.StatusCode != http.StatusOK {
+		logEntry.WithFields(logrus.Fields{
+			"status_code": resp.StatusCode,
+			"response":    string(body),
+		}).Error("AI API returned error status")
 		return nil, fmt.Errorf("AI API returned status %d: %s", resp.StatusCode, string(body))
 	}
 
 	// Parse response
 	var aiResponse AIQuestionResponse
 	if err := json.Unmarshal(body, &aiResponse); err != nil {
+		logEntry.WithError(err).WithField("response_body", string(body)).Error("Failed to unmarshal AI response")
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
+
+	duration := time.Since(start)
+
+	logEntry.WithFields(logrus.Fields{
+		"duration":            duration.String(),
+		"questions_generated": len(aiResponse.Questions),
+		"summary_length":      len(aiResponse.Summary),
+		"status_code":         resp.StatusCode,
+	}).Info("AI question generation completed successfully")
 
 	return &aiResponse, nil
 }
 
 func (ai *AIService) GenerateChatResponse(request *AIChatRequest) (*AIChatResponse, error) {
+	start := time.Now()
+
+	logEntry := logrus.WithFields(logrus.Fields{
+		"service":        "AIService",
+		"operation":      "GenerateChatResponse",
+		"project_id":     request.ProjectID,
+		"message_length": len(request.Message),
+		"api_url":        ai.apiURL + "/chat",
+	})
+
+	logEntry.Info("Starting AI chat response generation")
+
 	// Prepare request body
 	requestBody, err := json.Marshal(request)
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to marshal chat request")
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	// Create HTTP request
 	req, err := http.NewRequest("POST", ai.apiURL+"/chat", bytes.NewBuffer(requestBody))
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to create HTTP request for chat")
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
@@ -131,8 +180,10 @@ func (ai *AIService) GenerateChatResponse(request *AIChatRequest) (*AIChatRespon
 	req.Header.Set("Authorization", "Bearer "+ai.apiKey)
 
 	// Make the request
+	logEntry.Info("Making HTTP request to AI chat API")
 	resp, err := ai.client.Do(req)
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to make HTTP request to AI chat API")
 		return nil, fmt.Errorf("failed to make request: %w", err)
 	}
 	defer resp.Body.Close()
@@ -140,19 +191,33 @@ func (ai *AIService) GenerateChatResponse(request *AIChatRequest) (*AIChatRespon
 	// Read response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to read AI chat response body")
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
 	// Check response status
 	if resp.StatusCode != http.StatusOK {
+		logEntry.WithFields(logrus.Fields{
+			"status_code": resp.StatusCode,
+			"response":    string(body),
+		}).Error("AI chat API returned error status")
 		return nil, fmt.Errorf("AI API returned status %d: %s", resp.StatusCode, string(body))
 	}
 
 	// Parse response
 	var aiResponse AIChatResponse
 	if err := json.Unmarshal(body, &aiResponse); err != nil {
+		logEntry.WithError(err).WithField("response_body", string(body)).Error("Failed to unmarshal AI chat response")
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
+
+	duration := time.Since(start)
+
+	logEntry.WithFields(logrus.Fields{
+		"duration":        duration.String(),
+		"response_length": len(aiResponse.Message),
+		"status_code":     resp.StatusCode,
+	}).Info("AI chat response generated successfully")
 
 	return &aiResponse, nil
 }
