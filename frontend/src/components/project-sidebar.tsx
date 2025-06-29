@@ -39,14 +39,14 @@ export function ProjectSidebar({
             title: 'Overview',
             icon: FileText,
             description: 'PDF content and AI summary',
-            href: `/project/`,
+            href: `/project/${project.id}/`,
         },
         {
             id: 'chat',
             title: 'AI Chat',
             icon: MessageSquare,
             description: 'Ask questions about content',
-            href: `/project/chat`,
+            href: `/project/${project.id}/chat`,
         },
         {
             id: 'flashcards',
