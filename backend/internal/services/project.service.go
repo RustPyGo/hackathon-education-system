@@ -11,7 +11,7 @@ import (
 )
 
 type FileInfo struct {
-	FileURL  string `json:"file_url"`
+	FileURL  string `json:"url"`
 	FileName string `json:"file_name"`
 }
 
