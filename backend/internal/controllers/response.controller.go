@@ -172,6 +172,79 @@ func (rc *ResponseController) GetResponsesByUserID(c *gin.Context) {
 	response.SuccessResponse(c, http.StatusOK, responses)
 }
 
+// GetAllResponsesSortedByScore godoc
+// @Summary Get all responses sorted by score
+// @Description Get list of all responses sorted by score (highest first) and time taken (fastest first for same score)
+// @Tags responses
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response{data=[]models.Response}
+// @Failure 500 {object} response.Response
+// @Router /response/sorted/score [get]
+func (rc *ResponseController) GetAllResponsesSortedByScore(c *gin.Context) {
+	responses, err := rc.responseService.GetAllResponsesSortedByScore()
+	if err != nil {
+		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to get responses: "+err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, http.StatusOK, responses)
+}
+
+// GetResponsesByProjectIDSortedByScore godoc
+// @Summary Get responses by project ID sorted by score
+// @Description Get list of responses for a specific project sorted by score (highest first) and time taken (fastest first for same score)
+// @Tags responses
+// @Accept json
+// @Produce json
+// @Param projectId path string true "Project ID"
+// @Success 200 {object} response.Response{data=[]models.Response}
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /response/project/{projectId}/sorted/score [get]
+func (rc *ResponseController) GetResponsesByProjectIDSortedByScore(c *gin.Context) {
+	projectID := c.Param("projectId")
+	if projectID == "" {
+		response.ErrorResponse(c, http.StatusBadRequest, "Project ID is required")
+		return
+	}
+
+	responses, err := rc.responseService.GetResponsesByProjectIDSortedByScore(projectID)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to get responses: "+err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, http.StatusOK, responses)
+}
+
+// GetResponsesByUserIDSortedByScore godoc
+// @Summary Get responses by user ID sorted by score
+// @Description Get list of responses for a specific user sorted by score (highest first) and time taken (fastest first for same score)
+// @Tags responses
+// @Accept json
+// @Produce json
+// @Param userId path string true "User ID"
+// @Success 200 {object} response.Response{data=[]models.Response}
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /response/user/{userId}/sorted/score [get]
+func (rc *ResponseController) GetResponsesByUserIDSortedByScore(c *gin.Context) {
+	userID := c.Param("userId")
+	if userID == "" {
+		response.ErrorResponse(c, http.StatusBadRequest, "User ID is required")
+		return
+	}
+
+	responses, err := rc.responseService.GetResponsesByUserIDSortedByScore(userID)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to get responses: "+err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, http.StatusOK, responses)
+}
+
 // UpdateResponse godoc
 // @Summary Update response
 // @Description Update response information
