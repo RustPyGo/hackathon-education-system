@@ -75,49 +75,23 @@ export default function HomePage() {
         setCurrentStep(0);
 
         try {
-            // Create FormData for file upload
-            const formData = new FormData();
-
-            // Add project metadata
-            formData.append('title', title.trim());
-            formData.append('duration', duration.trim());
-
-            console.log(formData);
-
-            // Add files
-
-            // Simulate processing steps
             setCurrentStep(1);
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             setCurrentStep(2);
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
-            // Log detailed FormData information
+            await createProject(title, duration, files);
+            setCurrentStep(3);
+            await new Promise((resolve) => setTimeout(resolve, 500));
 
-            files.forEach((file) => {
-                formData.append('pdf', file);
-            });
+            toast.success('Project created successfully!');
 
-            // Call the API service
-            const result = await fetch('http://localhost:3001/api/v1/project', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const data = await result.json();
-            console.log(data);
-            // setCurrentStep(3);
-            // await new Promise((resolve) => setTimeout(resolve, 500));
-
-            // toast.success('Project created successfully!');
-
-            // Navigate to the project page or dashboard
-            // if (result.projectId) {
-            //     router.push(`/project/${result.projectId}`);
-            // } else {
-            //     router.push('/dashboard');
-            // }
+            if (result.projectId) {
+                router.push(`/project/${result.projectId}`);
+            } else {
+                router.push('/dashboard');
+            }
         } catch (error) {
             console.error('Error uploading files:', error);
             toast.error('Failed to create project. Please try again.');
