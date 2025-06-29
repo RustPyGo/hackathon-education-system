@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
 	"github.com/sirupsen/logrus"
 )
 
@@ -58,9 +59,9 @@ type AIService struct {
 }
 
 func NewAIService() IAIService {
-	// TODO: Load from config
-	apiURL := "https://e2e5-118-69-69-187.ngrok-free.app" // Change to your AI API base URL
-	apiKey := "1234567890"                                // Change to your API key
+	// Load from global config
+	apiURL := global.Config.AI.APIURL
+	apiKey := global.Config.AI.APIKey
 
 	return &AIService{
 		apiURL: apiURL,

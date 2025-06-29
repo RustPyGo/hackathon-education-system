@@ -5,6 +5,7 @@ type Config struct {
 	Redis  RedisSetting    `mapstructure:"redis"`
 	DB     DatabaseSetting `mapstructure:"database"`
 	AWS    AWSSetting      `mapstructure:"aws"`
+	AI     AISetting       `mapstructure:"ai"`
 	CORS   CORSSetting     `mapstructure:"cors"`
 }
 
@@ -37,6 +38,11 @@ type AWSSetting struct {
 	AccessKey string `mapstructure:"access_key"`
 	SecretKey string `mapstructure:"secret_key"`
 	Endpoint  string `mapstructure:"endpoint"`
+}
+
+type AISetting struct {
+	APIURL string `mapstructure:"api_url"`
+	APIKey string `mapstructure:"api_key"`
 }
 
 type CORSSetting struct {

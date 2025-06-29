@@ -52,6 +52,11 @@ services:
       AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
       AWS_SECRET_KEY: ${AWS_SECRET_KEY}
       AWS_ENDPOINT: ${AWS_ENDPOINT}
+
+      # AI Configuration
+      AI_API_URL: ${AI_API_URL}
+      AI_API_KEY: ${AI_API_KEY}
+
     image: ${REGISTRY}/backend:latest
     restart: always
     networks:
