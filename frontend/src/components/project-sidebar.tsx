@@ -15,58 +15,67 @@ import {
 import type { Project } from '@/service/overview/type';
 import { BookOpen, Brain, FileText, MessageSquare, Trophy } from 'lucide-react';
 import Link from 'next/link';
-import type * as React from 'react';
+import React from 'react';
+import { usePathname } from 'next/navigation';
 
 interface ProjectSidebarProps extends React.ComponentProps<typeof Sidebar> {
     project: Project;
-    activeSection: string;
 }
 
-export function ProjectSidebar({
-    project,
-    activeSection,
-    ...props
-}: ProjectSidebarProps) {
-    const navigationItems = [
-        {
-            id: 'overview',
-            title: 'Overview',
-            icon: FileText,
-            description: 'PDF content and AI summary',
-            href: `/project/${project.id}/`,
-        },
-        {
-            id: 'chat',
-            title: 'AI Chat',
-            icon: MessageSquare,
-            description: 'Ask questions about content',
-            href: `/project/${project.id}/chat`,
-        },
-        {
-            id: 'flashcards',
-            title: 'Flashcards',
-            icon: BookOpen,
-            description: 'Study with AI-generated cards',
-            href: `/project/${project.id}/flashcards`,
-        },
-        {
-            id: 'quiz',
-            title: 'Quiz',
-            icon: Brain,
-            description: 'Test your knowledge',
-            href: `/project/${project.id}/quiz`,
-        },
-        {
-            id: 'rankings',
-            title: 'Rankings',
-            icon: Trophy,
-            description: 'View project leaderboard',
-            href: `/project/${project.id}/rankings`,
-        },
-    ];
+export function ProjectSidebar({ project }: ProjectSidebarProps) {
+    const pathname = usePathname();
+    // navigationItems should be memoized to avoid warning
+    const navigationItems = React.useMemo(
+        () => [
+            {
+                id: 'overview',
+                title: 'Overview',
+                icon: FileText,
+                description: 'PDF content and AI summary',
+                href: `/project/${project.id}/`,
+            },
+            {
+                id: 'chat',
+                title: 'AI Chat',
+                icon: MessageSquare,
+                description: 'Ask questions about content',
+                href: `/project/${project.id}/chat`,
+            },
+            {
+                id: 'flashcards',
+                title: 'Flashcards',
+                icon: BookOpen,
+                description: 'Study with AI-generated cards',
+                href: `/project/${project.id}/flashcards`,
+            },
+            {
+                id: 'quiz',
+                title: 'Quiz',
+                icon: Brain,
+                description: 'Test your knowledge',
+                href: `/project/${project.id}/quiz`,
+            },
+            {
+                id: 'rankings',
+                title: 'Rankings',
+                icon: Trophy,
+                description: 'View project leaderboard',
+                href: `/project/${project.id}/ranking`,
+            },
+        ],
+        [project.id]
+    );
+    const selectedSection = React.useMemo(() => {
+        const found = navigationItems.find((item) => {
+            const itemHref = item.href.replace(/\/$/, '');
+            const path = pathname.replace(/\/$/, '');
+            return path === itemHref;
+        });
+        return found ? found.id : 'overview';
+    }, [pathname, navigationItems]);
 
     return (
-        <Sidebar variant="inset" {...props}>
+        <Sidebar variant="inset">
             <SidebarHeader className="border-b border-sidebar-border">
                 <div className="flex items-center gap-3 px-4 py-3"></div>
                 <div className="px-4 pb-4">
@@ -89,7 +98,9 @@ export function ProjectSidebar({
                                 <SidebarMenuItem key={item.id}>
                                     <Link href={item.href} className="w-full">
                                         <SidebarMenuButton
-                                            isActive={activeSection === item.id}
+                                            isActive={
+                                                selectedSection === item.id
+                                            }
                                             className="flex flex-col items-start h-auto py-3 w-full"
                                         >
                                             <div className="flex items-center gap-3 w-full">

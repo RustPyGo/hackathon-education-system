@@ -20,7 +20,7 @@ export const ProjectCard = (project: Project) => {
         <Card
             className="group hover:shadow-2xl transition-all duration-300 cursor-pointer border-0 shadow-lg overflow-hidden bg-white hover:scale-105 transform"
             onClick={() => {
-                router.push(`/projects/${project.id}`);
+                router.push(`/project/${project.id}`);
             }}
         >
             <CardHeader>
