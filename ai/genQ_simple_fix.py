@@ -123,7 +123,7 @@ class SimpleQuestionGenerator:
                         "content": prompt
                     }
                 ],
-                "max_tokens": min(max_tokens, 2000),
+                "max_tokens": min(max_tokens, 1500),
                 "temperature": 0.7
             }
             
@@ -504,7 +504,7 @@ Trả về JSON:"""
         """Tạo câu hỏi theo batch với full guarantee đủ số lượng"""
         print(f"🔄 Tạo {total_questions} câu hỏi theo batch...")
         
-        # Chia thành batch 5 câu mỗi batch (nhỏ hơn để JSON ổn định hơn)
+        # Chia thành batch 8 câu mỗi batch (tăng từ 5 để test performance)
         batch_size = 5
         all_questions = []
         max_retries = 3
@@ -650,7 +650,7 @@ QUAN TRỌNG:
 JSON:"""
         
         print(f"🚀 Gọi API cho batch {batch_number}...")
-        result = self.call_openai_api_safe(prompt, max_tokens=1500)
+        result = self.call_openai_api_safe(prompt, max_tokens=2000)  # Tăng từ 1500 cho 8 câu hỏi
         
         if result:
             try:
