@@ -9,21 +9,33 @@ import { Skeleton } from '@/components/ui/skeleton';
 import UserMessage from '@/components/user-message';
 import { fetchMessages, sendMessageApi } from '@/service/chat/api';
 import type { ChatMessage } from '@/service/chat/type';
-import { useAuth } from '@workos-inc/authkit-nextjs/components';
+import { withAuth } from '@workos-inc/authkit-nextjs';
 import { Bot, Send } from 'lucide-react';
-import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export default function ChatPage() {
-    const { id: projectId } = useParams<{ id: string }>();
-    const { user } = useAuth({ ensureSignedIn: true });
+    const [user, setUser] = useState<{ id: string; name?: string } | null>(
+        null
+    );
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
+    const projectId = '12345'; // You can get this from params if needed
 
     useEffect(() => {
-        fetchMessagesHandler();
+        async function fetchUser() {
+            const { user } = await withAuth({ ensureSignedIn: true });
+            console.log('Fetched user:', user);
+            setUser(user);
+        }
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            fetchMessagesHandler();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectId, user]);
 
@@ -110,7 +122,7 @@ export default function ChatPage() {
                                         key={message.id}
                                         message={message}
                                     />
-                                ),
+                                )
                             )
                         )}
                     </div>
