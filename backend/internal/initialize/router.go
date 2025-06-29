@@ -5,6 +5,7 @@ import (
 
 	_ "github.com/RustPyGo/hackathon-education-system/backend/docs"
 	"github.com/RustPyGo/hackathon-education-system/backend/global"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/middleware"
 	"github.com/RustPyGo/hackathon-education-system/backend/internal/routers"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -21,6 +22,18 @@ func InitRouter() *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 		r = gin.New()
 	}
+
+	// Add CORS middleware first (before other middleware)
+	if global.Config.Server.Mode == "dev" {
+		r.Use(middleware.DevelopmentCORSMiddleware())
+	} else {
+		r.Use(middleware.CORSMiddleware())
+	}
+
+	// Add logging middleware
+	r.Use(middleware.Logger())
+	r.Use(middleware.RequestLogger())
+	r.Use(middleware.ErrorLogger())
 
 	// Test route for Swagger
 	r.GET("/swagger-test", func(c *gin.Context) {

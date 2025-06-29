@@ -15,6 +15,5 @@ type ChatMessage struct {
 	CreatedAt time.Time      `json:"created_at"`
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 
-	// Relationships
-	Project Project `json:"project,omitempty" gorm:"foreignKey:ProjectID"`
+	// Relationships (removed Project to avoid circular reference)
 }

@@ -14,8 +14,5 @@ type Answer struct {
 	CreatedAt  time.Time      `json:"created_at"`
 	DeletedAt  gorm.DeletedAt `json:"-" gorm:"index"`
 
-	// Relationships
-	Response Response       `json:"response,omitempty" gorm:"foreignKey:ResponseID"`
-	Question Question       `json:"question,omitempty" gorm:"foreignKey:QuestionID"`
-	Choice   QuestionChoice `json:"choice,omitempty" gorm:"foreignKey:ChoiceID"`
+	// Relationships (removed to avoid circular references)
 }

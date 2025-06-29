@@ -16,7 +16,6 @@ type Response struct {
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 
-	// Relationships
-	Project Project  `json:"project,omitempty" gorm:"foreignKey:ProjectID"`
+	// Relationships (removed Project to avoid circular reference)
 	Answers []Answer `json:"answers,omitempty" gorm:"foreignKey:ResponseID"`
 }
