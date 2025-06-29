@@ -100,10 +100,35 @@ class GenerateQuestionsRequest(BaseModel):
         return v
 
 # ===== CHAT API MODELS =====
-class ChatData(BaseModel):
-    """Model cho chat request data"""
+class ChatFileInput(BaseModel):
+    """Model cho file input trong chat"""
     file_name: str
+    file_url: str
+
+class ChatMessage(BaseModel):
+    """Model cho message trong history chat"""
     message: str
+    sender: str  # 'user' hoặc 'assistant'
+
+class ChatData(BaseModel):
+    """Model cho chat request data (multi-file + history)"""
+    files: List[ChatFileInput]
+    history_chat: List[ChatMessage]
+    message: str
+    
+    @validator('files')
+    def validate_files(cls, v):
+        if not v or len(v) == 0:
+            raise ValueError('Cần ít nhất 1 file cho chat')
+        if len(v) > 5:  # Giới hạn 5 files cho chat
+            raise ValueError('Tối đa 5 files cho chat')
+        return v
+    
+    @validator('history_chat')
+    def validate_history(cls, v):
+        if len(v) > 20:  # Giới hạn 20 messages trong history
+            raise ValueError('Tối đa 20 messages trong history')
+        return v
 
 class ChatRequest(BaseModel):
     """Model cho chat request"""
@@ -1459,144 +1484,178 @@ async def clear_cache():
 
 # ===== CHAT FUNCTIONALITY =====
 class ChatSystem:
-    """Hệ thống chat sử dụng cached content từ question generator"""
+    """Enhanced chat system với multi-file support và history"""
     
     def __init__(self):
+        self.cache_dir = Path("cache/content")
         self.openai_api_key = os.getenv('OPENAI_API_KEY')
         if not self.openai_api_key:
             logger.error("Missing OPENAI_API_KEY")
+        
+    def get_content_from_files(self, files: List[ChatFileInput]) -> str:
+        """Lấy content từ nhiều files với caching thông minh"""
+        combined_content = []
+        
+        for file_input in files:
+            file_name = file_input.file_name
+            file_url = file_input.file_url
             
-    def get_cached_content(self, file_name: str) -> Optional[str]:
-        """Lấy nội dung đã cache từ file_name (sử dụng cùng logic với question generation)"""
+            # Tìm cache file - normalize file_name và hash
+            cache_file = self.find_cache_file(file_name)
+            
+            if cache_file:
+                logger.info(f"Using cached content for {file_name}")
+                try:
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        combined_content.append(f"=== CONTENT FROM {file_name} ===\n{content}\n")
+                        continue
+                except Exception as e:
+                    logger.warning(f"Error reading cache for {file_name}: {e}")
+            
+            # Không có cache, đọc từ URL
+            logger.info(f"Reading content from URL for {file_name}")
+            try:
+                content = self.read_pdf_from_url(file_url)
+                if content:
+                    # Cache content for future use
+                    self.save_content_to_cache(file_name, content)
+                    combined_content.append(f"=== CONTENT FROM {file_name} ===\n{content}\n")
+                else:
+                    combined_content.append(f"=== ERROR: Could not read content from {file_name} ===\n")
+            except Exception as e:
+                logger.error(f"Error reading PDF from URL {file_url}: {e}")
+                combined_content.append(f"=== ERROR: Could not read content from {file_name} ===\n")
+        
+        return "\n".join(combined_content)
+    
+    def find_cache_file(self, file_name: str) -> Optional[Path]:
+        """Tìm cache file với nhiều strategies - cải thiện lookup"""
+        if not self.cache_dir.exists():
+            return None
+        
+        # Normalize file_name (same logic as MultiFileCache)
+        normalized_name = file_name
+        if normalized_name.endswith('_content.pdf'):
+            normalized_name = normalized_name.replace('_content.pdf', '.pdf')
+        elif normalized_name.endswith('_content'):
+            normalized_name = normalized_name.replace('_content', '')
+        
+        # Generate hash
+        file_hash = hashlib.md5(normalized_name.encode()).hexdigest()
+        
+        logger.info(f"Looking for cache with file_name: {file_name}")
+        logger.info(f"Normalized to: {normalized_name}")
+        logger.info(f"Hash: {file_hash}")
+        
+        # Strategy 1: hash_filename_content.txt
+        cache_files = list(self.cache_dir.glob(f"{file_hash}_{normalized_name}_content.txt"))
+        
+        if not cache_files:
+            # Strategy 2: hash_content.txt
+            cache_files = list(self.cache_dir.glob(f"{file_hash}_*content.txt"))
+        
+        if not cache_files:
+            # Strategy 3: Tìm file có hash matching
+            for cache_file in self.cache_dir.glob("*_content.txt"):
+                if cache_file.name.startswith(file_hash):
+                    cache_files = [cache_file]
+                    break
+        
+        if not cache_files:
+            # Strategy 4: Tìm file chứa normalized_name trong tên
+            base_name = normalized_name.replace('.pdf', '').replace('.', '-')
+            cache_files = list(self.cache_dir.glob(f"*{base_name}*"))
+        
+        if cache_files:
+            # Lấy file cache mới nhất
+            latest_cache = max(cache_files, key=lambda x: x.stat().st_mtime)
+            logger.info(f"Found cached content for {file_name}: {latest_cache.name}")
+            return latest_cache
+        
+        # Log available files for debugging
+        all_cache_files = [f.name for f in self.cache_dir.glob("*.txt")]
+        logger.warning(f"No cached content found for file: {file_name}")
+        logger.info(f"Available cache files: {all_cache_files}")
+        return None
+    
+    def save_content_to_cache(self, file_name: str, content: str):
+        """Save content to cache với file name được normalize"""
         try:
-            # Kiểm tra cache folder
-            cache_dir = Path("cache")
-            if not cache_dir.exists():
-                logger.warning("Cache directory not found")
-                return None
+            self.cache_dir.mkdir(parents=True, exist_ok=True)
             
-            # Normalize file_name (remove _content.pdf suffix if present)
+            # Normalize file name cho cache
             normalized_name = file_name
             if normalized_name.endswith('_content.pdf'):
                 normalized_name = normalized_name.replace('_content.pdf', '.pdf')
             elif normalized_name.endswith('_content'):
                 normalized_name = normalized_name.replace('_content', '')
             
-            # Sử dụng cùng logic hash như trong MultiFileCache
+            # Generate hash and cache file
             file_hash = hashlib.md5(normalized_name.encode()).hexdigest()
+            cache_file = self.cache_dir / f"{file_hash}_{normalized_name}_content.txt"
             
-            logger.info(f"Looking for cache with file_name: {file_name}")
-            logger.info(f"Normalized to: {normalized_name}")
-            logger.info(f"Hash: {file_hash}")
+            with open(cache_file, 'w', encoding='utf-8') as f:
+                f.write(content)
             
-            # Tìm file cache trong cache/content/
-            content_dir = cache_dir / "content"
-            if content_dir.exists():
-                # Pattern 1: hash_filename_content.txt
-                cache_files = list(content_dir.glob(f"{file_hash}_{normalized_name}_content.txt"))
-                
-                if not cache_files:
-                    # Pattern 2: hash_content.txt
-                    cache_files = list(content_dir.glob(f"{file_hash}_*content.txt"))
-                
-                if not cache_files:
-                    # Pattern 3: Tìm file có hash matching
-                    for cache_file in content_dir.glob("*_content.txt"):
-                        if cache_file.name.startswith(file_hash):
-                            cache_files = [cache_file]
-                            break
-                    
-                if not cache_files:
-                    # Pattern 4: Tìm file chứa normalized_name trong tên
-                    base_name = normalized_name.replace('.pdf', '').replace('.', '-')
-                    cache_files = list(content_dir.glob(f"*{base_name}*"))
-                
-                if cache_files:
-                    # Lấy file cache mới nhất
-                    latest_cache = max(cache_files, key=lambda x: x.stat().st_mtime)
-                    with open(latest_cache, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        logger.info(f"Found cached content for {file_name}: {len(content)} chars from {latest_cache.name}")
-                        return content
-            
-            # Fallback: Tìm trong cache root directory
-            cache_files = list(cache_dir.glob(f"{file_hash}_content.txt")) + list(cache_dir.glob(f"*{normalized_name}*"))
-            
-            if cache_files:
-                latest_cache = max(cache_files, key=lambda x: x.stat().st_mtime)
-                with open(latest_cache, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                    logger.info(f"Found cached content for {file_name}: {len(content)} chars from {latest_cache.name}")
-                    return content
-            
-            # Log available files for debugging
-            all_cache_files = []
-            if content_dir.exists():
-                all_cache_files.extend([f.name for f in content_dir.glob("*.txt")])
-            all_cache_files.extend([f.name for f in cache_dir.glob("*_content.txt")])
-            
-            logger.warning(f"No cached content found for file: {file_name}")
-            logger.info(f"Normalized: {normalized_name}")
-            logger.info(f"File hash: {file_hash}")
-            logger.info(f"Available cache files: {all_cache_files}")
-            return None
-            
+            logger.info(f"Cached content for {file_name} -> {cache_file.name}")
         except Exception as e:
-            logger.error(f"Error reading cached content for {file_name}: {e}")
-            return None
+            logger.error(f"Error caching content for {file_name}: {e}")
     
-    def generate_chat_response(self, file_name: str, user_message: str) -> str:
-        """Tạo response cho chat dựa trên cached content"""
+    def read_pdf_from_url(self, pdf_url: str) -> str:
+        """Đọc PDF content từ URL"""
         try:
-            # Lấy cached content
-            cached_content = self.get_cached_content(file_name)
+            response = requests.get(pdf_url, timeout=30)
+            response.raise_for_status()
             
-            if not cached_content:
-                # Throw exception thay vì return error message
-                raise HTTPException(
-                    status_code=404, 
-                    detail=f"File '{file_name}' not found in cache. Please upload the document first using /api/generate-questions-sync"
-                )
-            
-            # Tạo prompt cho OpenAI
-            # Lấy relevant content (first 2000 chars để tránh token limit)
-            content_sample = cached_content[:2000] if len(cached_content) > 2000 else cached_content
-            
-            prompt = f"""You are an AI assistant helping students understand educational content. Based on the following document content, please answer the student's question accurately and helpfully.
-
-Document Content:
-{content_sample}
-
-Student Question: {user_message}
-
-Instructions:
-- Answer based on the document content provided
-- Be educational and helpful
-- If the question is not related to the document, politely redirect to document topics
-- Keep answers clear and concise
-- Use English for the response
-
-Answer:"""
-
-            # Gọi OpenAI API
-            response = self.call_openai_api(prompt)
-            
-            if response:
-                return response
-            else:
-                raise HTTPException(
-                    status_code=500,
-                    detail="Failed to generate response from AI. Please try again."
-                )
+            with io.BytesIO(response.content) as pdf_file:
+                pdf_reader = PyPDF2.PdfReader(pdf_file)
+                text = ""
+                for page in pdf_reader.pages:
+                    text += page.extract_text() + "\n"
                 
-        except HTTPException:
-            raise  # Re-raise HTTP exceptions
+                return text.strip()
         except Exception as e:
-            logger.error(f"Error generating chat response: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail=f"Internal server error while processing your question: {str(e)}"
-            )
+            logger.error(f"Error reading PDF from URL {pdf_url}: {e}")
+            return ""
+    
+    def format_chat_prompt(self, content: str, history_chat: List[ChatMessage], current_message: str) -> str:
+        """Format prompt cho OpenAI với multi-file content và history"""
+        
+        # Format history chat
+        history_text = ""
+        if history_chat:
+            history_text = "=== CHAT HISTORY ===\n"
+            for msg in history_chat[-10:]:  # Chỉ lấy 10 messages gần nhất
+                sender_label = "User" if msg.sender == "user" else "Assistant"
+                history_text += f"{sender_label}: {msg.message}\n"
+            history_text += "\n"
+        
+        # Trim content nếu quá dài (để tránh token limit)
+        if len(content) > 4000:
+            content = content[:4000] + "\n... (content truncated)"
+        
+        # Tạo prompt hoàn chỉnh
+        prompt = f"""You are an AI assistant specialized in educational content analysis. You have access to multiple educational documents and conversation history.
+
+{history_text}=== AVAILABLE DOCUMENTS ===
+{content}
+
+=== CURRENT USER QUESTION ===
+{current_message}
+
+=== INSTRUCTIONS ===
+1. Answer the user's question based on the provided documents and conversation history
+2. Use information from ALL relevant documents when applicable
+3. Be specific and cite which document(s) you're referencing when possible
+4. If the question relates to previous conversation, acknowledge that context
+5. If information is not available in the documents, clearly state that
+6. Provide comprehensive, educational responses
+7. Always respond in Vietnamese unless specifically asked otherwise
+
+Please provide a helpful and accurate response:"""
+
+        return prompt
     
     def call_openai_api(self, prompt: str) -> Optional[str]:
         """Gọi OpenAI API để tạo response"""
@@ -1609,12 +1668,10 @@ Answer:"""
             data = {
                 'model': 'gpt-3.5-turbo',
                 'messages': [
-                    {
-                        'role': 'user',
-                        'content': prompt
-                    }
+                    {'role': 'system', 'content': 'You are a helpful educational AI assistant.'},
+                    {'role': 'user', 'content': prompt}
                 ],
-                'max_tokens': 500,
+                'max_tokens': 1500,
                 'temperature': 0.7
             }
             
@@ -1635,30 +1692,53 @@ Answer:"""
         except Exception as e:
             logger.error(f"Error calling OpenAI API: {e}")
             return None
+    
+    def process_chat(self, files: List[ChatFileInput], history_chat: List[ChatMessage], message: str) -> str:
+        """Xử lý chat request hoàn chỉnh"""
+        try:
+            # 1. Lấy content từ nhiều files
+            content = self.get_content_from_files(files)
+            
+            if not content or content.strip() == "":
+                return "Không thể đọc nội dung từ các file được cung cấp."
+            
+            # 2. Format prompt với content và history
+            prompt = self.format_chat_prompt(content, history_chat, message)
+            
+            # 3. Gọi OpenAI API
+            ai_response = self.call_openai_api(prompt)
+            
+            if ai_response:
+                return ai_response
+            else:
+                return "Xin lỗi, tôi gặp lỗi khi tạo phản hồi. Vui lòng thử lại."
+            
+        except Exception as e:
+            logger.error(f"Error in process_chat: {e}")
+            return f"Xin lỗi, có lỗi xảy ra khi xử lý yêu cầu. Lỗi: {str(e)}"
 
 # Khởi tạo chat system
 chat_system = ChatSystem()
 
 # ===== CHAT API ENDPOINTS =====
 @app.post("/api/chat", response_model=ChatResponse)
-async def chat_with_document(request: ChatRequest):
+async def chat_with_documents(request: ChatRequest):
     """
-    API chat với document đã được cache
+    API chat với multiple documents và history support
     """
     try:
-        logger.info(f"Chat request for file: {request.data.file_name}")
+        logger.info(f"Chat request with {len(request.data.files)} files")
+        logger.info(f"History messages: {len(request.data.history_chat)}")
         logger.info(f"User message: {request.data.message}")
         
         # Validate input
-        if not request.data.file_name.strip():
-            raise HTTPException(status_code=400, detail="file_name is required")
-        
         if not request.data.message.strip():
             raise HTTPException(status_code=400, detail="message is required")
         
-        # Generate response
-        response_message = chat_system.generate_chat_response(
-            request.data.file_name,
+        # Process chat với multi-file support
+        response_message = chat_system.process_chat(
+            request.data.files,
+            request.data.history_chat,
             request.data.message
         )
         
