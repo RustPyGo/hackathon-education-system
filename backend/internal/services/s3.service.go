@@ -13,13 +13,21 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+type FileUploadResult struct {
+	Key      string `json:"key"`
+	URL      string `json:"url"`
+	FileName string `json:"file_name"`
+}
+
 type IS3Service interface {
-	UploadPDFToS3(file *multipart.FileHeader, projectID string) (string, error)
+	UploadPDFToS3(file *multipart.FileHeader, projectID string) (*FileUploadResult, error)
+	UploadMultiplePDFsToS3(files []*multipart.FileHeader, projectID string) ([]*FileUploadResult, error)
 }
 
 type S3Service struct {
 	s3Client *s3.S3
 	bucket   string
+	endpoint string
 }
 
 func NewS3Service() IS3Service {
@@ -46,14 +54,24 @@ func NewS3Service() IS3Service {
 	return &S3Service{
 		s3Client: s3.New(sess),
 		bucket:   awsConfig.Bucket,
+		endpoint: awsConfig.Endpoint,
 	}
 }
 
-func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) (string, error) {
+func (s *S3Service) generateFileURL(key string) string {
+	if s.endpoint != "" {
+		// Custom endpoint (path-style)
+		return fmt.Sprintf("%s/%s/%s", s.endpoint, s.bucket, key)
+	}
+	// AWS S3 standard
+	return fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", s.bucket, global.Config.AWS.Region, key)
+}
+
+func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) (*FileUploadResult, error) {
 	// Open the uploaded file
 	src, err := file.Open()
 	if err != nil {
-		return "", fmt.Errorf("failed to open file: %w", err)
+		return nil, fmt.Errorf("failed to open file: %w", err)
 	}
 	defer src.Close()
 
@@ -71,8 +89,36 @@ func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) 
 		ACL:         aws.String("public-read"), // Make file publicly accessible
 	})
 	if err != nil {
-		return "", fmt.Errorf("failed to upload to S3: %w", err)
+		return nil, fmt.Errorf("failed to upload to S3: %w", err)
 	}
 
-	return key, nil
+	// Generate file URL
+	url := s.generateFileURL(key)
+
+	return &FileUploadResult{
+		Key:      key,
+		URL:      url,
+		FileName: file.Filename,
+	}, nil
+}
+
+func (s *S3Service) UploadMultiplePDFsToS3(files []*multipart.FileHeader, projectID string) ([]*FileUploadResult, error) {
+	var results []*FileUploadResult
+	var errors []string
+
+	for i, file := range files {
+		result, err := s.UploadPDFToS3(file, projectID)
+		if err != nil {
+			errors = append(errors, fmt.Sprintf("File %d (%s): %v", i+1, file.Filename, err))
+			continue
+		}
+		results = append(results, result)
+	}
+
+	// If there were any errors, return them along with successful uploads
+	if len(errors) > 0 {
+		return results, fmt.Errorf("some files failed to upload: %v", errors)
+	}
+
+	return results, nil
 }
