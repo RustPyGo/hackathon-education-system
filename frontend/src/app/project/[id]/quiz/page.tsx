@@ -22,7 +22,7 @@ export default function Page() {
                     Choose Quiz Mode
                 </h2>
                 <p className="text-gray-600">
-                    Select how you'd like to take your quiz
+                    Select how you&apos;d like to take your quiz
                 </p>
             </div>
 

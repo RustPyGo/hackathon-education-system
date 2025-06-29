@@ -1,11 +1,10 @@
 'use client';
 
 import { Question, QuestionChoice } from '@/service/question';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     CheckCircle,
-    ChevronLeft,
     ChevronRight,
     RotateCcw,
 } from 'lucide-react';
@@ -23,18 +22,6 @@ const difficultyConfigs = {
     },
     easy: {
         color: 'bg-blue-100 text-blue-800 border-blue-200',
-    },
-};
-
-const questionStatusConfigs = {
-    current: {
-        color: 'bg-blue-500 text-white border-blue-500',
-    },
-    answered: {
-        color: 'bg-green-500 text-white border-green-500',
-    },
-    unanswered: {
-        color: 'bg-white text-gray-700 border-gray-300 hover:border-gray-400 hover:text-white',
     },
 };
 
@@ -63,7 +50,7 @@ export const PracticeQuestionList = ({ questions: raw }: Props) => {
                             Congratulations!
                         </h2>
                         <p className="text-gray-600">
-                            You've completed all the practice questions.
+                            You&apos;ve completed all the practice questions.
                         </p>
                         <Button onClick={handleReset}>
                             <RotateCcw className="h-4 w-4 mr-2" />

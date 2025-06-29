@@ -1,6 +1,7 @@
 import { Question } from './type';
 
-export const getQuestions = async (_projectId: string): Promise<Question[]> => {
+export const getQuestions = async (projectId: string): Promise<Question[]> => {
+    console.log(projectId)
     return [
         {
             id: '1',
