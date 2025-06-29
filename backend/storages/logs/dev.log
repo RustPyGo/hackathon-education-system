@@ -305,3 +305,17 @@
 {"level":"INFO","time":"2025-06-29T13:44:31.241+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
 {"level":"INFO","time":"2025-06-29T13:44:31.555+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
 {"level":"INFO","time":"2025-06-29T13:44:31.556+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:20:19.119+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:20:19.132+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:20:19.134+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:20:19.343+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:20:19.343+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:39:19.488+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:39:19.493+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:39:19.493+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"ERROR","time":"2025-06-29T14:39:19.540+0700","caller":"initialize/migration.go:38","msg":"Failed to migrate database: ERROR: relation \"responses\" does not exist (SQLSTATE 42P01)","stacktrace":"github.com/RustPyGo/hackathon-education-system/backend/internal/initialize.AutoMigrate\n\t/Users/macbook/Documents/Hackathon/education-system/backend/internal/initialize/migration.go:38\ngithub.com/RustPyGo/hackathon-education-system/backend/internal/initialize.Init\n\t/Users/macbook/Documents/Hackathon/education-system/backend/internal/initialize/run.go:14\nmain.main\n\t/Users/macbook/Documents/Hackathon/education-system/backend/cmd/server/main.go:27\nruntime.main\n\t/usr/local/Cellar/go/1.24.2/libexec/src/runtime/proc.go:283"}
+{"level":"INFO","time":"2025-06-29T14:44:31.836+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:44:31.842+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:44:31.843+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:44:32.024+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:44:32.025+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
