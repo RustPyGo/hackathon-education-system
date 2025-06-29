@@ -63,8 +63,8 @@ jobs:
       PG_DB: ${{ secrets.PG_DB }}
       SERVER_PORT: ${{ secrets.SERVER_PORT }}
       SERVER_MODE: ${{ secrets.SERVER_MODE }}
-      REDIS_HOST: ${{ REDIS_HOST }}
-      REDIS_PORT: ${{ REDIS_PORT }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
       REDIS_DB: ${{ secrets.REDIS_DB }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
