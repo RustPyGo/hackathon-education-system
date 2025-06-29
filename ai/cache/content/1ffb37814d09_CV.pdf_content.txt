@@ -16,5 +16,5 @@ SKILL
 Programming Languages : Python, C, JavaScript, TypeScript, Go
 Backend : Node.js, Express.js, NestJs, Gin
 Frontend : React.js, React Native, NextJs
-Clound : Cloundinary, Firebase
+Cloud : Cloundinary, Firebase
 Database : MongoDB, MySQL, PostgreSQL, Graphql
