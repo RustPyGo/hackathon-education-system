@@ -9,11 +9,15 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY . .
 
+RUN bun install --frozen-lockfile
+
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
+
+FROM base AS builder
 
 ENV HOSTNAME="0.0.0.0"
 CMD ["bun", "run", "dev"]
