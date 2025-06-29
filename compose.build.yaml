@@ -12,8 +12,6 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile
-      args:
-        - NEXT_PUBLIC_WORKOS_REDIRECT_URI=${NEXT_PUBLIC_WORKOS_REDIRECT_URI}
     profiles:
       - frontend
       - build

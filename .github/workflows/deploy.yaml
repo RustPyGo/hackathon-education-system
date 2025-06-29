@@ -23,8 +23,6 @@ jobs:
           username: ${{ github.actor}}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image And Push
-        env:
-          NEXT_PUBLIC_WORKOS_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_WORKOS_REDIRECT_URI }}
         run: |
           docker compose -f compose.build.yaml --profile frontend build
           docker compose -f compose.build.yaml --profile frontend push
@@ -77,6 +75,7 @@ jobs:
       AI_API_URL: ${{ secrets.AI_API_URL }}
       AI_API_KEY: ${{ secrets.AI_API_KEY }}
 
+      NEXT_PUBLIC_WORKOS_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_WORKOS_REDIRECT_URI }}
       WORKOS_API_KEY: ${{ secrets.WORKOS_API_KEY }}
       WORKOS_CLIENT_ID: ${{ secrets.WORKOS_CLIENT_ID }}
       WORKOS_COOKIE_PASSWORD: ${{ secrets.WORKOS_COOKIE_PASSWORD }}
