@@ -92,6 +92,29 @@ func (cmc *ChatMessageController) GetChatMessageByID(c *gin.Context) {
 // @Param projectId path string true "Project ID"
 // @Success 200 {object} response.Response{data=[]models.ChatMessage}
 // @Failure 500 {object} response.Response
+// @Router /chat-message/project/{projectId} [get]
+func (cmc *ChatMessageController) GetChatMessagesByProjectID(c *gin.Context) {
+	projectID := c.Param("projectId")
+
+	chatMessages, err := cmc.chatMessageService.GetChatMessagesByProjectID(projectID)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to get chat messages")
+		return
+	}
+
+	response.SuccessResponse(c, http.StatusOK, chatMessages)
+}
+
+// GetChatMessagesByProjectAndUserID godoc
+// @Summary Get chat messages by project ID and user ID
+// @Description Get list of chat messages for a specific project and user
+// @Tags chat-messages
+// @Accept json
+// @Produce json
+// @Param projectId path string true "Project ID"
+// @Param userId path string true "User ID"
+// @Success 200 {object} response.Response{data=[]models.ChatMessage}
+// @Failure 500 {object} response.Response
 // @Router /chat-message/project/{projectId}/user/{userId} [get]
 func (cmc *ChatMessageController) GetChatMessagesByProjectAndUserID(c *gin.Context) {
 	projectID := c.Param("projectId")

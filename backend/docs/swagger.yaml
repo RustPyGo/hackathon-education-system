@@ -1,0 +1,1553 @@
+basePath: /api/v1
+definitions:
+  controllers.CreateQuestionRequest:
+    properties:
+      project_id:
+        type: string
+      questions:
+        items:
+          $ref: '#/definitions/services.CreateQuestionData'
+        type: array
+    type: object
+  models.Answer:
+    properties:
+      choice:
+        $ref: '#/definitions/models.QuestionChoice'
+      choice_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      question:
+        $ref: '#/definitions/models.Question'
+      question_id:
+        type: string
+      response:
+        allOf:
+        - $ref: '#/definitions/models.Response'
+        description: Relationships
+      response_id:
+        type: string
+    type: object
+  models.ChatMessage:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      project:
+        allOf:
+        - $ref: '#/definitions/models.Project'
+        description: Relationships
+      project_id:
+        type: string
+      sender:
+        type: string
+    type: object
+  models.Document:
+    properties:
+      created_at:
+        type: string
+      file_name:
+        type: string
+      id:
+        type: string
+      project_id:
+        type: string
+      s3_url:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Project:
+    properties:
+      chat_messages:
+        items:
+          $ref: '#/definitions/models.ChatMessage'
+        type: array
+      created_at:
+        type: string
+      documents:
+        items:
+          $ref: '#/definitions/models.Document'
+        type: array
+      exam_duration:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      questions:
+        description: Relationships
+        items:
+          $ref: '#/definitions/models.Question'
+        type: array
+      summary:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.Question:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/models.Answer'
+        type: array
+      choices:
+        items:
+          $ref: '#/definitions/models.QuestionChoice'
+        type: array
+      content:
+        type: string
+      created_at:
+        type: string
+      difficulty:
+        type: string
+      explanation:
+        type: string
+      id:
+        type: string
+      project:
+        allOf:
+        - $ref: '#/definitions/models.Project'
+        description: Relationships
+      project_id:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.QuestionChoice:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      explanation:
+        type: string
+      id:
+        type: string
+      is_correct:
+        type: boolean
+      question_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Response:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/models.Answer'
+        type: array
+      created_at:
+        type: string
+      id:
+        type: string
+      project:
+        allOf:
+        - $ref: '#/definitions/models.Project'
+        description: Relationships
+      project_id:
+        type: string
+      score:
+        type: integer
+      time_taken:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      last_name:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  response.Response:
+    description: Standard API response structure
+    properties:
+      code:
+        example: 200
+        type: integer
+      data: {}
+      message:
+        example: Success
+        type: string
+    type: object
+  services.CreateQuestionChoiceData:
+    properties:
+      content:
+        type: string
+      explanation:
+        type: string
+      is_correct:
+        type: boolean
+    type: object
+  services.CreateQuestionData:
+    properties:
+      choices:
+        items:
+          $ref: '#/definitions/services.CreateQuestionChoiceData'
+        type: array
+      difficulty:
+        type: string
+      explanation:
+        type: string
+      question:
+        type: string
+      type:
+        type: string
+    type: object
+  services.FileInfo:
+    properties:
+      file_name:
+        type: string
+      url:
+        type: string
+    type: object
+  services.ProjectCreateResult:
+    properties:
+      file_count:
+        type: integer
+      files:
+        items:
+          $ref: '#/definitions/services.FileInfo'
+        type: array
+      project:
+        $ref: '#/definitions/models.Project'
+      questions:
+        items:
+          $ref: '#/definitions/models.Question'
+        type: array
+      summary:
+        type: string
+    type: object
+  services.SubmitAnswer:
+    properties:
+      choice_id:
+        type: string
+      question_id:
+        type: string
+    type: object
+  services.SubmitExamRequest:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/services.SubmitAnswer'
+        type: array
+      project_id:
+        type: string
+      score:
+        type: integer
+      time_taken:
+        type: integer
+      user_id:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a education system server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Education System API
+  version: "1.0"
+paths:
+  /answer/:
+    post:
+      consumes:
+      - application/json
+      description: Create a new answer for a question
+      parameters:
+      - description: Answer information
+        in: body
+        name: answer
+        required: true
+        schema:
+          $ref: '#/definitions/models.Answer'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Answer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a new answer
+      tags:
+      - answers
+  /answer/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an answer by ID
+      parameters:
+      - description: Answer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete answer
+      tags:
+      - answers
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of an answer by its ID
+      parameters:
+      - description: Answer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Answer'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get answer by ID
+      tags:
+      - answers
+    put:
+      consumes:
+      - application/json
+      description: Update answer information
+      parameters:
+      - description: Answer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Answer information
+        in: body
+        name: answer
+        required: true
+        schema:
+          $ref: '#/definitions/models.Answer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Answer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update answer
+      tags:
+      - answers
+  /answer/question/{questionId}:
+    get:
+      consumes:
+      - application/json
+      description: Get list of answers for a specific question
+      parameters:
+      - description: Question ID
+        in: path
+        name: questionId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Answer'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get answers by question ID
+      tags:
+      - answers
+  /chat-message/:
+    post:
+      consumes:
+      - application/json
+      description: Create a new chat message and get AI response
+      parameters:
+      - description: Chat message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChatMessage'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.ChatMessage'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a new chat message
+      tags:
+      - chat-messages
+  /chat-message/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a chat message by ID
+      parameters:
+      - description: Chat Message ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete chat message
+      tags:
+      - chat-messages
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a chat message by its ID
+      parameters:
+      - description: Chat Message ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.ChatMessage'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get chat message by ID
+      tags:
+      - chat-messages
+    put:
+      consumes:
+      - application/json
+      description: Update chat message information
+      parameters:
+      - description: Chat Message ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Chat message information
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChatMessage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.ChatMessage'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update chat message
+      tags:
+      - chat-messages
+  /chat-message/project/{projectId}:
+    get:
+      consumes:
+      - application/json
+      description: Get list of chat messages for a specific project
+      parameters:
+      - description: Project ID
+        in: path
+        name: projectId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.ChatMessage'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get chat messages by project ID
+      tags:
+      - chat-messages
+  /document/:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all documents
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Document'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get all documents
+      tags:
+      - documents
+  /document/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a document by ID
+      parameters:
+      - description: Document ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete document
+      tags:
+      - documents
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a document by its ID
+      parameters:
+      - description: Document ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Document'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get document by ID
+      tags:
+      - documents
+    put:
+      consumes:
+      - application/json
+      description: Update document information
+      parameters:
+      - description: Document ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Document information
+        in: body
+        name: document
+        required: true
+        schema:
+          $ref: '#/definitions/models.Document'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Document'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update document
+      tags:
+      - documents
+  /document/project/{projectId}:
+    get:
+      consumes:
+      - application/json
+      description: Get list of documents for a specific project
+      parameters:
+      - description: Project ID
+        in: path
+        name: projectId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Document'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get documents by project ID
+      tags:
+      - documents
+  /document/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a document file
+      parameters:
+      - description: Document file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Document'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Upload document
+      tags:
+      - documents
+  /project/:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all projects
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Project'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get all projects
+      tags:
+      - projects
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new project by uploading PDF file(s), processing with
+        AI to generate questions and summary
+      parameters:
+      - description: PDF file(s) to upload
+        in: formData
+        name: pdf
+        required: true
+        type: file
+      - description: User ID
+        in: formData
+        name: user_id
+        required: true
+        type: string
+      - description: Exam duration in minutes
+        in: formData
+        name: exam_duration
+        required: true
+        type: integer
+      - description: Project name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Number of questions to generate
+        in: formData
+        name: total_questions
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/services.ProjectCreateResult'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a new project with PDF upload and AI processing
+      tags:
+      - projects
+  /project/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a project by ID
+      parameters:
+      - description: Project ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete project
+      tags:
+      - projects
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a project by its ID
+      parameters:
+      - description: Project ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Project'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get project by ID
+      tags:
+      - projects
+    put:
+      consumes:
+      - application/json
+      description: Update project information
+      parameters:
+      - description: Project ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Project information
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/models.Project'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Project'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update project
+      tags:
+      - projects
+  /project/account/{accountId}:
+    get:
+      consumes:
+      - application/json
+      description: Get list of projects for a specific account
+      parameters:
+      - description: Account ID
+        in: path
+        name: accountId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Project'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get projects by account ID
+      tags:
+      - projects
+  /question/:
+    post:
+      consumes:
+      - application/json
+      description: Create multiple questions for a project, including choices for
+        multiple choice questions
+      parameters:
+      - description: Question creation request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Question'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create multiple questions with choices
+      tags:
+      - questions
+  /question/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a question by ID
+      parameters:
+      - description: Question ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete question
+      tags:
+      - questions
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a question by its ID
+      parameters:
+      - description: Question ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Question'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get question by ID
+      tags:
+      - questions
+    put:
+      consumes:
+      - application/json
+      description: Update question information
+      parameters:
+      - description: Question ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Question information
+        in: body
+        name: question
+        required: true
+        schema:
+          $ref: '#/definitions/models.Question'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Question'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update question
+      tags:
+      - questions
+  /question/project/{projectId}:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all questions for a specific project
+      parameters:
+      - description: Project ID
+        in: path
+        name: projectId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Question'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get questions by project ID
+      tags:
+      - questions
+  /response/:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all responses
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Response'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get all responses
+      tags:
+      - responses
+  /response/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a response by ID
+      parameters:
+      - description: Response ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete response
+      tags:
+      - responses
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a response by its ID, including answers
+      parameters:
+      - description: Response ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Response'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get response by ID
+      tags:
+      - responses
+    put:
+      consumes:
+      - application/json
+      description: Update response information
+      parameters:
+      - description: Response ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Response update request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/services.SubmitExamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Response'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update response
+      tags:
+      - responses
+  /response/project/{projectId}:
+    get:
+      consumes:
+      - application/json
+      description: Get list of responses for a specific project
+      parameters:
+      - description: Project ID
+        in: path
+        name: projectId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Response'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get responses by project ID
+      tags:
+      - responses
+  /response/submit:
+    post:
+      consumes:
+      - application/json
+      description: Submit an exam with answers and get results
+      parameters:
+      - description: Exam submission request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/services.SubmitExamRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Response'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Submit exam
+      tags:
+      - responses
+  /response/user/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Get list of responses for a specific user
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Response'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get responses by user ID
+      tags:
+      - responses
+  /user/:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a new user
+      tags:
+      - users
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.User'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user information
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update user
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

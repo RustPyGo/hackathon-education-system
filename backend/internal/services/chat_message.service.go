@@ -15,6 +15,7 @@ type ChatMessageCreateResult struct {
 type IChatMessageService interface {
 	CreateChatMessage(chatMessage *models.ChatMessage) (*ChatMessageCreateResult, error)
 	GetChatMessageByID(id string) (*models.ChatMessage, error)
+	GetChatMessagesByProjectID(projectID string) ([]models.ChatMessage, error)
 	GetChatMessagesByProjectIDAndUserID(projectID, userID string) ([]models.ChatMessage, error)
 	UpdateChatMessage(chatMessage *models.ChatMessage) error
 	DeleteChatMessage(id string) error
@@ -69,6 +70,10 @@ func (cms *ChatMessageService) CreateChatMessage(chatMessage *models.ChatMessage
 
 func (cms *ChatMessageService) GetChatMessageByID(id string) (*models.ChatMessage, error) {
 	return cms.chatMessageRepo.GetByID(id)
+}
+
+func (cms *ChatMessageService) GetChatMessagesByProjectID(projectID string) ([]models.ChatMessage, error) {
+	return cms.chatMessageRepo.GetByProjectID(projectID)
 }
 
 func (cms *ChatMessageService) GetChatMessagesByProjectIDAndUserID(projectID, userID string) ([]models.ChatMessage, error) {
