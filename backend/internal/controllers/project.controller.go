@@ -20,6 +20,21 @@ func NewProjectController(projectService services.IProjectService) *ProjectContr
 	}
 }
 
+// CreateProject godoc
+// @Summary Create a new project with PDF upload and AI processing
+// @Description Create a new project by uploading PDF file(s), processing with AI to generate questions and summary
+// @Tags projects
+// @Accept multipart/form-data
+// @Produce json
+// @Param pdf formData file true "PDF file(s) to upload"
+// @Param user_id formData string true "User ID"
+// @Param exam_duration formData integer true "Exam duration in minutes"
+// @Param name formData string true "Project name"
+// @Param total_questions formData integer true "Number of questions to generate"
+// @Success 201 {object} response.Response{data=services.ProjectCreateResult}
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /project/ [post]
 func (pc *ProjectController) CreateProject(c *gin.Context) {
 	// Get form data
 	userID := c.PostForm("user_id")
@@ -108,6 +123,16 @@ func (pc *ProjectController) CreateProject(c *gin.Context) {
 	response.SuccessResponse(c, http.StatusCreated, result)
 }
 
+// GetProjectByID godoc
+// @Summary Get project by ID
+// @Description Get detailed information of a project by its ID
+// @Tags projects
+// @Accept json
+// @Produce json
+// @Param id path string true "Project ID"
+// @Success 200 {object} response.Response{data=models.Project}
+// @Failure 404 {object} response.Response
+// @Router /project/{id} [get]
 func (pc *ProjectController) GetProjectByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -120,6 +145,15 @@ func (pc *ProjectController) GetProjectByID(c *gin.Context) {
 	response.SuccessResponse(c, http.StatusOK, project)
 }
 
+// GetAllProjects godoc
+// @Summary Get all projects
+// @Description Get list of all projects
+// @Tags projects
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response{data=[]models.Project}
+// @Failure 500 {object} response.Response
+// @Router /project/ [get]
 func (pc *ProjectController) GetAllProjects(c *gin.Context) {
 	projects, err := pc.projectService.GetAllProjects()
 	if err != nil {
@@ -130,6 +164,16 @@ func (pc *ProjectController) GetAllProjects(c *gin.Context) {
 	response.SuccessResponse(c, http.StatusOK, projects)
 }
 
+// GetProjectsByAccountID godoc
+// @Summary Get projects by account ID
+// @Description Get list of projects for a specific account
+// @Tags projects
+// @Accept json
+// @Produce json
+// @Param accountId path string true "Account ID"
+// @Success 200 {object} response.Response{data=[]models.Project}
+// @Failure 500 {object} response.Response
+// @Router /project/account/{accountId} [get]
 func (pc *ProjectController) GetProjectsByAccountID(c *gin.Context) {
 	accountID := c.Param("accountId")
 
@@ -142,6 +186,18 @@ func (pc *ProjectController) GetProjectsByAccountID(c *gin.Context) {
 	response.SuccessResponse(c, http.StatusOK, projects)
 }
 
+// UpdateProject godoc
+// @Summary Update project
+// @Description Update project information
+// @Tags projects
+// @Accept json
+// @Produce json
+// @Param id path string true "Project ID"
+// @Param project body models.Project true "Project information"
+// @Success 200 {object} response.Response{data=models.Project}
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /project/{id} [put]
 func (pc *ProjectController) UpdateProject(c *gin.Context) {
 	id := c.Param("id")
 
@@ -160,6 +216,16 @@ func (pc *ProjectController) UpdateProject(c *gin.Context) {
 	response.SuccessResponse(c, http.StatusOK, project)
 }
 
+// DeleteProject godoc
+// @Summary Delete project
+// @Description Delete a project by ID
+// @Tags projects
+// @Accept json
+// @Produce json
+// @Param id path string true "Project ID"
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /project/{id} [delete]
 func (pc *ProjectController) DeleteProject(c *gin.Context) {
 	id := c.Param("id")
 

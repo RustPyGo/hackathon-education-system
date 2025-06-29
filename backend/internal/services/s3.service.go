@@ -14,8 +14,9 @@ import (
 )
 
 type FileUploadResult struct {
-	Key string `json:"key"`
-	URL string `json:"url"`
+	Key      string `json:"key"`
+	URL      string `json:"url"`
+	FileName string `json:"file_name"`
 }
 
 type IS3Service interface {
@@ -95,8 +96,9 @@ func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) 
 	url := s.generateFileURL(key)
 
 	return &FileUploadResult{
-		Key: key,
-		URL: url,
+		Key:      key,
+		URL:      url,
+		FileName: file.Filename,
 	}, nil
 }
 

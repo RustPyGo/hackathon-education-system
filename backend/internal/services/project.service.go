@@ -8,9 +8,14 @@ import (
 	"github.com/RustPyGo/hackathon-education-system/backend/internal/repositories"
 )
 
+type FileInfo struct {
+	URL      string `json:"url"`
+	FileName string `json:"file_name"`
+}
+
 type ProjectCreateResult struct {
 	Project   *models.Project   `json:"project"`
-	FileURLs  []string          `json:"file_urls,omitempty"`
+	Files     []FileInfo        `json:"files,omitempty"`
 	FileCount int               `json:"file_count,omitempty"`
 	Questions []models.Question `json:"questions,omitempty"`
 	Summary   string            `json:"summary,omitempty"`
@@ -27,22 +32,24 @@ type IProjectService interface {
 }
 
 type ProjectService struct {
-	projectRepo  repositories.IProjectRepository
-	documentRepo repositories.IDocumentRepository
-	questionRepo repositories.IQuestionRepository
-	answerRepo   repositories.IAnswerRepository
-	s3Service    IS3Service
-	aiService    IAIService
+	projectRepo        repositories.IProjectRepository
+	documentRepo       repositories.IDocumentRepository
+	questionRepo       repositories.IQuestionRepository
+	questionChoiceRepo repositories.IQuestionChoiceRepository
+	answerRepo         repositories.IAnswerRepository
+	s3Service          IS3Service
+	aiService          IAIService
 }
 
-func NewProjectService(projectRepo repositories.IProjectRepository, documentRepo repositories.IDocumentRepository, questionRepo repositories.IQuestionRepository, answerRepo repositories.IAnswerRepository) IProjectService {
+func NewProjectService(projectRepo repositories.IProjectRepository, documentRepo repositories.IDocumentRepository, questionRepo repositories.IQuestionRepository, questionChoiceRepo repositories.IQuestionChoiceRepository, answerRepo repositories.IAnswerRepository) IProjectService {
 	return &ProjectService{
-		projectRepo:  projectRepo,
-		documentRepo: documentRepo,
-		questionRepo: questionRepo,
-		answerRepo:   answerRepo,
-		s3Service:    NewS3Service(),
-		aiService:    NewAIService(),
+		projectRepo:        projectRepo,
+		documentRepo:       documentRepo,
+		questionRepo:       questionRepo,
+		questionChoiceRepo: questionChoiceRepo,
+		answerRepo:         answerRepo,
+		s3Service:          NewS3Service(),
+		aiService:          NewAIService(),
 	}
 }
 
@@ -61,7 +68,8 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 	// 3. Create document record in database
 	document := &models.Document{
 		ProjectID: project.ID,
-		AWSKey:    uploadResult.Key,
+		S3URL:     uploadResult.URL,
+		FileName:  uploadResult.FileName,
 	}
 	if err := ps.documentRepo.Create(document); err != nil {
 		return nil, fmt.Errorf("failed to create document record: %w", err)
@@ -69,7 +77,12 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 
 	// 4. Call AI API to generate questions and summary
 	aiRequest := &AIQuestionRequest{
-		URL:            uploadResult.URL,
+		Files: []FileInfo{
+			{
+				URL:      uploadResult.URL,
+				FileName: uploadResult.FileName,
+			},
+		},
 		ProjectID:      project.ID,
 		TotalQuestions: totalQuestions,
 		Name:           project.Name,
@@ -80,29 +93,32 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 		return nil, fmt.Errorf("failed to generate questions and summary: %w", err)
 	}
 
-	// 5. Save questions and answers to database
+	// 5. Save questions and choices to database
 	var questions []models.Question
 	for _, aiQuestion := range aiResponse.Questions {
 		// Create question
 		question := &models.Question{
-			ProjectID:       project.ID,
-			Question:        aiQuestion.Question,
-			AnswerCorrect:   aiQuestion.AnswerCorrect,
-			DifficultyLevel: aiQuestion.DifficultyLevel,
+			ProjectID:   project.ID,
+			Content:     aiQuestion.Question,
+			Type:        aiQuestion.Type,
+			Difficulty:  aiQuestion.Difficulty,
+			Explanation: aiQuestion.Explanation,
 		}
 
 		if err := ps.questionRepo.Create(question); err != nil {
 			return nil, fmt.Errorf("failed to create question: %w", err)
 		}
 
-		// Create answers for this question
-		for _, answerText := range aiQuestion.Answers {
-			answer := &models.Answer{
-				QuestionID: question.ID,
-				Answer:     answerText,
+		// Create choices for this question
+		for _, choiceData := range aiQuestion.Choices {
+			choice := &models.QuestionChoice{
+				QuestionID:  question.ID,
+				Content:     choiceData.Content,
+				IsCorrect:   choiceData.IsCorrect,
+				Explanation: choiceData.Explanation,
 			}
-			if err := ps.answerRepo.Create(answer); err != nil {
-				return nil, fmt.Errorf("failed to create answer: %w", err)
+			if err := ps.questionChoiceRepo.Create(choice); err != nil {
+				return nil, fmt.Errorf("failed to create question choice: %w", err)
 			}
 		}
 
@@ -115,9 +131,17 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 		return nil, fmt.Errorf("failed to update project with summary: %w", err)
 	}
 
+	// 7. Prepare file info for response
+	files := []FileInfo{
+		{
+			URL:      uploadResult.URL,
+			FileName: uploadResult.FileName,
+		},
+	}
+
 	return &ProjectCreateResult{
 		Project:   project,
-		FileURLs:  []string{uploadResult.URL},
+		Files:     files,
 		FileCount: 1,
 		Questions: questions,
 		Summary:   aiResponse.Summary,
@@ -137,21 +161,25 @@ func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project,
 	}
 
 	// 3. Create document records in database
-	var fileURLs []string
+	var files []FileInfo
 	for _, uploadResult := range uploadResults {
 		document := &models.Document{
 			ProjectID: project.ID,
-			AWSKey:    uploadResult.Key,
+			S3URL:     uploadResult.URL,
+			FileName:  uploadResult.FileName,
 		}
 		if err := ps.documentRepo.Create(document); err != nil {
 			return nil, fmt.Errorf("failed to create document record: %w", err)
 		}
-		fileURLs = append(fileURLs, uploadResult.URL)
+		files = append(files, FileInfo{
+			URL:      uploadResult.URL,
+			FileName: uploadResult.FileName,
+		})
 	}
 
-	// 4. Call AI API with the first file URL (or you can modify to use all URLs)
+	// 4. Call AI API with all file URLs
 	aiRequest := &AIQuestionRequest{
-		URL:            fileURLs[0], // Use first file for AI processing
+		Files:          files, // Send all files to AI
 		ProjectID:      project.ID,
 		TotalQuestions: totalQuestions,
 		Name:           project.Name,
@@ -162,29 +190,32 @@ func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project,
 		return nil, fmt.Errorf("failed to generate questions and summary: %w", err)
 	}
 
-	// 5. Save questions and answers to database
+	// 5. Save questions and choices to database
 	var questions []models.Question
 	for _, aiQuestion := range aiResponse.Questions {
 		// Create question
 		question := &models.Question{
-			ProjectID:       project.ID,
-			Question:        aiQuestion.Question,
-			AnswerCorrect:   aiQuestion.AnswerCorrect,
-			DifficultyLevel: aiQuestion.DifficultyLevel,
+			ProjectID:   project.ID,
+			Content:     aiQuestion.Question,
+			Type:        aiQuestion.Type,
+			Difficulty:  aiQuestion.Difficulty,
+			Explanation: aiQuestion.Explanation,
 		}
 
 		if err := ps.questionRepo.Create(question); err != nil {
 			return nil, fmt.Errorf("failed to create question: %w", err)
 		}
 
-		// Create answers for this question
-		for _, answerText := range aiQuestion.Answers {
-			answer := &models.Answer{
-				QuestionID: question.ID,
-				Answer:     answerText,
+		// Create choices for this question
+		for _, choiceData := range aiQuestion.Choices {
+			choice := &models.QuestionChoice{
+				QuestionID:  question.ID,
+				Content:     choiceData.Content,
+				IsCorrect:   choiceData.IsCorrect,
+				Explanation: choiceData.Explanation,
 			}
-			if err := ps.answerRepo.Create(answer); err != nil {
-				return nil, fmt.Errorf("failed to create answer: %w", err)
+			if err := ps.questionChoiceRepo.Create(choice); err != nil {
+				return nil, fmt.Errorf("failed to create question choice: %w", err)
 			}
 		}
 
@@ -199,7 +230,7 @@ func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project,
 
 	return &ProjectCreateResult{
 		Project:   project,
-		FileURLs:  fileURLs,
+		Files:     files,
 		FileCount: len(pdfFiles),
 		Questions: questions,
 		Summary:   aiResponse.Summary,
