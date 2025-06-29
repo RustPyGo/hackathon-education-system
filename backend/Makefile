@@ -27,6 +27,14 @@ clean:
 test:
 	go test ./...
 
+# Test sorted response APIs
+test-sorted-responses:
+	./test_sorted_responses.sh
+
+# Create test response data
+create-test-responses:
+	./scripts/create_test_responses.sh
+
 # Install dependencies
 deps:
 	go mod tidy

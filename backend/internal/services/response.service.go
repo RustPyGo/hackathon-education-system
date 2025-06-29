@@ -26,6 +26,9 @@ type IResponseService interface {
 	GetAllResponses() ([]models.Response, error)
 	GetResponsesByProjectID(projectID string) ([]models.Response, error)
 	GetResponsesByUserID(userID string) ([]models.Response, error)
+	GetAllResponsesSortedByScore() ([]models.Response, error)
+	GetResponsesByProjectIDSortedByScore(projectID string) ([]models.Response, error)
+	GetResponsesByUserIDSortedByScore(userID string) ([]models.Response, error)
 	UpdateResponse(response *models.Response) error
 	DeleteResponse(id string) error
 }
@@ -97,6 +100,18 @@ func (rs *ResponseService) GetResponsesByProjectID(projectID string) ([]models.R
 
 func (rs *ResponseService) GetResponsesByUserID(userID string) ([]models.Response, error) {
 	return rs.responseRepo.GetByUserID(userID)
+}
+
+func (rs *ResponseService) GetAllResponsesSortedByScore() ([]models.Response, error) {
+	return rs.responseRepo.GetAllSortedByScore()
+}
+
+func (rs *ResponseService) GetResponsesByProjectIDSortedByScore(projectID string) ([]models.Response, error) {
+	return rs.responseRepo.GetByProjectIDSortedByScore(projectID)
+}
+
+func (rs *ResponseService) GetResponsesByUserIDSortedByScore(userID string) ([]models.Response, error) {
+	return rs.responseRepo.GetByUserIDSortedByScore(userID)
 }
 
 func (rs *ResponseService) UpdateResponse(response *models.Response) error {
