@@ -1,31 +1,37 @@
 package response
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
-type ResponseData struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+// Response represents the standard API response structure
+// @Description Standard API response structure
+type Response struct {
+	Code    int         `json:"code" example:"200"`
+	Message string      `json:"message" example:"Success"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
-func SuccessResponse(c *gin.Context, statusCode int, data interface{}) {
-	c.JSON(statusCode, ResponseData{
-		Code:    ErrorCodeSuccess,
-		Message: msg[ErrorCodeSuccess],
-		Data:    data,
-	})
-}
-
-func ErrorResponse(c *gin.Context, statusCode int, message string) {
-	c.JSON(statusCode, ResponseData{
-		Code:    ErrorCodeParamInvalid,
+// ErrorResponse sends an error response
+func ErrorResponse(c *gin.Context, code int, message string) {
+	c.JSON(code, Response{
+		Code:    code,
 		Message: message,
 		Data:    nil,
 	})
 }
 
+// SuccessResponse sends a success response
+func SuccessResponse(c *gin.Context, code int, data interface{}) {
+	c.JSON(code, Response{
+		Code:    code,
+		Message: "Success",
+		Data:    data,
+	})
+}
+
 func ErrorResponseWithCode(c *gin.Context, statusCode int, code int) {
-	c.JSON(statusCode, ResponseData{
+	c.JSON(statusCode, Response{
 		Code:    code,
 		Message: msg[code],
 		Data:    nil,

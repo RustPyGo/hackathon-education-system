@@ -57,8 +57,8 @@ type AIService struct {
 
 func NewAIService() IAIService {
 	// TODO: Load from config
-	apiURL := "https://your-ai-api.com" // Change to your AI API base URL
-	apiKey := "your-api-key"            // Change to your API key
+	apiURL := "https://e2e5-118-69-69-187.ngrok-free.app" // Change to your AI API base URL
+	apiKey := "1234567890"                                // Change to your API key
 
 	return &AIService{
 		apiURL: apiURL,
@@ -77,7 +77,7 @@ func (ai *AIService) GenerateQuestionsAndSummary(request *AIQuestionRequest) (*A
 	}
 
 	// Create HTTP request
-	req, err := http.NewRequest("POST", ai.apiURL+"/generate-questions", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", ai.apiURL+"/api/generate-questions-sync", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}

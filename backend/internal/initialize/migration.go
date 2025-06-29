@@ -26,12 +26,12 @@ func AutoMigrate() {
 	err := global.DB.AutoMigrate(
 		&models.User{},
 		&models.Project{},
-		&models.QuestionPack{},
-		&models.FlashCard{},
 		&models.ChatMessage{},
 		&models.Question{},
 		&models.Answer{},
 		&models.Response{},
+		&models.Document{},
+		&models.QuestionChoice{},
 	)
 
 	if err != nil {
