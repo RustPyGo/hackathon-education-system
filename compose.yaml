@@ -74,6 +74,10 @@ services:
 
   frontend:
     container_name: education-system-frontend
+    environment:
+      WORKOS_API_KEY: ${WORKOS_API_KEY}
+      WORKOS_CLIENT_ID: ${secrets.WORKOS_CLIENT_ID}
+      WORKOS_COOKIE_PASSWORD: ${secrets.WORKOS_COOKIE_PASSWORD}
     image: ${REGISTRY}/frontend:latest
     restart: always
     ports:
