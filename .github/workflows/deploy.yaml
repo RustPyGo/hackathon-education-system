@@ -23,6 +23,8 @@ jobs:
           username: ${{ github.actor}}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image And Push
+        env:
+          NEXT_PUBLIC_WORKOS_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_WORKOS_REDIRECT_URI }}
         run: |
           docker compose -f compose.build.yaml --profile frontend build
           docker compose -f compose.build.yaml --profile frontend push
