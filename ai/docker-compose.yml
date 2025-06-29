@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - MAX_CONCURRENT_TASKS=10
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./cache:/app/cache
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: education-system
+    external: true

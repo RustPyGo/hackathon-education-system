@@ -1,0 +1,175 @@
+Biology Exam - Paper 6 Revision Notes  
+Enzyme activity lab : 
+2H 2O2 (l) →  2H 2O (l) + O 2 (g) 
+This reaction can be catalysed by an enzyme (catalase) or by a non -biological catalyst (Manganese IV oxide)  
+1. Put 3cm2 of hydrogen peroxide in a test tube.  
+2. Add fresh potato strips and shake gently.  
+3. Keep your  thumb on top of the test tube, or use a stopper, to retain the gas.  
+4. Do the “glowing splint” test → the splint relights  
+Positive control: repeat the original experiment using manganese IV oxide → bubbles of oxygen form  
+ Conclusion: the reaction happens because of a catalyst  
+1st negative control: repeat the original experiment using boiled  potato strips → nothing happens  
+ Conclusion: enzymes denature when they are at high temperatures  
+2nd negative control: repeat the original experiment using water instead of hydrogen peroxide → nothing happens  
+ Conclusion: hydrogen peroxide is the substrate  
+3rd negative control: repeat in a cold environment, the effervescence should be slower  
+ Conclusion: enzymes don’t work as well in the cold  
+ 
+Chemical tests : 
+-starch : add a few drops of iodine solution , a positive result (i.e. starch is present) is a deep blue -black  colour, a 
+negative result is orange.  
+-reducing sugars  (e.g. glucose): Benedict’s reagent , then the mixture is heated for 2 to 3 minutes. Positive result is 
+an orange/brick -red colour, negative result is blue (the colour of the Benedict’s reagent).  
+-proteins : add a few drops of Biuret reagent , a positive result is a mauve/purple  colour.  
+-fats: the emulsion test : ethanol is added to the mixture, this is poured into a test tube with an equal number of 
+distilled water, a positive result a milky -white emulsion forms.  
+ 
+Investigating the factors necessary  for photosynthesis : 
+Chlorophyll  – with a variegated leaf...  
+1) Leaf is boiled in water for 2 minutes: to break down cell walls, denature the enzymes and allow for easier 
+penetration by ethanol.  
+2) Warmed in ethanol until leaf is colorless: to extract the chlorophyll, which would mask observation (you need 
+to see a color change), chlorophyll is soluble in ethanol but not water.  
+3) Dipped in water briefly: to soften leaf  
+4) Leaf is placed on a white tile and iodine is added: if starch is present the color will be blue -black, if it is absent 
+it will be orange -brown, this is shown against the white tile.  
+ 
+Light : de-starch the plant by placing it in a dark cupboard or box for 48 hours, so that there is no starch in the leaves. 
+Then you can:  
+A) Clip a black paper onto both sides of the leaf to make a strip  
+B) Make an air -tight bag around a leaf with soda lime (absorbs CO 2) in it.  
+C) Make an air -tight bag around a leaf with hydrogencarbonate solution (provides CO 2) in it.  
+Then remove leaf and:  
+1. Leaf is boiled in water for 2 minutes: to break down cell walls, denature the enzymes and allow for easier 
+penetration by ethanol.  
+2. Warmed in ethanol until leaf is colorless: to extract the chlorophyll, which would mask observation (you need 
+to see a color change), chlorophyll is soluble in ethanol but not water.  
+3. Dipped in water briefly: to soften leaf  
+4. Leaf is placed on a white tile and iodine is added: if starch is present the color will be blue -black, if it is absent 
+it will be orange -brown, this is shown against the white tile.  
+ 
+Carbon dioxide:  
+Required materials  
+• 2 Potted plants  
+• 2 Bell -jars 
+• A Candle  
+• Dish containing Caustic soda  
+• Petroleum jelly  
+• Glass sheets  
+• Iodine solution to test leaves for starch  
+Estimated Experiment Time  
+Approximately 10 minutes to set up the apparatus and 8 -12 hours to carry out the observations  
+Step -By-Step Procedure  
+• 1. Take two young potted plants.  
+• 2. Apply petroleum jelly on two glass sheets.  
+• 3. Place the potted plants on these glass sheets.  
+• 4. On one glass sheet, along with the potted plant place a burning candle.  
+• 5. In the other, place a dish containing caustic soda.  
+• 6. Cover them with the bell jars.  
+• 7. Leave undisturbed for a few hours and test the leaves from each pot for the presence of starch.  
+Note  
+• Potted plants must ideally have been kept in the dark to make the leaves starch -free before including them in 
+this experiment.  
+• The petroleum jelly makes the bell jars airtight.  
+ 
+Investigating what happens when varying  the factors affecting 
+photosynthesis : 
+ 
+NOTE: this diagram is from an IGCSE paper 6 (and the “gas” is oxygen and the pondweed is in water)  
+Light intensity : (NOTE: I copied this from “model answer”) First a lamp is placed as close as possible to the 
+apparatus, then the experiment is repeated several times, each times with the lamp further away from the apparatus. 
+Heat from the bulb is prevented from affecting the result by placing a clear glass sheet between the lamp and the 
+apparatus, and the pond weed used is left for several minutes in each new light intensity to allow it to adjust to new 
+conditions before rate is measured.  
+Carbon dioxide : vary the amount of hydrogen carbonate in the solution, this supplies the plant with carbon 
+dioxide for photosynthesis (light intensity and temperature are controlled variables)  
+ 
+Temperature : set up the apparatus  in several different -temperature environments  
+The effect of temperature on plant growth  
+ 
+ 
+ 
+Investigating transpiration rate : the potometer (page 91)  
+ 
+1. Leafy shoot must be cut, the apparatus filled and the shoot fixed to the potometer, all under water to prevent air 
+locks in system. Capillary tube must be horizontal otherwise the bubble will move because of its lower density.  
+2. Allow plant to equilibrate (5min) before introducing air bubble. Measure rate of bubble movement at least 3 times, 
+and use reservoir to return bubble to zero each time. Record air temperature and find mean of readings.  
+3. Find out leaf area to calculate rate of water uptake per unit of leaves.  
+Variables: temperature, air humidity, light intensity and wind (using a fan vs. no fan, I guess).  
+ 
+Investigation: how plants respond to gravity (geotropism)  
+1) Freshly germinate broad bean seedlings inside a glass jar, the seed is held by a roll of moist clotting paper.  
+2) Seedlings are allowed to grow for a further five days, with the jars placed a) the right way up b) upside down and c) 
+on its side.  
+In each case the roots will turn to go downwards, and the shoot turns to grow upwards, (diagram page 162).  
+ 
+Investigating the light sensitive region (phototropism)  
+1) There are three groups of coleoptiles (oat shoots). A) Has its tips removed, B) tips are covered and C) are untreated.  
+2) The coleoptiles are measured, and lengths recorded.  
+3)They are put in light proof boxes with one gap which only allow light to enter laterally (from the side).  
+4) They are measured 2 -3 days later, and new lengths are recorded.  
+Untreated coleoptiles will grow the most.  
+Other experiments:  
+Mark rings around the shoot, all the same length away from each other. After growth towards the sunlight, the spaces 
+will increase in different areas showing where growth has taken place.  
+(All of these experiments on phototropism are on pages 160 -161 with diagrams).  
+ 
+Osmosis, hypertonic, hypotonic and isotonic solutions  & determining the 
+concentration inside a cell  
+Remember:  
+In an isotonic solution : concentration of solute outside cell = concentration inside cell → no change in size  
+In a hypertonic solution : concentration of solute outside cell > concentration inside cell → cell shrinks  
+In a hypotonic solution : concentration of solute outside cell < concentration inside cell → cell swells  
+ 
+Potato strips are placed in solutions of different concentrations (you have to know the concentrations). They are 
+measured in mass before and after being in the solutions. The solution in which the potato strip does not change in 
+mass is the isotonic solution, but it is unlikely that the solution will be exactly the right concentration, so you have to p lot 
+a graph and find what the concentration is. Concentration on the x -axis and mass change in the y -axis (note: the line 
+will go above and below the x -axis since some of the potato strips will shrink). Where the line intersects the x -axis, 
+there is no mass change so that is the concentration inside the potato.  
+ 
+Demonstrating osmosis : 
+This is like the potato strip experiment but it simply demonstrates that osmosis occurs, it does not determine the 
+concentration of the cells  
+ 
+The flaming nut experiment : 
+ 
+ 
+ 
+ 
+ 
+ 
+Investigating Insulation:  
+ 
+ 
+ 
+ 
+ 
+ 
+Concentration of Vitamin C (ascorbic acid) in fruit juices  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Finding the xylem in a cross section of a stem and root  
+ 
+ 
+ 
+ 
+ 
+Demonstrating that respiration uses oxygen and produces CO 2 
+ 
+or 
+ 
+Demonstrating the effect of pH on enzyme activity  
+(I don’t think this is the kind of lab that you have to remember)  
+ 
+OR 
+ 
+ 

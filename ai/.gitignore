@@ -7,3 +7,5 @@ show.json
 cache_*.pkl
 conversation_history.json
 temp_pdf_content*.txt
+temp_gen_pdf_*.txt
+questions_*.json

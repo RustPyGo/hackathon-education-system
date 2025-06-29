@@ -1,0 +1,194 @@
+{
+  "info": {
+    "name": "AI Question Generator - SYNC OPTIMIZED (300 Questions)",
+    "description": "Test API tối ưu cho 300 câu hỏi/lần - Chỉ xử lý đồng bộ",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/health",
+          "host": ["{{base_url}}"],
+          "path": ["api", "health"]
+        },
+        "description": "Kiểm tra trạng thái server tối ưu"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Cache Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/cache/info",
+          "host": ["{{base_url}}"],
+          "path": ["api", "cache", "info"]
+        },
+        "description": "Xem thông tin cache hiện tại"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Clear Cache",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/cache/clear",
+          "host": ["{{base_url}}"],
+          "path": ["api", "cache", "clear"]
+        },
+        "description": "Xóa toàn bộ cache để test từ đầu"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Test Small Batch (50 Questions)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"files\": [\n    {\n      \"url\": \"{{test_pdf_url_1}}\",\n      \"file_name\": \"test_document_1.pdf\"\n    },\n    {\n      \"url\": \"{{test_pdf_url_2}}\",\n      \"file_name\": \"test_document_2.pdf\"\n    }\n  ],\n  \"project_id\": \"test_small_batch\",\n  \"total_questions\": 50,\n  \"name\": \"Test Small Batch 50Q\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/generate-questions-sync",
+          "host": ["{{base_url}}"],
+          "path": ["api", "generate-questions-sync"]
+        },
+        "description": "Test với 50 câu hỏi để đảm bảo hệ thống hoạt động"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Test Medium Batch (150 Questions)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"files\": [\n    {\n      \"url\": \"{{test_pdf_url_1}}\",\n      \"file_name\": \"test_document_1.pdf\"\n    },\n    {\n      \"url\": \"{{test_pdf_url_2}}\",\n      \"file_name\": \"test_document_2.pdf\"\n    },\n    {\n      \"url\": \"{{test_pdf_url_3}}\",\n      \"file_name\": \"test_document_3.pdf\"\n    }\n  ],\n  \"project_id\": \"test_medium_batch\",\n  \"total_questions\": 150,\n  \"name\": \"Test Medium Batch 150Q\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/generate-questions-sync",
+          "host": ["{{base_url}}"],
+          "path": ["api", "generate-questions-sync"]
+        },
+        "description": "Test với 150 câu hỏi - mức trung bình"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Test Large Batch (300 Questions) 🎯",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"files\": [\n    {\n      \"url\": \"{{test_pdf_url_1}}\",\n      \"file_name\": \"document_1.pdf\"\n    },\n    {\n      \"url\": \"{{test_pdf_url_2}}\",\n      \"file_name\": \"document_2.pdf\"\n    },\n    {\n      \"url\": \"{{test_pdf_url_3}}\",\n      \"file_name\": \"document_3.pdf\"\n    },\n    {\n      \"url\": \"{{test_pdf_url_4}}\",\n      \"file_name\": \"document_4.pdf\"\n    }\n  ],\n  \"project_id\": \"test_large_batch_300\",\n  \"total_questions\": 300,\n  \"name\": \"Test Large Batch 300Q - OPTIMIZED\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/generate-questions-sync",
+          "host": ["{{base_url}}"],
+          "path": ["api", "generate-questions-sync"]
+        },
+        "description": "🎯 TEST CHÍNH: 300 câu hỏi với server tối ưu"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Test Multi-File (15 Files Max)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"files\": [\n    {\"url\": \"{{test_pdf_url_1}}\", \"file_name\": \"doc_01.pdf\"},\n    {\"url\": \"{{test_pdf_url_2}}\", \"file_name\": \"doc_02.pdf\"},\n    {\"url\": \"{{test_pdf_url_3}}\", \"file_name\": \"doc_03.pdf\"},\n    {\"url\": \"{{test_pdf_url_4}}\", \"file_name\": \"doc_04.pdf\"},\n    {\"url\": \"{{test_pdf_url_1}}\", \"file_name\": \"doc_05.pdf\"},\n    {\"url\": \"{{test_pdf_url_2}}\", \"file_name\": \"doc_06.pdf\"},\n    {\"url\": \"{{test_pdf_url_3}}\", \"file_name\": \"doc_07.pdf\"},\n    {\"url\": \"{{test_pdf_url_4}}\", \"file_name\": \"doc_08.pdf\"},\n    {\"url\": \"{{test_pdf_url_1}}\", \"file_name\": \"doc_09.pdf\"},\n    {\"url\": \"{{test_pdf_url_2}}\", \"file_name\": \"doc_10.pdf\"}\n  ],\n  \"project_id\": \"test_multi_file\",\n  \"total_questions\": 200,\n  \"name\": \"Test Multi-File Processing\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/generate-questions-sync",
+          "host": ["{{base_url}}"],
+          "path": ["api", "generate-questions-sync"]
+        },
+        "description": "Test xử lý nhiều file cùng lúc (tối đa 15 files)"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Test Cache Performance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"files\": [\n    {\n      \"url\": \"{{test_pdf_url_1}}\",\n      \"file_name\": \"cache_test_doc.pdf\"\n    }\n  ],\n  \"project_id\": \"test_cache_performance\",\n  \"total_questions\": 30,\n  \"name\": \"Cache Performance Test\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/generate-questions-sync",
+          "host": ["{{base_url}}"],
+          "path": ["api", "generate-questions-sync"]
+        },
+        "description": "Chạy lại request này để test tốc độ cache (lần 2 sẽ nhanh hơn)"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "description": "URL của server tối ưu"
+    },
+    {
+      "key": "test_pdf_url_1",
+      "value": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "description": "URL PDF test 1 (thay bằng PDF thật)"
+    },
+    {
+      "key": "test_pdf_url_2",
+      "value": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "description": "URL PDF test 2 (thay bằng PDF thật)"
+    },
+    {
+      "key": "test_pdf_url_3",
+      "value": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "description": "URL PDF test 3 (thay bằng PDF thật)"
+    },
+    {
+      "key": "test_pdf_url_4",
+      "value": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "description": "URL PDF test 4 (thay bằng PDF thật)"
+    }
+  ]
+}
