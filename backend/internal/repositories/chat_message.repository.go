@@ -11,6 +11,7 @@ type IChatMessageRepository interface {
 	GetByID(id string) (*models.ChatMessage, error)
 	GetByProjectID(projectID string) ([]models.ChatMessage, error)
 	Update(chatMessage *models.ChatMessage) error
+	GetByProjectIDAndUserID(projectID, userID string) ([]models.ChatMessage, error)
 	Delete(id string) error
 }
 
@@ -22,6 +23,12 @@ func NewChatMessageRepository() IChatMessageRepository {
 	return &chatMessageRepository{
 		db: global.DB,
 	}
+}
+
+func (r *chatMessageRepository) GetByProjectIDAndUserID(projectID, userID string) ([]models.ChatMessage, error) {
+	var chatMessages []models.ChatMessage
+	err := r.db.Where("project_id = ? AND user_id = ?", projectID, userID).Find(&chatMessages).Error
+	return chatMessages, err
 }
 
 func (r *chatMessageRepository) Create(chatMessage *models.ChatMessage) error {
