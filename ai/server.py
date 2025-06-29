@@ -1467,7 +1467,7 @@ class ChatSystem:
             logger.error("Missing OPENAI_API_KEY")
             
     def get_cached_content(self, file_name: str) -> Optional[str]:
-        """Lấy nội dung đã cache từ file_name"""
+        """Lấy nội dung đã cache từ file_name (sử dụng cùng logic với question generation)"""
         try:
             # Kiểm tra cache folder
             cache_dir = Path("cache")
@@ -1475,48 +1475,70 @@ class ChatSystem:
                 logger.warning("Cache directory not found")
                 return None
             
-            # Tạo hash từ file_name để tìm cache file
-            file_hash = hashlib.md5(file_name.encode()).hexdigest()
+            # Normalize file_name (remove _content.pdf suffix if present)
+            normalized_name = file_name
+            if normalized_name.endswith('_content.pdf'):
+                normalized_name = normalized_name.replace('_content.pdf', '.pdf')
+            elif normalized_name.endswith('_content'):
+                normalized_name = normalized_name.replace('_content', '')
             
-            # Tìm file cache theo pattern hash_content.txt
-            cache_files = list(cache_dir.glob(f"{file_hash}_content.txt"))
+            # Sử dụng cùng logic hash như trong MultiFileCache
+            file_hash = hashlib.md5(normalized_name.encode()).hexdigest()
             
-            if not cache_files:
-                # Thử tìm file cache theo pattern khác
-                cache_files = list(cache_dir.glob(f"*_content.txt"))
-                # Filter theo tên file nếu có metadata
-                for cache_file in cache_files:
-                    try:
-                        # Đọc một phần file để check nếu match
-                        with open(cache_file, 'r', encoding='utf-8') as f:
-                            content_preview = f.read(500)
-                            if file_name.lower() in content_preview.lower():
-                                cache_files = [cache_file]
-                                break
-                    except:
-                        continue
+            logger.info(f"Looking for cache with file_name: {file_name}")
+            logger.info(f"Normalized to: {normalized_name}")
+            logger.info(f"Hash: {file_hash}")
+            
+            # Tìm file cache trong cache/content/
+            content_dir = cache_dir / "content"
+            if content_dir.exists():
+                # Pattern 1: hash_filename_content.txt
+                cache_files = list(content_dir.glob(f"{file_hash}_{normalized_name}_content.txt"))
                 
+                if not cache_files:
+                    # Pattern 2: hash_content.txt
+                    cache_files = list(content_dir.glob(f"{file_hash}_*content.txt"))
+                
+                if not cache_files:
+                    # Pattern 3: Tìm file có hash matching
+                    for cache_file in content_dir.glob("*_content.txt"):
+                        if cache_file.name.startswith(file_hash):
+                            cache_files = [cache_file]
+                            break
+                    
+                if not cache_files:
+                    # Pattern 4: Tìm file chứa normalized_name trong tên
+                    base_name = normalized_name.replace('.pdf', '').replace('.', '-')
+                    cache_files = list(content_dir.glob(f"*{base_name}*"))
+                
+                if cache_files:
+                    # Lấy file cache mới nhất
+                    latest_cache = max(cache_files, key=lambda x: x.stat().st_mtime)
+                    with open(latest_cache, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        logger.info(f"Found cached content for {file_name}: {len(content)} chars from {latest_cache.name}")
+                        return content
+            
+            # Fallback: Tìm trong cache root directory
+            cache_files = list(cache_dir.glob(f"{file_hash}_content.txt")) + list(cache_dir.glob(f"*{normalized_name}*"))
+            
             if cache_files:
-                # Lấy file cache mới nhất
                 latest_cache = max(cache_files, key=lambda x: x.stat().st_mtime)
                 with open(latest_cache, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    logger.info(f"Found cached content for {file_name}: {len(content)} chars")
+                    logger.info(f"Found cached content for {file_name}: {len(content)} chars from {latest_cache.name}")
                     return content
             
-            # Thử check trong cache/content/ subfolder
-            content_dir = cache_dir / "content"
+            # Log available files for debugging
+            all_cache_files = []
             if content_dir.exists():
-                content_files = list(content_dir.glob(f"*{file_name}*")) + list(content_dir.glob("*.txt"))
-                if content_files:
-                    latest_file = max(content_files, key=lambda x: x.stat().st_mtime)
-                    with open(latest_file, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        logger.info(f"Found content in subfolder for {file_name}: {len(content)} chars")
-                        return content
+                all_cache_files.extend([f.name for f in content_dir.glob("*.txt")])
+            all_cache_files.extend([f.name for f in cache_dir.glob("*_content.txt")])
             
             logger.warning(f"No cached content found for file: {file_name}")
-            logger.info(f"Available cache files: {[f.name for f in cache_dir.glob('*_content.txt')]}")
+            logger.info(f"Normalized: {normalized_name}")
+            logger.info(f"File hash: {file_hash}")
+            logger.info(f"Available cache files: {all_cache_files}")
             return None
             
         except Exception as e:
@@ -1530,7 +1552,11 @@ class ChatSystem:
             cached_content = self.get_cached_content(file_name)
             
             if not cached_content:
-                return "I'm sorry, I don't have access to the document content. Please make sure the file has been processed through the question generation system first."
+                # Throw exception thay vì return error message
+                raise HTTPException(
+                    status_code=404, 
+                    detail=f"File '{file_name}' not found in cache. Please upload the document first using /api/generate-questions-sync"
+                )
             
             # Tạo prompt cho OpenAI
             # Lấy relevant content (first 2000 chars để tránh token limit)
@@ -1558,11 +1584,19 @@ Answer:"""
             if response:
                 return response
             else:
-                return "I'm having trouble processing your question right now. Please try again."
+                raise HTTPException(
+                    status_code=500,
+                    detail="Failed to generate response from AI. Please try again."
+                )
                 
+        except HTTPException:
+            raise  # Re-raise HTTP exceptions
         except Exception as e:
             logger.error(f"Error generating chat response: {e}")
-            return "I encountered an error while processing your question. Please try again."
+            raise HTTPException(
+                status_code=500,
+                detail=f"Internal server error while processing your question: {str(e)}"
+            )
     
     def call_openai_api(self, prompt: str) -> Optional[str]:
         """Gọi OpenAI API để tạo response"""
