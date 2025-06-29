@@ -1,23 +1,20 @@
-FROM oven/bun:latest AS base
-
+# Use the official Bun image as a base
 FROM oven/bun:latest
+
+# Set the working directory inside the container
 WORKDIR /app
 
-ENV NEXT_TELEMETRY_DISABLED=1
+# Copy package.json and bun.lockb to leverage Docker caching
+COPY package.json bun.lockb* ./
 
-RUN adduser --system --uid 1001 nextjs
+# Install dependencies
+RUN bun install
 
+# Copy the rest of your application code
 COPY . .
 
-RUN bun install --frozen-lockfile
-
-USER nextjs
-
+# Expose the port Next.js runs on
 EXPOSE 3000
 
-ENV PORT=3000
-
-FROM base AS builder
-
-ENV HOSTNAME="0.0.0.0"
+# Start the Next.js development server
 CMD ["bun", "run", "dev"]
