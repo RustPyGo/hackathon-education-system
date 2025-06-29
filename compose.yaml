@@ -27,15 +27,53 @@ services:
 
   backend:
     container_name: education-system-backend
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
+      # Database Configuration
+      DATABASE_HOST: database
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${PG_USER}
+      DATABASE_PASSWORD: ${PG_PASS}
+      DATABASE_NAME: ${PG_DB}
+      DATABASE_SSLMODE: disable
+
+      # Server Configuration
+      SERVER_PORT: ${SERVER_PORT}
+      SERVER_MODE: ${SERVER_MODE}
+
+      # Redis Configuration
+      REDIS_HOST: redis
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB: ${REDIS_DB}
+
+      # AWS/S3 Configuration
+      AWS_REGION: ${AWS_REGION}
+      AWS_BUCKET: ${AWS_BUCKET}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_ENDPOINT: ${AWS_ENDPOINT}
     image: ${REGISTRY}/backend:latest
     restart: always
     networks:
       - network
+    depends_on:
+      - database
+      - redis
     profiles:
       - backend
       - deploy
+
+  redis:
+    container_name: education-system-redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+    networks:
+      - network
+
   frontend:
     container_name: education-system-frontend
     image: ${REGISTRY}/frontend:latest
@@ -47,6 +85,7 @@ services:
     profiles:
       - frontend
       - deploy
+
 networks:
   network:
     name: education-system-network
