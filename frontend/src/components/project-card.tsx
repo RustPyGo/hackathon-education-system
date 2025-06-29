@@ -1,7 +1,9 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Project } from '@/service/project';
+import { formatDistanceToNow } from 'date-fns';
 import {
     BookOpen,
     Brain,
@@ -10,8 +12,6 @@ import {
     MessageSquare,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
-import { formatDistanceToNow } from 'date-fns';
 
 export const ProjectCard = (project: Project) => {
     const router = useRouter();
@@ -20,7 +20,7 @@ export const ProjectCard = (project: Project) => {
         <Card
             className="group hover:shadow-2xl transition-all duration-300 cursor-pointer border-0 shadow-lg overflow-hidden bg-white hover:scale-105 transform"
             onClick={() => {
-                router.push(`/projects/${project.id}`);
+                router.push(`/project/${project.id}`);
             }}
         >
             <CardHeader>
@@ -40,7 +40,7 @@ export const ProjectCard = (project: Project) => {
             <CardContent className="p-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
                     <Calendar className="h-4 w-4" />
-                    {formatDistanceToNow(project.createdAt)}
+                    {formatDistanceToNow(project.created_at)}
                 </div>
 
                 <h3 className="font-bold text-gray-900 mb-3 line-clamp-1 text-lg group-hover:text-blue-600 transition-colors">

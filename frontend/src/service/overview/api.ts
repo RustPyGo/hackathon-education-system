@@ -1,4 +1,6 @@
+import { GET_PROJECT_BY_ID } from './constant';
 import type { Overview3 as Overview, Project } from './type';
+import { BASE_URL_DEFAULT } from '@/api-client/constants';
 
 const MOCK_OVERVIEW: Overview = {
     project_id: '12345',
@@ -23,9 +25,11 @@ const MOCK_PDF_FILES = [
 ];
 
 export async function fetchOverview(projectId: string): Promise<Overview> {
-    await new Promise((res) => setTimeout(res, 400));
-    // Always return the mock overview for the demo
-    return { ...MOCK_OVERVIEW, project_id: projectId };
+    const response = await fetch(
+        `${BASE_URL_DEFAULT}${GET_PROJECT_BY_ID}/${projectId}`
+    );
+    const responseData = await response.json();
+    return responseData.data;
 }
 
 export async function fetchProject(projectId: string): Promise<Project> {
