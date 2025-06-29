@@ -1,0 +1,89 @@
+'use client';
+
+import { BookOpen, GraduationCap, Home, Users } from 'lucide-react';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarRail,
+} from '@/components/ui/sidebar';
+import Link from 'next/link';
+
+const menuItems = [
+    {
+        title: 'Overview',
+        icon: Home,
+        id: 'overview',
+        href: '/admin/overview',
+    },
+    {
+        title: 'Users',
+        icon: Users,
+        id: 'users',
+        href: '/admin/user',
+    },
+    {
+        title: 'Projects',
+        icon: BookOpen,
+        id: 'projects',
+        href: '/admin/project',
+    },
+    {
+        title: 'Archive',
+        icon: GraduationCap,
+        id: 'archive',
+        href: '/admin/archived',
+    },
+];
+
+interface DashboardSidebarProps {
+    activeView: string;
+    setActiveView?: (view: string) => void;
+}
+
+export function DashboardSidebar({
+    activeView,
+    setActiveView,
+}: DashboardSidebarProps) {
+    return (
+        <Sidebar collapsible="icon">
+            <SidebarHeader>
+                <div className="flex items-center gap-2 px-2 py-2">
+                    <GraduationCap className="h-6 w-6" />
+                    <span className="font-semibold">LearnHub</span>
+                </div>
+            </SidebarHeader>
+            <SidebarContent>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {menuItems.map((item) => (
+                                <SidebarMenuItem key={item.id}>
+                                    <Link
+                                        href={item.href}
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        <SidebarMenuButton
+                                            isActive={activeView === item.id}
+                                        >
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </SidebarMenuButton>
+                                    </Link>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+            </SidebarContent>
+            <SidebarRail />
+        </Sidebar>
+    );
+}
