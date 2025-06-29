@@ -12,7 +12,8 @@ type ChatMessageRouter struct {
 
 func (cmr *ChatMessageRouter) InitChatMessageRouter(Router *gin.RouterGroup) {
 	chatMessageRepo := repositories.NewChatMessageRepository()
-	chatMessageService := services.NewChatMessageService(chatMessageRepo)
+	documentRepo := repositories.NewDocumentRepository()
+	chatMessageService := services.NewChatMessageService(chatMessageRepo, documentRepo)
 	chatMessageController := controllers.NewChatMessageController(chatMessageService)
 
 	chatMessagePublicRouter := Router.Group("/chat-message")
@@ -20,6 +21,7 @@ func (cmr *ChatMessageRouter) InitChatMessageRouter(Router *gin.RouterGroup) {
 		chatMessagePublicRouter.POST("/", chatMessageController.CreateChatMessage)
 		chatMessagePublicRouter.GET("/:id", chatMessageController.GetChatMessageByID)
 		chatMessagePublicRouter.GET("/project/:projectId", chatMessageController.GetChatMessagesByProjectID)
+		chatMessagePublicRouter.GET("/project/:projectId/user/:userId", chatMessageController.GetChatMessagesByProjectAndUserID)
 		chatMessagePublicRouter.PUT("/:id", chatMessageController.UpdateChatMessage)
 		chatMessagePublicRouter.DELETE("/:id", chatMessageController.DeleteChatMessage)
 	}

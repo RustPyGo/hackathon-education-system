@@ -39,8 +39,15 @@ type AIQuestionChoice struct {
 }
 
 type AIChatRequest struct {
-	Message   string `json:"message"`
-	ProjectID string `json:"project_id"`
+	Message     string        `json:"message"`
+	ProjectID   string        `json:"project_id"`
+	Files       []FileInfo    `json:"files"`
+	HistoryChat []ChatHistory `json:"history_chat"`
+}
+
+type ChatHistory struct {
+	Message string `json:"message"`
+	Sender  string `json:"sender"`
 }
 
 type AIChatResponse struct {
