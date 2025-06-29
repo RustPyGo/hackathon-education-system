@@ -59,7 +59,7 @@ func (cms *ChatMessageService) CreateChatMessage(request *ChatMessageCreateReque
 	for _, doc := range documents {
 		files = append(files, FileInfo{
 			FileName: doc.FileName,
-			URL:      doc.S3URL,
+			FileURL:  doc.S3URL,
 		})
 	}
 
