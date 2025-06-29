@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 type FileUploadResult struct {
@@ -111,9 +112,22 @@ func (s *S3Service) generateFileURL(key string) string {
 }
 
 func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) (*FileUploadResult, error) {
+	start := time.Now()
+
+	logEntry := logrus.WithFields(logrus.Fields{
+		"service":    "S3Service",
+		"operation":  "UploadPDFToS3",
+		"file_name":  file.Filename,
+		"file_size":  file.Size,
+		"project_id": projectID,
+	})
+
+	logEntry.Info("Starting PDF upload to S3")
+
 	// Open the uploaded file
 	src, err := file.Open()
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to open uploaded file")
 		return nil, fmt.Errorf("failed to open file: %w", err)
 	}
 	defer src.Close()
@@ -124,6 +138,11 @@ func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) 
 	// Generate S3 key with unique file name
 	key := fmt.Sprintf("pdfs/%s/%s", projectID, uniqueFileName)
 
+	logEntry = logEntry.WithFields(logrus.Fields{
+		"unique_file_name": uniqueFileName,
+		"s3_key":           key,
+	})
+
 	// Upload to S3 with public read access
 	_, err = s.s3Client.PutObject(&s3.PutObjectInput{
 		Bucket:      aws.String(s.bucket),
@@ -133,11 +152,19 @@ func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) 
 		ACL:         aws.String("public-read"), // Make file publicly accessible
 	})
 	if err != nil {
+		logEntry.WithError(err).Error("Failed to upload file to S3")
 		return nil, fmt.Errorf("failed to upload to S3: %w", err)
 	}
 
 	// Generate file URL
 	url := s.generateFileURL(key)
+
+	duration := time.Since(start)
+
+	logEntry.WithFields(logrus.Fields{
+		"url":      url,
+		"duration": duration.String(),
+	}).Info("PDF uploaded successfully to S3")
 
 	return &FileUploadResult{
 		Key:      key,
@@ -147,22 +174,55 @@ func (s *S3Service) UploadPDFToS3(file *multipart.FileHeader, projectID string) 
 }
 
 func (s *S3Service) UploadMultiplePDFsToS3(files []*multipart.FileHeader, projectID string) ([]*FileUploadResult, error) {
+	start := time.Now()
+
+	logEntry := logrus.WithFields(logrus.Fields{
+		"service":    "S3Service",
+		"operation":  "UploadMultiplePDFsToS3",
+		"file_count": len(files),
+		"project_id": projectID,
+	})
+
+	logEntry.Info("Starting multiple PDF upload to S3")
+
 	var results []*FileUploadResult
 	var errors []string
 
 	for i, file := range files {
+		fileLogEntry := logEntry.WithFields(logrus.Fields{
+			"file_index": i + 1,
+			"file_name":  file.Filename,
+			"file_size":  file.Size,
+		})
+
 		result, err := s.UploadPDFToS3(file, projectID)
 		if err != nil {
-			errors = append(errors, fmt.Sprintf("File %d (%s): %v", i+1, file.Filename, err))
+			errorMsg := fmt.Sprintf("File %d (%s): %v", i+1, file.Filename, err)
+			errors = append(errors, errorMsg)
+			fileLogEntry.WithError(err).Error("Failed to upload file")
 			continue
 		}
 		results = append(results, result)
+		fileLogEntry.Info("File uploaded successfully")
 	}
+
+	duration := time.Since(start)
 
 	// If there were any errors, return them along with successful uploads
 	if len(errors) > 0 {
+		logEntry.WithFields(logrus.Fields{
+			"success_count": len(results),
+			"error_count":   len(errors),
+			"duration":      duration.String(),
+			"errors":        errors,
+		}).Warn("Multiple PDF upload completed with some errors")
 		return results, fmt.Errorf("some files failed to upload: %v", errors)
 	}
+
+	logEntry.WithFields(logrus.Fields{
+		"success_count": len(results),
+		"duration":      duration.String(),
+	}).Info("All PDFs uploaded successfully to S3")
 
 	return results, nil
 }
