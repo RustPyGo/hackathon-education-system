@@ -61,6 +61,17 @@ jobs:
       PG_USER: ${{ secrets.PG_USER }}
       PG_PASS: ${{ secrets.PG_PASS }}
       PG_DB: ${{ secrets.PG_DB }}
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
+      SERVER_MODE: ${{ secrets.SERVER_MODE }}
+      REDIS_HOST: ${{ REDIS_HOST }}
+      REDIS_PORT: ${{ REDIS_PORT }}
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+      REDIS_DB: ${{ secrets.REDIS_DB }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_ENDPOINT: ${{ secrets.AWS_ENDPOINT }}
     steps:
       - name: Checkout Develop
         uses: actions/checkout@v3
