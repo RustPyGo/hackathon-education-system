@@ -31,8 +31,6 @@ services:
       DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
     image: ${REGISTRY}/backend:latest
     restart: always
-    ports:
-      - 3000:3000
     networks:
       - network
     profiles:
@@ -43,7 +41,7 @@ services:
     image: ${REGISTRY}/frontend:latest
     restart: always
     ports:
-      - 5173:80
+      - 3000:3000
     networks:
       - network
     profiles:

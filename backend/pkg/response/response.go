@@ -8,16 +8,24 @@ type ResponseData struct {
 	Data    interface{} `json:"data"`
 }
 
-func SuccessResponse(c *gin.Context, code int, data interface{}) {
-	c.JSON(200, ResponseData{
-		Code:    code,
-		Message: msg[code],
+func SuccessResponse(c *gin.Context, statusCode int, data interface{}) {
+	c.JSON(statusCode, ResponseData{
+		Code:    ErrorCodeSuccess,
+		Message: msg[ErrorCodeSuccess],
 		Data:    data,
 	})
 }
 
-func ErrorResponse(c *gin.Context, code int) {
-	c.JSON(200, ResponseData{
+func ErrorResponse(c *gin.Context, statusCode int, message string) {
+	c.JSON(statusCode, ResponseData{
+		Code:    ErrorCodeParamInvalid,
+		Message: message,
+		Data:    nil,
+	})
+}
+
+func ErrorResponseWithCode(c *gin.Context, statusCode int, code int) {
+	c.JSON(statusCode, ResponseData{
 		Code:    code,
 		Message: msg[code],
 		Data:    nil,

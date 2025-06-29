@@ -1,8 +1,10 @@
 package initialize
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/global"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/routers"
+	"net/http"
+
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/routers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +23,12 @@ func InitRouter() *gin.Engine {
 
 	MainGroup := r.Group("/api/v1")
 	{
-		MainGroup.GET("/CheckStatus")
+		MainGroup.GET("/CheckStatus", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  "ok",
+				"message": "Server is running",
+			})
+		})
 	}
 	{
 		userRouter.InitUserRouter(MainGroup)

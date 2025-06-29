@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/controllers"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/controllers"
 	"github.com/gin-gonic/gin"
 )
 

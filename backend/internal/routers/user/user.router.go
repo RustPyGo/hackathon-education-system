@@ -1,9 +1,9 @@
 package user
 
 import (
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/controllers"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/repositories"
-	"github.com/fpt-ai-innovation-hackathon/education-system/backend/internal/services"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/controllers"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/repositories"
+	"github.com/RustPyGo/hackathon-education-system/backend/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,6 +18,10 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 
 	userPublicRouter := Router.Group("/user")
 	{
-		userPublicRouter.POST("/register", uc.Register)
+		userPublicRouter.POST("/", uc.CreateUser)
+		userPublicRouter.GET("/", uc.GetAllUsers)
+		userPublicRouter.GET("/:id", uc.GetUserByID)
+		userPublicRouter.PUT("/:id", uc.UpdateUser)
+		userPublicRouter.DELETE("/:id", uc.DeleteUser)
 	}
 }
