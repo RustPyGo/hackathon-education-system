@@ -45,36 +45,39 @@ All are completed with a full-stack web interface, scalable backend, and API-fir
 
 ```
 hackathon-education-system/
-├── backend/                      # ⚙️ Modern Go backend service
-│   ├── cmd/                     # Entry point commands for running the app
-│   ├── global/                  # Global configurations (logging, env, constants)
-│   ├── internal/                # Business logic modules (handlers, routes)
-│   ├── pkg/                     # Utility helpers (PDF, embeddings, etc.)
-│   ├── response/                # Response schema structs
-│   ├── Dockerfile               # Backend Docker config
-│   ├── go.mod / go.sum          # Go modules and dependencies
-│   ├── Makefile                 # Task runner shortcuts
-│   └── README.md                # Backend-specific usage info
+├── backend/                         # ⚙️ Primary Go backend service
+│   ├── cmd/                        # CLI entry points (e.g. main.go)
+│   ├── global/                     # Global configs (logging, environment)
+│   ├── internal/                   # Handlers, routes, and controller logic
+│   ├── pkg/                        # Core utilities: PDF parsing, embeddings, RAG
+│   ├── response/                   # Response schema definitions (DTOs)
+│   ├── Dockerfile                  # Backend Docker container config
+│   ├── go.mod / go.sum             # Go module version tracking
+│   ├── Makefile                    # CLI shortcuts for dev & build
+│   └── README.md                   # 📄 Backend-specific usage & docs
 │
-├── frontend/                    # 🖥️ Web UI built with Next.js + TailwindCSS
-│   ├── app/                    # Next.js app router and pages
-│   ├── components/             # Shared React components
-│   ├── public/                 # Static assets
-│   ├── lib/                    # Client-side utilities
-│   ├── Dockerfile              # Frontend Docker config
-│   ├── tsconfig.json           # TypeScript config
-│   ├── tailwind.config.js      # Tailwind customization
-│   └── README.md               # Frontend usage guide
+├── frontend/                       # 🖥️ Next.js 13+ App Router frontend
+│   ├── app/                       # Next.js route-based app folder
+│   ├── components/                # Reusable UI components (inputs, cards, etc.)
+│   ├── public/                    # Static assets (logo, favicons, etc.)
+│   ├── lib/                       # Utility functions and API helpers
+│   ├── Dockerfile                 # Frontend Docker setup
+│   ├── tsconfig.json              # TypeScript type definitions config
+│   ├── tailwind.config.js         # Tailwind CSS theme customization
+│   └── README.md                  # 📄 Frontend-specific documentation
 │
-├── education-system/           # 🧪 Legacy structure from initial hackathon prototype
-│   ├── backend/                # Older Go-based backend (deprecated/experimental)
-│   └── frontend/               # Earlier frontend version (likely pre-Next.js)
+├── education-system/              # 🧪 Legacy monorepo from initial prototype
+│   ├── backend/                   # Outdated Go backend
+│   └── frontend/                  # Old UI version (pre-Next.js)
 │
-├── compose.yaml                # 🔄 Docker Compose for local dev (latest version)
-├── compose.build.yaml          # 🧱 Extended Compose setup with custom builds
-└── .github/                    # 🔧 GitHub Actions for CI/CD
-    └── workflows/
-        └── deploy.yml         # Deployment pipeline script
+├── .github/                       # 🔄 CI/CD configuration
+│   └── workflows/
+│       └── deploy.yml            # GitHub Actions workflow for deployment
+│
+├── compose.yaml                   # 🐳 Docker Compose for dev orchestration
+├── compose.build.yaml             # 🛠️ Docker Compose with build instructions
+├── .gitignore                     # Files ignored by Git version control
+└── README.md                      # 🧭 Main project documentation
 ```
 
 ---
