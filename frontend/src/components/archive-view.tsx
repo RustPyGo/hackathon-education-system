@@ -16,10 +16,23 @@ import {
     PaginationNext,
 } from '@/components/ui/pagination';
 
+// Define User type for archive-view
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    status: string;
+    projects: number;
+    progress: number;
+    joinDate: string;
+    avatar: string;
+}
+
 export function ArchiveView() {
     const [tab, setTab] = useState<'projects' | 'users'>('projects');
     const [archivedProjects, setArchivedProjects] = useState<Project[]>([]);
-    const [archivedUsers, setArchivedUsers] = useState<any[]>([]);
+    const [archivedUsers, setArchivedUsers] = useState<User[]>([]);
 
     // Pagination state
     const [projectPage, setProjectPage] = useState(1);

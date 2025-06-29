@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { getProjects, Project } from '@/service/project';
+import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -9,9 +8,21 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Users, BookOpen, Search, Plus, MoreHorizontal } from 'lucide-react';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
 import {
     Table,
     TableBody,
@@ -20,21 +31,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { getProjects, Project } from '@/service/project';
+import { MoreHorizontal, Search } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationPrevious,
-    PaginationNext,
-} from '@/components/ui/pagination';
 
 export function ProjectManagement() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -56,11 +56,13 @@ export function ProjectManagement() {
         },
         // ...add more users as needed
     ]);
-    const [view, setView] = useState<'projects' | 'users'>('projects');
-    const [selectedRow, setSelectedRow] = useState<any>(null);
+    const [view] = useState<'projects' | 'users'>('projects');
+    const [selectedRow, setSelectedRow] = useState<Project | User | null>(null);
     const [showDetails, setShowDetails] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
-    const [editData, setEditData] = useState<any>({});
+    const [editData, setEditData] = useState<Partial<Project> | Partial<User>>(
+        {}
+    );
     const fileDownloadRef = useRef<HTMLAnchorElement>(null);
 
     useEffect(() => {
@@ -70,7 +72,7 @@ export function ProjectManagement() {
                 setProjects(data);
                 setLoading(false);
             })
-            .catch((err) => {
+            .catch(() => {
                 setError('Failed to load projects');
                 setLoading(false);
             });
@@ -141,7 +143,7 @@ export function ProjectManagement() {
         }
     };
     // User handlers
-    const handleUserMenu = (user: any, action: string) => {
+    const handleUserMenu = (user: User, action: string) => {
         setSelectedRow(user);
         if (action === 'details') setShowDetails(true);
         if (action === 'edit') {
@@ -539,17 +541,17 @@ export function ProjectManagement() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
                         <h2 className="text-xl font-bold mb-2">
-                            {view === 'projects'
+                            {isProject(selectedRow)
                                 ? selectedRow.title
                                 : selectedRow.name}
                         </h2>
                         <p className="mb-2 text-muted-foreground">
-                            {view === 'projects'
+                            {isProject(selectedRow)
                                 ? selectedRow.overview
                                 : selectedRow.email}
                         </p>
                         <p className="mb-4 text-xs">
-                            {view === 'projects'
+                            {isProject(selectedRow)
                                 ? `Created: ${new Date(
                                       selectedRow.createdAt
                                   ).toLocaleString()}`
@@ -575,11 +577,12 @@ export function ProjectManagement() {
                             <Input
                                 value={
                                     view === 'projects'
-                                        ? editData.title
-                                        : editData.name
+                                        ? (editData as Partial<Project>)
+                                              .title || ''
+                                        : (editData as Partial<User>).name || ''
                                 }
                                 onChange={(e) =>
-                                    setEditData((prev: any) => ({
+                                    setEditData((prev) => ({
                                         ...prev,
                                         [view === 'projects'
                                             ? 'title'
@@ -596,9 +599,12 @@ export function ProjectManagement() {
                                 <textarea
                                     className="w-full border rounded p-2 text-sm"
                                     rows={4}
-                                    value={editData.overview}
+                                    value={
+                                        (editData as Partial<Project>)
+                                            .overview || ''
+                                    }
                                     onChange={(e) =>
-                                        setEditData((prev: any) => ({
+                                        setEditData((prev) => ({
                                             ...prev,
                                             overview: e.target.value,
                                         }))
@@ -606,9 +612,11 @@ export function ProjectManagement() {
                                 />
                             ) : (
                                 <Input
-                                    value={editData.email}
+                                    value={
+                                        (editData as Partial<User>).email || ''
+                                    }
                                     onChange={(e) =>
-                                        setEditData((prev: any) => ({
+                                        setEditData((prev) => ({
                                             ...prev,
                                             email: e.target.value,
                                         }))
@@ -619,19 +627,31 @@ export function ProjectManagement() {
                         <div className="flex gap-2">
                             <Button
                                 onClick={() => {
-                                    if (view === 'projects') {
+                                    if (
+                                        view === 'projects' &&
+                                        isProject(selectedRow)
+                                    ) {
                                         setProjects((prev) =>
                                             prev.map((p) =>
                                                 p.id === selectedRow.id
-                                                    ? { ...p, ...editData }
+                                                    ? {
+                                                          ...p,
+                                                          ...(editData as Partial<Project>),
+                                                      }
                                                     : p
                                             )
                                         );
-                                    } else {
+                                    } else if (
+                                        view === 'users' &&
+                                        isUser(selectedRow)
+                                    ) {
                                         setUsers((prev) =>
                                             prev.map((u) =>
                                                 u.id === selectedRow.id
-                                                    ? { ...u, ...editData }
+                                                    ? {
+                                                          ...u,
+                                                          ...(editData as Partial<User>),
+                                                      }
                                                     : u
                                             )
                                         );
@@ -654,4 +674,26 @@ export function ProjectManagement() {
             )}
         </div>
     );
+}
+
+// Define User type
+
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    status: string;
+    projects: number;
+    progress: number;
+    joinDate: string;
+    avatar: string;
+};
+
+// Use type guards to safely access properties for Project or User
+function isProject(obj: Project | User): obj is Project {
+    return (obj as Project).title !== undefined;
+}
+function isUser(obj: Project | User): obj is User {
+    return (obj as User).name !== undefined;
 }

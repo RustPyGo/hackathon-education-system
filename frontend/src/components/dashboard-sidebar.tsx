@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import { BookOpen, Home, Users } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const menuItems = [
     {
@@ -38,23 +39,23 @@ const menuItems = [
 
 interface DashboardSidebarProps {
     activeView: string;
-    setActiveView?: (view: string) => void;
 }
 
-export function DashboardSidebar({
-    activeView,
-    setActiveView,
-}: DashboardSidebarProps) {
+export function DashboardSidebar({ activeView }: DashboardSidebarProps) {
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader>
                 <div className="flex items-center gap-3 px-2 py-2">
                     <Link href="/">
-                        <img
-                            src="/QLearning-logo-bigger.svg"
-                            alt="QLearning Logo"
-                            className="h-14 w-14 cursor-pointer"
-                        />
+                        <span className="h-14 w-14 cursor-pointer block relative">
+                            <Image
+                                src="/QLearning-logo-bigger.svg"
+                                alt="QLearning Logo"
+                                width={56}
+                                height={56}
+                                priority
+                            />
+                        </span>
                     </Link>
                 </div>
             </SidebarHeader>

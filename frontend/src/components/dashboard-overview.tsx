@@ -59,8 +59,8 @@ export function DashboardOverview() {
                         Dashboard Overview
                     </h1>
                     <p className="text-muted-foreground">
-                        Welcome back! Here's what's happening with your learning
-                        platform.
+                        Welcome back! Here&apos;s what&apos;s happening with
+                        your learning platform.
                     </p>
                 </div>
             </div>

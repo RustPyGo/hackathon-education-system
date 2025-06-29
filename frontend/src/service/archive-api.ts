@@ -26,7 +26,9 @@ export const getArchivedUsers = async () => [
         role: 'Student',
         status: 'Inactive',
         projects: 1,
+        progress: 0,
         joinDate: '2023-10-01',
+        avatar: '/placeholder.svg?height=32&width=32',
     },
     {
         id: 2,
@@ -35,6 +37,8 @@ export const getArchivedUsers = async () => [
         role: 'Instructor',
         status: 'Inactive',
         projects: 2,
+        progress: 0,
         joinDate: '2023-09-15',
+        avatar: '/placeholder.svg?height=32&width=32',
     },
 ];
