@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BnJtqqYZDXVYhRPyTH7YlpMDfYDaX",
+  "object": "chat.completion",
+  "created": 1751094266,
+  "model": "gpt-3.5-turbo-0125",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"question\": \"What does AI stand for?\",\n  \"options\": [\n    \"Artificial Insect\",\n    \"Automated Intelligence\",\n    \"Artificial Intelligence\",\n    \"Advanced Interface\"\n  ],\n  \"correct_answer\": \"Artificial Intelligence\"\n}\n\n{\n  \"question\": \"Which of the following is not a type of AI?\",\n  \"options\": [\n    \"Reactive Machines\",\n    \"Limited Memory\",\n    \"Super Intelligence\",\n    \"Self-Awareness\"\n  ],\n  \"correct_answer\": \"Self-Awareness\"\n}\n\n{\n  \"question\": \"What is the goal of AI?\",\n  \"options\": [\n    \"To replace human intelligence\",\n    \"To mimic human intelligence\",\n    \"To surpass human intelligence\",\n    \"To control human intelligence\"\n  ],\n  \"correct_answer\": \"To surpass human intelligence\"\n}\n\n{\n  \"question\": \"Which field of study is closely related to AI?\",\n  \"options\": [\n    \"Biology\",\n    \"Astronomy\",\n    \"Psychology\",\n    \"Computer Science\"\n  ],\n  \"correct_answer\": \"Computer Science\"\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 57,
+    "completion_tokens": 227,
+    "total_tokens": 284,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

@@ -1,0 +1,565 @@
+{
+    "questions": [
+        {
+            "question": "What is the reaction catalysed by the enzyme catalase?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests knowledge of enzyme activity",
+            "choices": [
+                {
+                    "content": "2H2O2 (l) → 2H2O (l) + O2 (g)",
+                    "is_correct": true,
+                    "explanation": "Correct - this is the reaction catalysed by catalase"
+                },
+                {
+                    "content": "2H2O (l) + O2 (g) → 2H2O2 (l)",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this is the reverse reaction"
+                },
+                {
+                    "content": "H2O2 (l) → H2O (l) + O2 (g)",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this is a different reaction"
+                },
+                {
+                    "content": "H2O (l) + O2 (g) → H2O2 (l)",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this is the reverse reaction"
+                }
+            ]
+        },
+        {
+            "question": "What is the positive control for the enzyme activity lab experiment?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of experimental controls",
+            "choices": [
+                {
+                    "content": "Repeat the original experiment using manganese IV oxide",
+                    "is_correct": true,
+                    "explanation": "Correct - bubbles of oxygen form in this case"
+                },
+                {
+                    "content": "Repeat the original experiment using boiled potato strips",
+                    "is_correct": false,
+                    "explanation": "Incorrect - no reaction occurs in this case"
+                },
+                {
+                    "content": "Repeat the original experiment using water instead of hydrogen peroxide",
+                    "is_correct": false,
+                    "explanation": "Incorrect - no reaction occurs in this case"
+                },
+                {
+                    "content": "Repeat the original experiment in a cold environment",
+                    "is_correct": false,
+                    "explanation": "Incorrect - effervescence should be slower in this case"
+                }
+            ]
+        },
+        {
+            "question": "What is the negative control for the enzyme activity lab experiment?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of experimental controls",
+            "choices": [
+                {
+                    "content": "Repeat the original experiment using boiled potato strips",
+                    "is_correct": true,
+                    "explanation": "Correct - nothing happens in this case"
+                },
+                {
+                    "content": "Repeat the original experiment using manganese IV oxide",
+                    "is_correct": false,
+                    "explanation": "Incorrect - bubbles of oxygen form in this case"
+                },
+                {
+                    "content": "Repeat the original experiment using water instead of hydrogen peroxide",
+                    "is_correct": false,
+                    "explanation": "Incorrect - nothing happens in this case"
+                },
+                {
+                    "content": "Repeat the original experiment in a cold environment",
+                    "is_correct": false,
+                    "explanation": "Incorrect - enzymes don't work as well in the cold"
+                }
+            ]
+        },
+        {
+            "question": "What is the purpose of adding iodine solution in the starch test?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of chemical tests",
+            "choices": [
+                {
+                    "content": "To test for the presence of starch",
+                    "is_correct": true,
+                    "explanation": "Correct - a deep blue-black color indicates the presence of starch"
+                },
+                {
+                    "content": "To test for the presence of reducing sugars",
+                    "is_correct": false,
+                    "explanation": "Incorrect - iodine solution does not react with reducing sugars"
+                },
+                {
+                    "content": "To test for the presence of proteins",
+                    "is_correct": false,
+                    "explanation": "Incorrect - iodine solution does not react with proteins"
+                },
+                {
+                    "content": "To test for the presence of fats",
+                    "is_correct": false,
+                    "explanation": "Incorrect - iodine solution does not react with fats"
+                }
+            ]
+        },
+        {
+            "question": "What is the positive result for the reducing sugars test using Benedict's reagent?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of chemical tests",
+            "choices": [
+                {
+                    "content": "An orange/brick-red color",
+                    "is_correct": true,
+                    "explanation": "Correct - this indicates the presence of reducing sugars"
+                },
+                {
+                    "content": "A blue color",
+                    "is_correct": false,
+                    "explanation": "Incorrect - blue color is the color of the Benedict's reagent itself"
+                },
+                {
+                    "content": "A deep blue-black color",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this indicates the presence of starch"
+                },
+                {
+                    "content": "A mauve/purple color",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this indicates the presence of proteins"
+                }
+            ]
+        },
+        {
+            "question": "What is the color of a positive result in the protein test using Biuret reagent?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of chemical tests",
+            "choices": [
+                {
+                    "content": "Mauve/purple",
+                    "is_correct": true,
+                    "explanation": "Correct - this color indicates the presence of proteins"
+                },
+                {
+                    "content": "Orange/brick-red",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this color indicates the presence of reducing sugars"
+                },
+                {
+                    "content": "Deep blue-black",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this color indicates the presence of starch"
+                },
+                {
+                    "content": "Milky-white",
+                    "is_correct": false,
+                    "explanation": "Incorrect - this indicates the presence of fats in the emulsion test"
+                }
+            ]
+        },
+        {
+            "question": "What is the purpose of the emulsion test for fats?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of chemical tests",
+            "choices": [
+                {
+                    "content": "To test for the presence of fats",
+                    "is_correct": true,
+                    "explanation": "Correct - a milky-white emulsion indicates the presence of fats"
+                },
+                {
+                    "content": "To test for the presence of starch",
+                    "is_correct": false,
+                    "explanation": "Incorrect - emulsion test is not used for starch"
+                },
+                {
+                    "content": "To test for the presence of reducing sugars",
+                    "is_correct": false,
+                    "explanation": "Incorrect - emulsion test is not used for reducing sugars"
+                },
+                {
+                    "content": "To test for the presence of proteins",
+                    "is_correct": false,
+                    "explanation": "Incorrect - emulsion test is not used for proteins"
+                }
+            ]
+        },
+        {
+            "question": "What is the purpose of boiling the leaf in water for the photosynthesis investigation?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of the photosynthesis experiment",
+            "choices": [
+                {
+                    "content": "To break down cell walls",
+                    "is_correct": true,
+                    "explanation": "Correct - this allows for easier penetration by ethanol"
+                },
+                {
+                    "content": "To test for the presence of reducing sugars",
+                    "is_correct": false,
+                    "explanation": "Incorrect - boiling the leaf is not for testing reducing sugars"
+                },
+                {
+                    "content": "To denature enzymes",
+                    "is_correct": false,
+                    "explanation": "Incorrect - enzymes are denatured by high temperatures, not boiling"
+                },
+                {
+                    "content": "To test for the presence of starch",
+                    "is_correct": false,
+                    "explanation": "Incorrect - boiling the leaf is not for testing starch"
+                }
+            ]
+        },
+        {
+            "question": "What is the purpose of warming the leaf in ethanol for the photosynthesis investigation?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of the photosynthesis experiment",
+            "choices": [
+                {
+                    "content": "To allow for easier penetration by ethanol",
+                    "is_correct": true,
+                    "explanation": "Correct - this helps extract the chlorophyll"
+                },
+                {
+                    "content": "To test for the presence of proteins",
+                    "is_correct": false,
+                    "explanation": "Incorrect - ethanol extraction is not for testing proteins"
+                },
+                {
+                    "content": "To test for the presence of fats",
+                    "is_correct": false,
+                    "explanation": "Incorrect - ethanol extraction is not for testing fats"
+                },
+                {
+                    "content": "To break down cell walls",
+                    "is_correct": false,
+                    "explanation": "Incorrect - boiling the leaf breaks down cell walls, not warming in ethanol"
+                }
+            ]
+        },
+        {
+            "question": "What is the most important concept discussed in this educational document?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of core educational concepts (Question 1)",
+            "choices": [
+                {
+                    "content": "The fundamental learning principles and methodologies presented",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Advanced theoretical frameworks beyond basic scope",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Historical background information only",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Supplementary reference materials",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "Which educational approach is primarily emphasized in the content?",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This evaluates knowledge of educational methodologies (Question 2)",
+            "choices": [
+                {
+                    "content": "Student-centered active learning with practical applications",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Traditional lecture-based passive learning",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Purely theoretical academic discussions",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Technology-free conventional methods",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "What is the key learning objective mentioned in this material?",
+            "type": "multiple_choice",
+            "difficulty": "easy",
+            "explanation": "This assesses understanding of educational goals (Question 3)",
+            "choices": [
+                {
+                    "content": "To develop comprehensive understanding and practical skills",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "To memorize facts without application",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "To focus only on theoretical knowledge",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "To prepare for standardized testing only",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "What is the main benefit of the educational approach described?",
+            "type": "multiple_choice",
+            "difficulty": "easy",
+            "explanation": "This tests comprehension of educational advantages (Question 4)",
+            "choices": [
+                {
+                    "content": "Enhanced critical thinking and problem-solving abilities",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Faster completion of coursework",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Reduced study time requirements",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Simplified assessment procedures",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "Which principle is most strongly advocated in this educational content?",
+            "type": "multiple_choice",
+            "difficulty": "hard",
+            "explanation": "This evaluates advanced understanding of educational principles (Question 5)",
+            "choices": [
+                {
+                    "content": "Integration of theory with hands-on practical experience",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Separation of theoretical and practical components",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Focus exclusively on academic research",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Emphasis on standardized curriculum only",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "What is the most important concept discussed in this educational document? (Advanced Level 2)",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of core educational concepts (Question 6)",
+            "choices": [
+                {
+                    "content": "The fundamental learning principles and methodologies presented",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Advanced theoretical frameworks beyond basic scope",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Historical background information only",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Supplementary reference materials",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "Which educational approach is primarily emphasized in the content? (Advanced Level 2)",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This evaluates knowledge of educational methodologies (Question 7)",
+            "choices": [
+                {
+                    "content": "Student-centered active learning with practical applications",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Traditional lecture-based passive learning",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Purely theoretical academic discussions",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Technology-free conventional methods",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "What is the key learning objective mentioned in this material? (Advanced Level 2)",
+            "type": "multiple_choice",
+            "difficulty": "easy",
+            "explanation": "This assesses understanding of educational goals (Question 8)",
+            "choices": [
+                {
+                    "content": "To develop comprehensive understanding and practical skills",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "To memorize facts without application",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "To focus only on theoretical knowledge",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "To prepare for standardized testing only",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "What is the main benefit of the educational approach described? (Advanced Level 2)",
+            "type": "multiple_choice",
+            "difficulty": "easy",
+            "explanation": "This tests comprehension of educational advantages (Question 9)",
+            "choices": [
+                {
+                    "content": "Enhanced critical thinking and problem-solving abilities",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Faster completion of coursework",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Reduced study time requirements",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Simplified assessment procedures",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "Which principle is most strongly advocated in this educational content? (Advanced Level 2)",
+            "type": "multiple_choice",
+            "difficulty": "hard",
+            "explanation": "This evaluates advanced understanding of educational principles (Question 10)",
+            "choices": [
+                {
+                    "content": "Integration of theory with hands-on practical experience",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Separation of theoretical and practical components",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Focus exclusively on academic research",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Emphasis on standardized curriculum only",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        },
+        {
+            "question": "What is the most important concept discussed in this educational document? (Advanced Level 3)",
+            "type": "multiple_choice",
+            "difficulty": "medium",
+            "explanation": "This tests understanding of core educational concepts (Question 11)",
+            "choices": [
+                {
+                    "content": "The fundamental learning principles and methodologies presented",
+                    "is_correct": true,
+                    "explanation": "This is the correct answer based on educational best practices and document content"
+                },
+                {
+                    "content": "Advanced theoretical frameworks beyond basic scope",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Historical background information only",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                },
+                {
+                    "content": "Supplementary reference materials",
+                    "is_correct": false,
+                    "explanation": "This approach is not recommended according to modern educational principles"
+                }
+            ]
+        }
+    ],
+    "summary": "This document (test_document.pdf) contains educational material covering topics related to control:, repeat, hydrogen designed to test understanding of key concepts and principles. This material provides comprehensive coverage of the subject matter and includes practical applications and theoretical foundations relevant to the field of study."
+}
