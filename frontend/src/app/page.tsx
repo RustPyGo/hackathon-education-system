@@ -120,7 +120,7 @@ export default function HomePage() {
                                                     );
                                                 }
                                                 setLoading(false);
-                                                router.push('/dashboard');
+                                                router.push('/project');
                                             }}
                                             className="bg-white hover:bg-gray-50 mt-4"
                                             disabled={loading}
