@@ -1,7 +1,7 @@
 # 🎓 QLearning: An innovative AI-based learning system for college students of FPT University
 
-An end-to-end, AI-powered educational platform that extracts learning content from PDF documents, summarizes key terms, generates intelligent multiple-choice quizzes, flashcards with feedback, and provides a user-friendly AI chatbot for study purposes
-All are completed with a full-stack web interface, scalable backend, and API-first architecture.
+An end-to-end, AI-powered educational platform that extracts learning content from PDF documents, summarizes key terms, generates intelligent multiple-choice quizzes, flashcards with feedback, and provides a user-friendly AI chatbot for study purposes.
+All are completed with a full-stack web interface, scalable backend, and API-first architecture!
 
 ---
 
