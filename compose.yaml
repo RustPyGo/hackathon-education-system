@@ -27,8 +27,6 @@ services:
 
   backend:
     container_name: education-system-backend
-    env_file:
-      - .env
     environment:
       # Database Configuration
       DATABASE_HOST: database
