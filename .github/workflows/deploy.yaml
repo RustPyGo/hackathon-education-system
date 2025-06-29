@@ -23,8 +23,6 @@ jobs:
           username: ${{ github.actor}}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image And Push
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: |
           docker compose -f compose.build.yaml --profile frontend build
           docker compose -f compose.build.yaml --profile frontend push
