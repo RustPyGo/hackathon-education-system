@@ -175,7 +175,7 @@ export function ProjectManagement() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 mt-3">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">
@@ -185,76 +185,31 @@ export function ProjectManagement() {
                         Manage learning projects and courses
                     </p>
                 </div>
-                <div className="flex gap-2">
-                    <Button
-                        variant={view === 'projects' ? 'default' : 'outline'}
-                        onClick={() => setView('projects')}
-                    >
-                        Projects
-                    </Button>
-                    <Button
-                        variant={view === 'users' ? 'default' : 'outline'}
-                        onClick={() => setView('users')}
-                    >
-                        Users
-                    </Button>
-                </div>
             </div>
+            {/* Move search input out of the card */}
+            {view === 'projects' && (
+                <div className="flex items-center space-x-2 max-w-sm">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            placeholder="Search projects..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-8"
+                        />
+                    </div>
+                </div>
+            )}
             {view === 'projects' ? (
                 <>
-                    <div className="grid gap-4 md:grid-cols-2">
-                        <Card>
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">
-                                    Total Projects
-                                </CardTitle>
-                                <BookOpen className="h-4 w-4 text-muted-foreground" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">
-                                    {loading ? '...' : projects.length}
-                                </div>
-                                <p className="text-xs text-foreground font-medium">
-                                    Across all categories
-                                </p>
-                            </CardContent>
-                        </Card>
-                        {/* Students count is not available in API, so we can hide or set to N/A */}
-                        <Card>
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">
-                                    Total Users
-                                </CardTitle>
-                                <Users className="h-4 w-4 text-muted-foreground" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">N/A</div>
-                                <p className="text-xs text-foreground font-medium">
-                                    Enrolled across all projects
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </div>
-
                     <Card>
                         <CardHeader>
-                            <CardTitle>Learning Projects</CardTitle>
-                            <CardDescription className="text-foreground font-medium">
+                            <CardTitle className="text-2xl font-bold">
+                                Learning Projects
+                            </CardTitle>
+                            <CardDescription className="text-lg text-foreground font-semibold mt-1">
                                 Manage and monitor all learning projects
                             </CardDescription>
-                            <div className="flex items-center space-x-2">
-                                <div className="relative flex-1 max-w-sm">
-                                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                        placeholder="Search projects..."
-                                        value={searchTerm}
-                                        onChange={(e) =>
-                                            setSearchTerm(e.target.value)
-                                        }
-                                        className="pl-8"
-                                    />
-                                </div>
-                            </div>
                         </CardHeader>
                         <CardContent>
                             {loading ? (

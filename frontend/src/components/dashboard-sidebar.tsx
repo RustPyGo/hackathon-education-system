@@ -54,9 +54,14 @@ export function DashboardSidebar({
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader>
-                <div className="flex items-center gap-2 px-2 py-2">
-                    <GraduationCap className="h-6 w-6" />
-                    <span className="font-semibold">LearnHub</span>
+                <div className="flex items-center gap-3 px-2 py-2">
+                    <Link href="/">
+                        <img
+                            src="/QLearning-logo.svg"
+                            alt="QLearning Logo"
+                            className="h-14 w-14 cursor-pointer"
+                        />
+                    </Link>
                 </div>
             </SidebarHeader>
             <SidebarContent>
