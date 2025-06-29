@@ -1,17 +1,13 @@
 'use client';
 
-import { Question, QuestionChoice } from '@/service/question';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-    CheckCircle,
-    ChevronRight,
-    RotateCcw,
-} from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Question, QuestionChoice } from '@/service/question';
+import { CheckCircle, ChevronRight, RotateCcw } from 'lucide-react';
+import { useState } from 'react';
 
 const difficultyConfigs = {
     hard: {
@@ -72,7 +68,7 @@ export const PracticeQuestionList = ({ questions: raw }: Props) => {
     };
 
     const onNextQuestion = () => {
-        if (selectedChoice?.isCorrect) {
+        if (selectedChoice?.is_correct) {
             setQuestions((prev) => prev.slice(1));
         } else {
             setAttempts((prev) => ({
@@ -92,7 +88,10 @@ export const PracticeQuestionList = ({ questions: raw }: Props) => {
                         <div className="flex items-center gap-2 mb-4">
                             <Badge
                                 variant="outline"
-                                className={`capitalize bg-gray-50 text-gray-700 border-gray-200 ${difficultyConfigs[questions[0].difficulty].color}`}
+                                className={`capitalize bg-gray-50 text-gray-700 border-gray-200 ${
+                                    difficultyConfigs[questions[0].difficulty]
+                                        .color
+                                }`}
                             >
                                 {questions[0].difficulty}
                             </Badge>
@@ -142,14 +141,24 @@ export const PracticeQuestionList = ({ questions: raw }: Props) => {
 
                     {selectedChoice && (
                         <div
-                            className={`mt-4 p-4 rounded-lg ${selectedChoice.isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}
+                            className={`mt-4 p-4 rounded-lg ${
+                                selectedChoice.is_correct
+                                    ? 'bg-green-50 border border-green-200'
+                                    : 'bg-red-50 border border-red-200'
+                            }`}
                         >
                             <div
-                                className={`font-medium ${selectedChoice.isCorrect ? 'text-green-800' : 'text-red-800'}`}
+                                className={`font-medium ${
+                                    selectedChoice.is_correct
+                                        ? 'text-green-800'
+                                        : 'text-red-800'
+                                }`}
                             >
                                 {}
 
-                                {`${selectedChoice.isCorrect ? '✓' : '✗'} ${selectedChoice.explanation}`}
+                                {`${selectedChoice.is_correct ? '✓' : '✗'} ${
+                                    selectedChoice.explanation
+                                }`}
                             </div>
                         </div>
                     )}

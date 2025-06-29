@@ -2,7 +2,7 @@ export interface QuestionChoice {
     id: string;
     content: string;
     explanation: string;
-    isCorrect: boolean;
+    is_correct: boolean;
 }
 
 export type QuestionDifficulty = 'easy' | 'medium' | 'hard';

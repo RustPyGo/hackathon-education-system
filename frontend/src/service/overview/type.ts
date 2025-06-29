@@ -1,6 +1,6 @@
 export interface Overview3 {
     project_id: string;
-    overview: string;
+    summary: string;
     updated_at: string;
 }
 

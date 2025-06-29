@@ -2,7 +2,7 @@ import type { Overview3 as Overview, Project } from './type';
 
 const MOCK_OVERVIEW: Overview = {
     project_id: '12345',
-    overview:
+    summary:
         'This is a mock AI-generated overview for your project. It summarizes the key concepts and insights extracted from your uploaded content. Use this to quickly grasp the main ideas and structure your study plan.',
     updated_at: new Date().toISOString(),
 };
@@ -23,9 +23,12 @@ const MOCK_PDF_FILES = [
 ];
 
 export async function fetchOverview(projectId: string): Promise<Overview> {
-    await new Promise((res) => setTimeout(res, 400));
-    // Always return the mock overview for the demo
-    return { ...MOCK_OVERVIEW, project_id: projectId };
+    const response = await fetch(
+        `http://localhost:3001/api/v1/project/${projectId}`
+    );
+    const result = await response.json();
+    console.log(result);
+    return result.data;
 }
 
 export async function fetchProject(projectId: string): Promise<Project> {

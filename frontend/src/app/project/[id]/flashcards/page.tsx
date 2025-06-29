@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import LoadingSpinner from '@/components/loading-spinner';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { fetchQuestions } from '@/service/flashcard/api';
+import { FlashCard } from '@/service/flashcard/type';
 import {
     ChevronLeft,
     ChevronRight,
@@ -13,9 +14,8 @@ import {
     Shuffle,
     BookOpen,
 } from 'lucide-react';
-import LoadingSpinner from '@/components/loading-spinner';
-import { FlashCard } from '@/service/flashcard/type';
-import { fetchFlashCardsMock } from '@/service/flashcard/api';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
 
 function ProjectFlashcardsPage() {
     const searchParams = useSearchParams();
@@ -24,12 +24,16 @@ function ProjectFlashcardsPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+
     const [loading, setLoading] = useState(true);
+
+    const params = useParams();
 
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
-            const data = await fetchFlashCardsMock(projectId);
+            const data = await fetchQuestions(params?.id as string);
+            console.log(data);
             setFlashCards(data);
             setLoading(false);
         }
@@ -189,7 +193,7 @@ function ProjectFlashcardsPage() {
                                     Question
                                 </Badge>
                                 <p className="text-xl font-medium text-gray-900 leading-relaxed">
-                                    {currentCard.question}
+                                    {currentCard.content}
                                 </p>
                                 <p className="text-sm text-gray-500 mt-6">
                                     Click or press spacebar to reveal answer
@@ -210,7 +214,15 @@ function ProjectFlashcardsPage() {
                                     Answer
                                 </Badge>
                                 <p className="text-xl font-medium text-gray-900 leading-relaxed">
-                                    {currentCard.answer}
+                                    {currentCard.choices.map((choice) => {
+                                        if (choice.is_correct) {
+                                            return (
+                                                <p key={choice.id}>
+                                                    {choice.content}
+                                                </p>
+                                            );
+                                        }
+                                    })}
                                 </p>
                                 <p className="text-sm text-gray-500 mt-6">
                                     Click or press spacebar to see question

@@ -1,5 +1,6 @@
 'use client';
 
+import { FileCard } from '@/components/file-card';
 import LoadingSpinner from '@/components/loading-spinner';
 import {
     Card,
@@ -11,8 +12,8 @@ import {
 import { fetchOverview, fetchPdfFiles } from '@/service/overview/api';
 import type { Overview3 as Overview } from '@/service/overview/type';
 import { Brain } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FileCard } from '@/components/file-card';
 
 function ProjectIdPage() {
     // State cho overview
@@ -23,13 +24,17 @@ function ProjectIdPage() {
         []
     );
 
+    const { id } = useParams();
+
     useEffect(() => {
-        fetchOverview('12345').then((data) => {
+        fetchOverview(id as string).then((data) => {
             setOverview(data);
             setLoadingOverview(false);
         });
         fetchPdfFiles().then((files) => setPdfFiles(files));
     }, []);
+
+    console.log(overview);
 
     return (
         <div className="space-y-3 mt-3">
@@ -56,7 +61,7 @@ function ProjectIdPage() {
                         ) : (
                             <div className="prose prose-sm max-w-none">
                                 <p className="text-gray-700 leading-relaxed">
-                                    {overview?.overview}
+                                    {overview?.summary}
                                 </p>
                             </div>
                         )}

@@ -1,10 +1,11 @@
 'use client';
 
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { ProjectSidebar } from '@/components/project-sidebar';
-import type { Project } from '@/service/overview/type';
-import { useEffect, useState } from 'react';
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { fetchProject } from '@/service/overview/api';
+import type { Project } from '@/service/overview/type';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function ProjectLayout({
     children,
@@ -14,9 +15,11 @@ export default function ProjectLayout({
     const [activeSection] = useState('overview');
     const [project, setProject] = useState<Project | null>(null);
 
+    const params = useParams();
+
     useEffect(() => {
-        fetchProject('12345').then((proj) => setProject(proj));
-    }, []);
+        fetchProject(params.id as string).then((proj) => setProject(proj));
+    }, [params.id]);
 
     return (
         <SidebarProvider>

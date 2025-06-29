@@ -26,13 +26,13 @@ export async function getFlashCards(): Promise<FlashCard[]> {
 }
 
 // Simulate API call with delay
-export async function fetchFlashCardsMock(
+export async function fetchQuestions(
     projectId: string,
     delay = 500
 ): Promise<FlashCard[]> {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(mockFlashCards);
-        }, delay);
-    });
+    const response = await fetch(
+        `http://localhost:3001/api/v1/question/project/${projectId}`
+    );
+    const result = await response.json();
+    return result.data;
 }

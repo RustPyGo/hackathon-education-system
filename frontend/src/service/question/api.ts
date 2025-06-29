@@ -1,7 +1,7 @@
 import { Question } from './type';
 
 export const getQuestions = async (projectId: string): Promise<Question[]> => {
-    console.log(projectId)
+    console.log(projectId);
     return [
         {
             id: '1',
@@ -13,26 +13,26 @@ export const getQuestions = async (projectId: string): Promise<Question[]> => {
                     id: '1',
                     content: 'To replace human intelligence completely',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '2',
                     content:
                         'To enable computers to learn and make decisions from data without explicit programming',
                     explanation: 'No explanation',
-                    isCorrect: true,
+                    is_correct: true,
                 },
                 {
                     id: '3',
                     content: 'To create faster computers',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '4',
                     content: 'To store large amounts of data efficiently',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
             ],
         },
@@ -47,25 +47,25 @@ export const getQuestions = async (projectId: string): Promise<Question[]> => {
                     id: '5',
                     content: 'Customer segmentation',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '6',
                     content: 'Email spam classification',
                     explanation: 'No explanation',
-                    isCorrect: true,
+                    is_correct: true,
                 },
                 {
                     id: '7',
                     content: 'Data compression',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '8',
                     content: 'Anomaly detection',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
             ],
         },
@@ -79,26 +79,26 @@ export const getQuestions = async (projectId: string): Promise<Question[]> => {
                     id: '9',
                     content: 'When a model is too simple',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '10',
                     content:
                         'When a model performs well on training data but poorly on new data',
                     explanation: 'No explanation',
-                    isCorrect: true,
+                    is_correct: true,
                 },
                 {
                     id: '11',
                     content: 'When training takes too long',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '12',
                     content: 'Anomaly detection',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
             ],
         },
@@ -112,26 +112,26 @@ export const getQuestions = async (projectId: string): Promise<Question[]> => {
                     id: '13',
                     content: 'The probability that the null hypothesis is true',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '14',
                     content:
                         'The probability of observing the data given that the null hypothesis is true',
                     explanation: 'No explanation',
-                    isCorrect: true,
+                    is_correct: true,
                 },
                 {
                     id: '15',
                     content: 'The probability of making a Type I error',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
                 {
                     id: '16',
                     content: 'The confidence level of the test',
                     explanation: 'No explanation',
-                    isCorrect: false,
+                    is_correct: false,
                 },
             ],
         },

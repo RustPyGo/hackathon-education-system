@@ -1,10 +1,8 @@
 'use client';
 
-import { BookOpen, Brain, FileText, MessageSquare, Zap } from 'lucide-react';
-import * as React from 'react';
-
 import FeatureCard from '@/components/feature-card';
 import { PdfDropZone } from '@/components/pdf-drop-zone';
+import ProgressIndicator from '@/components/progress-indicator';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -13,14 +11,22 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import ProgressIndicator from '@/components/progress-indicator';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { createProject } from '@/service/project/api';
+import { BookOpen, Brain, FileText, MessageSquare, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import * as React from 'react';
+import { toast } from 'sonner';
 
 export default function HomePage() {
     const router = useRouter();
     const [hasFiles, setHasFiles] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [currentStep, setCurrentStep] = React.useState(0);
+    const [title, setTitle] = React.useState('');
+    const [duration, setDuration] = React.useState('');
+    const [files, setFiles] = React.useState<File[]>([]);
 
     const featureCards = [
         {
@@ -51,6 +57,75 @@ export default function HomePage() {
     ];
 
     const progressSteps = ['Uploading PDF', 'Processing', 'Generating Results'];
+
+    const handleFilesChange = React.useCallback((uploadedFiles: File[]) => {
+        setFiles(uploadedFiles);
+        setHasFiles(uploadedFiles.length > 0);
+    }, []);
+
+    const handleSubmit = React.useCallback(async () => {
+        if (!title.trim() || !duration.trim() || files.length === 0) {
+            toast.error(
+                'Please fill in all required fields and upload at least one PDF file'
+            );
+            return;
+        }
+
+        setLoading(true);
+        setCurrentStep(0);
+
+        try {
+            // Create FormData for file upload
+            const formData = new FormData();
+
+            // Add project metadata
+            formData.append('title', title.trim());
+            formData.append('duration', duration.trim());
+
+            console.log(formData);
+
+            // Add files
+
+            // Simulate processing steps
+            setCurrentStep(1);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
+            setCurrentStep(2);
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+
+            // Log detailed FormData information
+
+            files.forEach((file) => {
+                formData.append('pdf', file);
+            });
+
+            // Call the API service
+            const result = await fetch('http://localhost:3001/api/v1/project', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await result.json();
+            console.log(data);
+            // setCurrentStep(3);
+            // await new Promise((resolve) => setTimeout(resolve, 500));
+
+            // toast.success('Project created successfully!');
+
+            // Navigate to the project page or dashboard
+            // if (result.projectId) {
+            //     router.push(`/project/${result.projectId}`);
+            // } else {
+            //     router.push('/dashboard');
+            // }
+        } catch (error) {
+            console.error('Error uploading files:', error);
+            toast.error('Failed to create project. Please try again.');
+        } finally {
+            setLoading(false);
+            setCurrentStep(0);
+        }
+    }, [title, duration, files, router]);
 
     return (
         <>
@@ -88,10 +163,44 @@ export default function HomePage() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6 flex flex-col items-center">
+                                <div className="w-full space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="title">
+                                            Project Title
+                                        </Label>
+                                        <Input
+                                            id="title"
+                                            type="text"
+                                            placeholder="Enter project title"
+                                            value={title}
+                                            onChange={(e) =>
+                                                setTitle(e.target.value)
+                                            }
+                                            className="w-full"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="duration">
+                                            Exam Duration (minutes)
+                                        </Label>
+                                        <Input
+                                            id="duration"
+                                            type="number"
+                                            placeholder="Enter duration in minutes"
+                                            value={duration}
+                                            onChange={(e) =>
+                                                setDuration(e.target.value)
+                                            }
+                                            className="w-full"
+                                            min="1"
+                                            max="300"
+                                        />
+                                    </div>
+                                </div>
+
                                 <PdfDropZone
-                                    onFilesChange={(files) =>
-                                        setHasFiles(files.length > 0)
-                                    }
+                                    onFilesChange={handleFilesChange}
                                 />
                                 {hasFiles && (
                                     <>
@@ -103,27 +212,16 @@ export default function HomePage() {
                                                 />
                                             </div>
                                         )}
+
                                         <Button
                                             variant="outline"
-                                            onClick={async () => {
-                                                setLoading(true);
-                                                setCurrentStep(0);
-                                                // Animate progress bar
-                                                for (
-                                                    let i = 0;
-                                                    i < progressSteps.length;
-                                                    i++
-                                                ) {
-                                                    setCurrentStep(i);
-                                                    await new Promise((res) =>
-                                                        setTimeout(res, 400)
-                                                    );
-                                                }
-                                                setLoading(false);
-                                                router.push('/dashboard');
-                                            }}
+                                            onClick={handleSubmit}
                                             className="bg-white hover:bg-gray-50 mt-4"
-                                            disabled={loading}
+                                            disabled={
+                                                loading ||
+                                                !title.trim() ||
+                                                !duration.trim()
+                                            }
                                         >
                                             {loading
                                                 ? 'Đang xử lý...'

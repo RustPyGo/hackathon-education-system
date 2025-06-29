@@ -89,8 +89,8 @@ export function PdfDropZone({
                 </FileUploadTrigger>
             </FileUploadDropzone>
             <FileUploadList>
-                {files.map((file) => (
-                    <FileUploadItem key={file.name} value={file}>
+                {files.map((file, index) => (
+                    <FileUploadItem key={index} value={file}>
                         <FileUploadItemPreview />
                         <FileUploadItemMetadata />
                         <FileUploadItemDelete asChild>

@@ -1,5 +1,5 @@
 import { PracticeQuestionList } from '@/components/practice-question-list';
-import { getQuestions } from '@/service/question';
+import { fetchQuestions } from '@/service/flashcard/api';
 
 export default async function Page({
     params,
@@ -7,7 +7,8 @@ export default async function Page({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const questions = await getQuestions(id);
+
+    const questions = await fetchQuestions(id);
 
     return (
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
