@@ -99,6 +99,24 @@ class GenerateQuestionsRequest(BaseModel):
             raise ValueError('Số câu hỏi phải từ 1 đến 300')
         return v
 
+# ===== CHAT API MODELS =====
+class ChatData(BaseModel):
+    """Model cho chat request data"""
+    file_name: str
+    message: str
+
+class ChatRequest(BaseModel):
+    """Model cho chat request"""
+    data: ChatData
+
+class ChatResponseData(BaseModel):
+    """Model cho chat response data"""
+    message: str
+
+class ChatResponse(BaseModel):
+    """Model cho chat response"""
+    data: ChatResponseData
+
 # ===== LEGACY MODELS (keep for backward compatibility) =====
 class QuestionRequest(BaseModel):
     """Model cho request tạo câu hỏi (legacy - single file)"""
@@ -553,9 +571,10 @@ async def root():
             "question_distribution": "equal_split"
         },
         "endpoints": {
-            "POST /api/generate-questions-sync": "Tạo câu hỏi từ nhiều file (sync, ≤100 câu)",
+            "POST /api/generate-questions-sync": "Tạo câu hỏi từ nhiều file (sync, ≤300 câu)",
             "POST /api/generate-questions": "Tạo câu hỏi từ nhiều file (async, ≤200 câu)",
             "POST /api/generate-questions-single-sync": "Tạo câu hỏi từ 1 file (legacy)",
+            "POST /api/chat": "Chat với document đã cache (file_name + message)",
             "GET /api/health": "Health check với cache info",
             "GET /api/cache/info": "Thông tin cache system",
             "DELETE /api/cache/clear": "Xóa cache",
@@ -1437,3 +1456,186 @@ async def clear_cache():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Lỗi clear cache: {str(e)}")
+
+# ===== CHAT FUNCTIONALITY =====
+class ChatSystem:
+    """Hệ thống chat sử dụng cached content từ question generator"""
+    
+    def __init__(self):
+        self.openai_api_key = os.getenv('OPENAI_API_KEY')
+        if not self.openai_api_key:
+            logger.error("Missing OPENAI_API_KEY")
+            
+    def get_cached_content(self, file_name: str) -> Optional[str]:
+        """Lấy nội dung đã cache từ file_name"""
+        try:
+            # Kiểm tra cache folder
+            cache_dir = Path("cache")
+            if not cache_dir.exists():
+                logger.warning("Cache directory not found")
+                return None
+            
+            # Tạo hash từ file_name để tìm cache file
+            file_hash = hashlib.md5(file_name.encode()).hexdigest()
+            
+            # Tìm file cache theo pattern hash_content.txt
+            cache_files = list(cache_dir.glob(f"{file_hash}_content.txt"))
+            
+            if not cache_files:
+                # Thử tìm file cache theo pattern khác
+                cache_files = list(cache_dir.glob(f"*_content.txt"))
+                # Filter theo tên file nếu có metadata
+                for cache_file in cache_files:
+                    try:
+                        # Đọc một phần file để check nếu match
+                        with open(cache_file, 'r', encoding='utf-8') as f:
+                            content_preview = f.read(500)
+                            if file_name.lower() in content_preview.lower():
+                                cache_files = [cache_file]
+                                break
+                    except:
+                        continue
+                
+            if cache_files:
+                # Lấy file cache mới nhất
+                latest_cache = max(cache_files, key=lambda x: x.stat().st_mtime)
+                with open(latest_cache, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    logger.info(f"Found cached content for {file_name}: {len(content)} chars")
+                    return content
+            
+            # Thử check trong cache/content/ subfolder
+            content_dir = cache_dir / "content"
+            if content_dir.exists():
+                content_files = list(content_dir.glob(f"*{file_name}*")) + list(content_dir.glob("*.txt"))
+                if content_files:
+                    latest_file = max(content_files, key=lambda x: x.stat().st_mtime)
+                    with open(latest_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        logger.info(f"Found content in subfolder for {file_name}: {len(content)} chars")
+                        return content
+            
+            logger.warning(f"No cached content found for file: {file_name}")
+            logger.info(f"Available cache files: {[f.name for f in cache_dir.glob('*_content.txt')]}")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error reading cached content for {file_name}: {e}")
+            return None
+    
+    def generate_chat_response(self, file_name: str, user_message: str) -> str:
+        """Tạo response cho chat dựa trên cached content"""
+        try:
+            # Lấy cached content
+            cached_content = self.get_cached_content(file_name)
+            
+            if not cached_content:
+                return "I'm sorry, I don't have access to the document content. Please make sure the file has been processed through the question generation system first."
+            
+            # Tạo prompt cho OpenAI
+            # Lấy relevant content (first 2000 chars để tránh token limit)
+            content_sample = cached_content[:2000] if len(cached_content) > 2000 else cached_content
+            
+            prompt = f"""You are an AI assistant helping students understand educational content. Based on the following document content, please answer the student's question accurately and helpfully.
+
+Document Content:
+{content_sample}
+
+Student Question: {user_message}
+
+Instructions:
+- Answer based on the document content provided
+- Be educational and helpful
+- If the question is not related to the document, politely redirect to document topics
+- Keep answers clear and concise
+- Use English for the response
+
+Answer:"""
+
+            # Gọi OpenAI API
+            response = self.call_openai_api(prompt)
+            
+            if response:
+                return response
+            else:
+                return "I'm having trouble processing your question right now. Please try again."
+                
+        except Exception as e:
+            logger.error(f"Error generating chat response: {e}")
+            return "I encountered an error while processing your question. Please try again."
+    
+    def call_openai_api(self, prompt: str) -> Optional[str]:
+        """Gọi OpenAI API để tạo response"""
+        try:
+            headers = {
+                'Authorization': f'Bearer {self.openai_api_key}',
+                'Content-Type': 'application/json'
+            }
+            
+            data = {
+                'model': 'gpt-3.5-turbo',
+                'messages': [
+                    {
+                        'role': 'user',
+                        'content': prompt
+                    }
+                ],
+                'max_tokens': 500,
+                'temperature': 0.7
+            }
+            
+            response = requests.post(
+                'https://api.openai.com/v1/chat/completions',
+                headers=headers,
+                json=data,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content'].strip()
+            else:
+                logger.error(f"OpenAI API error: {response.status_code} - {response.text}")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Error calling OpenAI API: {e}")
+            return None
+
+# Khởi tạo chat system
+chat_system = ChatSystem()
+
+# ===== CHAT API ENDPOINTS =====
+@app.post("/api/chat", response_model=ChatResponse)
+async def chat_with_document(request: ChatRequest):
+    """
+    API chat với document đã được cache
+    """
+    try:
+        logger.info(f"Chat request for file: {request.data.file_name}")
+        logger.info(f"User message: {request.data.message}")
+        
+        # Validate input
+        if not request.data.file_name.strip():
+            raise HTTPException(status_code=400, detail="file_name is required")
+        
+        if not request.data.message.strip():
+            raise HTTPException(status_code=400, detail="message is required")
+        
+        # Generate response
+        response_message = chat_system.generate_chat_response(
+            request.data.file_name,
+            request.data.message
+        )
+        
+        return ChatResponse(
+            data=ChatResponseData(message=response_message)
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Chat API error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+# ===== END HELPER FUNCTIONS =====

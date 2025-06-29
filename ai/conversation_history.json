@@ -1,11 +1,5 @@
 [
   {
-    "timestamp": "2025-06-29 03:54:38",
-    "question": "hi",
-    "answer": "Xin lỗi, tôi không thể tìm thấy câu hỏi hiện tại để trả lời. Bạn có thể cung cấp lại câu hỏi để tôi có thể hỗ trợ bạn không?",
-    "extended_knowledge": "- \"Hi\" là một từ chào hỏi thông thường trong tiếng Anh, thường được sử dụng để bắt đầu một cuộc trò chuyện hoặc giao tiếp.\n- Trong giao tiếp hàng ngày, việc chào hỏi là một phần quan trọng để tạo ra môi trường giao tiếp thoải mái và thân thiện.\n- Ngoài việc sử dụng \"hi\", có nhiều cách khác để chào hỏi nhau như \"hello\", \"hey\", \"howdy\", v.v.\n- Cách chào hỏi còn phụ thuộc vào văn hóa và quy tắc xã hội của từng quốc gia, vì vậy khi giao tiếp với người nước ngoài, bạn cần hiểu và tôn trọng các phong tục địa phương."
-  },
-  {
     "timestamp": "2025-06-29 03:54:57",
     "question": "hello",
     "answer": "Xin chào! Có điều gì bạn cần trợ giúp không? Bạn có thể chia sẻ thêm thông tin hoặc câu hỏi cụ thể để tôi có thể hỗ trợ bạn tốt hơn.",
@@ -58,5 +52,11 @@
     "question": "tài liệu này đang nói về gì vậy ?",
     "answer": "Tài liệu hiện đang nói về khái niệm về kỹ thuật phần mềm trong ngành công nghiệp công nghệ thông tin. Nó bắt đầu với ý tưởng về vòng đời phần mềm và sau đó giới thiệu hai mô hình phát triển phổ biến: mô hình thác nước và mô hình tăng dần. Tài liệu cũng đề cập đến bốn giai đoạn trong quá trình phát triển phần mềm: phân tích, thiết kế, triển khai và kiểm thử. Nó cũng đề cập đến sự quan trọng của tài liệu trong kỹ thuật phần mềm và phân biệt giữa tài liệu người dùng, tài liệu hệ thống và tài liệu kỹ thuật.",
     "extended_knowledge": "- Kỹ thuật phần mềm là một lĩnh vực quan trọng trong công nghệ thông tin, đóng vai trò quan trọng trong việc phát triển các ứng dụng phần mềm chất lượng và hiệu quả.\n- Mô hình thác nước và mô hình tăng dần là hai trong số nhiều mô hình phát triển phần mềm phổ biến, mỗi mô hình có những ưu điểm và hạn chế riêng.\n- Quá trình phát triển phần mềm thường bao gồm các bước phân tích yêu cầu, thiết kế hệ thống, triển khai và kiểm thử để đảm bảo chất lượng và tính ổn định của phần mềm.\n- Tài liệu trong kỹ thuật phần mềm đóng vai trò quan trọng trong việc truyền đạt thông tin, hướng dẫn sử dụng và bảo trì phần mềm sau khi triển khai.\n- Tài liệu người dùng, tài liệu hệ thống và tài liệu kỹ thuật đều có vai trò quan trọng trong việc hỗ trợ quá trình phát triển và sử dụng phần mềm một cách hiệu quả."
+  },
+  {
+    "timestamp": "2025-06-29 11:56:35",
+    "question": "hello",
+    "answer": "Xin chào! Bạn có câu hỏi cụ thể nào cần trợ giúp không? Bạn có thể chia sẻ thông tin hoặc câu hỏi để tôi có thể hỗ trợ bạn.",
+    "extended_knowledge": "- Xin chào là một cách chào hỏi thông dụng trong nhiều ngôn ngữ trên thế giới.\n- Việc chào hỏi và kết nối với người khác là rất quan trọng trong giao tiếp hàng ngày.\n- Khi chào hỏi, ngoài cách nói \"hello\", còn có nhiều cách khác như \"hi\", \"hey\", \"good morning/afternoon/evening\", tùy theo thời điểm trong ngày."
   }
 ]
