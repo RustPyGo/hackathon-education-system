@@ -31,7 +31,7 @@ func (r *projectRepository) Create(project *models.Project) error {
 
 func (r *projectRepository) GetByID(id string) (*models.Project, error) {
 	var project models.Project
-	err := r.db.First(&project, "id = ?", id).Error
+	err := r.db.Preload("Questions.Choices").First(&project, "id = ?", id).Error
 	if err != nil {
 		return nil, err
 	}
@@ -40,13 +40,13 @@ func (r *projectRepository) GetByID(id string) (*models.Project, error) {
 
 func (r *projectRepository) GetAll() ([]models.Project, error) {
 	var projects []models.Project
-	err := r.db.Find(&projects).Error
+	err := r.db.Preload("Questions.Choices").Find(&projects).Error
 	return projects, err
 }
 
 func (r *projectRepository) GetByAccountID(accountID string) ([]models.Project, error) {
 	var projects []models.Project
-	err := r.db.Where("account_id = ?", accountID).Find(&projects).Error
+	err := r.db.Preload("Questions.Choices").Where("user_id = ?", accountID).Find(&projects).Error
 	return projects, err
 }
 
