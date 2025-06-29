@@ -33,10 +33,17 @@ export async function fetchProject(projectId: string): Promise<Project> {
     return { ...MOCK_PROJECT, id: projectId };
 }
 
-export async function fetchPdfFiles(
-    projectId: string
-): Promise<{ label: string; url: string }[]> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function fetchPdfFiles(): Promise<
+    { label: string; url: string }[]
+> {
     await new Promise((res) => setTimeout(res, 200));
     // Always return the mock pdf files for the demo
     return MOCK_PDF_FILES;
+}
+
+export async function getOverview(): Promise<Overview> {
+    // In real API, fetch from server using projectId
+    // Here, just return mock data
+    return Promise.resolve(MOCK_OVERVIEW);
 }

@@ -19,7 +19,7 @@ export const mockFlashCards: FlashCard[] = [
 ];
 
 // Mock API: get flashcards by projectId
-export async function getFlashCards(projectId: string): Promise<FlashCard[]> {
+export async function getFlashCards(): Promise<FlashCard[]> {
     // In real API, fetch from server using projectId
     // Here, just return mock data
     return Promise.resolve(mockFlashCards);

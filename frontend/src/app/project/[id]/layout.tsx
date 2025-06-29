@@ -24,7 +24,6 @@ export default function ProjectLayout({
                 <ProjectSidebar
                     project={project}
                     activeSection={activeSection}
-                    onSectionChange={setActiveSection}
                 />
             )}
             <SidebarInset>

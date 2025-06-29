@@ -10,11 +10,13 @@ import UserMessage from '@/components/user-message';
 import { fetchMessages, sendMessageApi } from '@/service/chat/api';
 import type { ChatMessage } from '@/service/chat/type';
 import { withAuth } from '@workos-inc/authkit-nextjs';
-import { Bot, Send, User } from 'lucide-react';
+import { Bot, Send } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-export default function Page() {
-    const [user, setUser] = useState<any>(null);
+export default function ChatPage() {
+    const [user, setUser] = useState<{ id: string; name?: string } | null>(
+        null
+    );
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isInitialLoading, setIsInitialLoading] = useState(true);

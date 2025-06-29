@@ -14,7 +14,7 @@ import { Brain } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FileCard } from '@/components/file-card';
 
-const page = () => {
+function ProjectPage() {
     // State cho overview
     const [overview, setOverview] = useState<Overview | null>(null);
     const [loadingOverview, setLoadingOverview] = useState(true);
@@ -28,7 +28,7 @@ const page = () => {
             setOverview(data);
             setLoadingOverview(false);
         });
-        fetchPdfFiles('12345').then((files) => setPdfFiles(files));
+        fetchPdfFiles().then((files) => setPdfFiles(files));
     }, []);
 
     return (
@@ -139,6 +139,6 @@ const page = () => {
             </div> */}
         </div>
     );
-};
+}
 
-export default page;
+export default ProjectPage;

@@ -3,7 +3,6 @@
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -16,23 +15,18 @@ import {
 import type { Project } from '@/service/overview/type';
 import { BookOpen, Brain, FileText, MessageSquare, Trophy } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import type * as React from 'react';
 
 interface ProjectSidebarProps extends React.ComponentProps<typeof Sidebar> {
     project: Project;
     activeSection: string;
-    onSectionChange: (section: string) => void;
 }
 
 export function ProjectSidebar({
     project,
     activeSection,
-    onSectionChange,
     ...props
 }: ProjectSidebarProps) {
-    const router = useRouter();
-
     const navigationItems = [
         {
             id: 'overview',

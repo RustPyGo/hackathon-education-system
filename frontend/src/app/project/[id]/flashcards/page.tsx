@@ -17,7 +17,7 @@ import LoadingSpinner from '@/components/loading-spinner';
 import { FlashCard } from '@/service/flashcard/type';
 import { fetchFlashCardsMock } from '@/service/flashcard/api';
 
-export default function FlashcardPage() {
+function ProjectFlashcardsPage() {
     const searchParams = useSearchParams();
     const projectId = searchParams.get('projectId') || '';
     const [flashCards, setFlashCards] = useState<FlashCard[]>([]);
@@ -51,7 +51,7 @@ export default function FlashcardPage() {
         };
         window.addEventListener('keydown', handleKeyPress);
         return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [isFlipped, currentIndex, flashCards]);
+    }, [isFlipped, currentIndex]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
     const handleNext = () => {
         if (currentIndex < flashCards.length - 1) {
@@ -292,3 +292,5 @@ export default function FlashcardPage() {
         </div>
     );
 }
+
+export default ProjectFlashcardsPage;

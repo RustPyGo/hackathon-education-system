@@ -42,7 +42,7 @@ const MOCK_MESSAGES: ChatMessage[] = [
 
 export async function fetchMessages(
     projectId: string,
-    _userId: string
+    _userId: string // eslint-disable-line @typescript-eslint/no-unused-vars
 ): Promise<ChatMessage[]> {
     // Mock: always return the same messages for the project
     await new Promise((res) => setTimeout(res, 400));
