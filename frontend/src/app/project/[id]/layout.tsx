@@ -11,7 +11,7 @@ export default function ProjectLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const [activeSection, setActiveSection] = useState('overview');
+    const [activeSection] = useState('overview');
     const [project, setProject] = useState<Project | null>(null);
 
     useEffect(() => {

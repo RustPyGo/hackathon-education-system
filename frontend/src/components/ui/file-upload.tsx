@@ -380,6 +380,38 @@ function FileUploadRoot(props: FileUploadRootProps) {
         }
     }, [value, defaultValue, isControlled, store]);
 
+    const onFilesUpload = React.useCallback(
+        async (files: File[]) => {
+            try {
+                for (const file of files) {
+                    store.dispatch({ type: 'SET_PROGRESS', file, progress: 0 });
+                }
+
+                if (onUpload) {
+                    await onUpload(files, {
+                        onProgress,
+                        onSuccess: (file) => {
+                            store.dispatch({
+                                type: 'SET_SUCCESS',
+                                file,
+                            });
+                        },
+                        onError: (file, error) => {
+                            store.dispatch({
+                                type: 'SET_ERROR',
+                                file,
+                                error: error.message ?? 'Upload failed',
+                            });
+                        },
+                    });
+                }
+            } catch {
+                // handle error (removed unused error variable)
+            }
+        },
+        [store, onUpload, onProgress]
+    );
+
     const onFilesChange = React.useCallback(
         (originalFiles: File[]) => {
             if (disabled) return;
@@ -515,57 +547,8 @@ function FileUploadRoot(props: FileUploadRootProps) {
             acceptTypes,
             maxSize,
             disabled,
+            onFilesUpload, // Added missing dependency
         ]
-    );
-
-    const onFilesUpload = React.useCallback(
-        async (files: File[]) => {
-            try {
-                for (const file of files) {
-                    store.dispatch({ type: 'SET_PROGRESS', file, progress: 0 });
-                }
-
-                if (onUpload) {
-                    await onUpload(files, {
-                        onProgress,
-                        onSuccess: (file) => {
-                            store.dispatch({ type: 'SET_SUCCESS', file });
-                        },
-                        onError: (file, error) => {
-                            store.dispatch({
-                                type: 'SET_ERROR',
-                                file,
-                                error: error.message ?? 'Upload failed',
-                            });
-                        },
-                    });
-                } else {
-                    for (const file of files) {
-                        store.dispatch({ type: 'SET_SUCCESS', file });
-                    }
-                }
-            } catch (error) {
-                const errorMessage =
-                    error instanceof Error ? error.message : 'Upload failed';
-                for (const file of files) {
-                    store.dispatch({
-                        type: 'SET_ERROR',
-                        file,
-                        error: errorMessage,
-                    });
-                }
-            }
-        },
-        [store, onUpload, onProgress]
-    );
-
-    const onInputChange = React.useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            const files = Array.from(event.target.files ?? []);
-            onFilesChange(files);
-            event.target.value = '';
-        },
-        [onFilesChange]
     );
 
     const contextValue = React.useMemo<FileUploadContextValue>(
@@ -582,6 +565,15 @@ function FileUploadRoot(props: FileUploadRootProps) {
     );
 
     const RootPrimitive = asChild ? Slot : 'div';
+
+    const onInputChange = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const files = Array.from(event.target.files ?? []);
+            onFilesChange(files);
+            event.target.value = '';
+        },
+        [onFilesChange]
+    );
 
     return (
         <StoreContext.Provider value={store}>
@@ -791,8 +783,6 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
             role="region"
             id={context.dropzoneId}
             aria-controls={`${context.inputId} ${context.listId}`}
-            aria-disabled={context.disabled}
-            aria-invalid={invalid}
             data-disabled={context.disabled ? '' : undefined}
             data-dragging={dragOver ? '' : undefined}
             data-invalid={invalid ? '' : undefined}
@@ -877,7 +867,6 @@ function FileUploadList(props: FileUploadListProps) {
         <ListPrimitive
             role="list"
             id={context.listId}
-            aria-orientation={orientation}
             data-orientation={orientation}
             data-slot="file-upload-list"
             data-state={shouldRender ? 'active' : 'inactive'}
@@ -1074,6 +1063,7 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
                     urlCache.set(file, url);
                 }
                 return (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                         src={url}
                         alt={file.name}

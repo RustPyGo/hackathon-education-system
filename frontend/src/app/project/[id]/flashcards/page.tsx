@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -36,6 +36,20 @@ function ProjectFlashcardsPage() {
         fetchData();
     }, [projectId]);
 
+    const handleNext = useCallback(() => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex < flashCards.length - 1 ? prevIndex + 1 : prevIndex
+        );
+        setIsFlipped(false);
+    }, [flashCards.length]);
+
+    const handlePrevious = useCallback(() => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex > 0 ? prevIndex - 1 : prevIndex
+        );
+        setIsFlipped(false);
+    }, []);
+
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
             if (e.code === 'Space') {
@@ -51,21 +65,7 @@ function ProjectFlashcardsPage() {
         };
         window.addEventListener('keydown', handleKeyPress);
         return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [isFlipped, currentIndex]); // eslint-disable-next-line react-hooks/exhaustive-deps
-
-    const handleNext = () => {
-        if (currentIndex < flashCards.length - 1) {
-            setCurrentIndex(currentIndex + 1);
-            setIsFlipped(false);
-        }
-    };
-
-    const handlePrevious = () => {
-        if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
-            setIsFlipped(false);
-        }
-    };
+    }, [isFlipped, currentIndex, handleNext, handlePrevious]);
 
     const handleShuffle = () => {
         const shuffled = [...flashCards].sort(() => Math.random() - 0.5);

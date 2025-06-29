@@ -33,7 +33,6 @@ export async function fetchProject(projectId: string): Promise<Project> {
     return { ...MOCK_PROJECT, id: projectId };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function fetchPdfFiles(): Promise<
     { label: string; url: string }[]
 > {
