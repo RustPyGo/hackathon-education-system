@@ -11,7 +11,7 @@ import (
 )
 
 type FileInfo struct {
-	URL      string `json:"url"`
+	FileURL  string `json:"file_url"`
 	FileName string `json:"file_name"`
 }
 
@@ -105,7 +105,7 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 	aiRequest := &AIQuestionRequest{
 		Files: []FileInfo{
 			{
-				URL:      uploadResult.URL,
+				FileURL:  uploadResult.URL,
 				FileName: uploadResult.FileName,
 			},
 		},
@@ -179,7 +179,7 @@ func (ps *ProjectService) CreateProject(project *models.Project, pdfFile *multip
 	// 7. Prepare file info for response
 	files := []FileInfo{
 		{
-			URL:      uploadResult.URL,
+			FileURL:  uploadResult.URL,
 			FileName: uploadResult.FileName,
 		},
 	}
@@ -225,7 +225,7 @@ func (ps *ProjectService) CreateProjectWithMultiplePDFs(project *models.Project,
 			return nil, fmt.Errorf("failed to create document record: %w", err)
 		}
 		files = append(files, FileInfo{
-			URL:      uploadResult.URL,
+			FileURL:  uploadResult.URL,
 			FileName: uploadResult.FileName,
 		})
 	}
