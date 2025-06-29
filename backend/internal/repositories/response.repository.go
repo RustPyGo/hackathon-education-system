@@ -13,6 +13,9 @@ type IResponseRepository interface {
 	GetByProjectID(projectID string) ([]models.Response, error)
 	GetByUserID(userID string) ([]models.Response, error)
 	GetByQuestionID(questionID string) ([]models.Response, error)
+	GetAllSortedByScore() ([]models.Response, error)
+	GetByProjectIDSortedByScore(projectID string) ([]models.Response, error)
+	GetByUserIDSortedByScore(userID string) ([]models.Response, error)
 	Update(response *models.Response) error
 	Delete(id string) error
 }
@@ -61,6 +64,24 @@ func (r *responseRepository) GetByUserID(userID string) ([]models.Response, erro
 func (r *responseRepository) GetByQuestionID(questionID string) ([]models.Response, error) {
 	var responses []models.Response
 	err := r.db.Where("question_id = ?", questionID).Find(&responses).Error
+	return responses, err
+}
+
+func (r *responseRepository) GetAllSortedByScore() ([]models.Response, error) {
+	var responses []models.Response
+	err := r.db.Order("score DESC, time_taken ASC").Find(&responses).Error
+	return responses, err
+}
+
+func (r *responseRepository) GetByProjectIDSortedByScore(projectID string) ([]models.Response, error) {
+	var responses []models.Response
+	err := r.db.Where("project_id = ?", projectID).Order("score DESC, time_taken ASC").Find(&responses).Error
+	return responses, err
+}
+
+func (r *responseRepository) GetByUserIDSortedByScore(userID string) ([]models.Response, error) {
+	var responses []models.Response
+	err := r.db.Where("user_id = ?", userID).Order("score DESC, time_taken ASC").Find(&responses).Error
 	return responses, err
 }
 

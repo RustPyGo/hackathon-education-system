@@ -23,6 +23,9 @@ func (rr *ResponseRouter) InitResponseRouter(Router *gin.RouterGroup) {
 		responsePublicRouter.GET("/:id", responseController.GetResponseByID)
 		responsePublicRouter.GET("/project/:projectId", responseController.GetResponsesByProjectID)
 		responsePublicRouter.GET("/user/:userId", responseController.GetResponsesByUserID)
+		responsePublicRouter.GET("/sorted/score", responseController.GetAllResponsesSortedByScore)
+		responsePublicRouter.GET("/project/:projectId/sorted/score", responseController.GetResponsesByProjectIDSortedByScore)
+		responsePublicRouter.GET("/user/:userId/sorted/score", responseController.GetResponsesByUserIDSortedByScore)
 		responsePublicRouter.PUT("/:id", responseController.UpdateResponse)
 		responsePublicRouter.DELETE("/:id", responseController.DeleteResponse)
 	}

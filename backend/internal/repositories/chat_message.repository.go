@@ -12,6 +12,7 @@ type IChatMessageRepository interface {
 	GetByProjectID(projectID string) ([]models.ChatMessage, error)
 	Update(chatMessage *models.ChatMessage) error
 	GetByProjectIDAndUserID(projectID, userID string) ([]models.ChatMessage, error)
+	GetLatestMessagesByProjectIDAndUserID(projectID, userID string, limit int) ([]models.ChatMessage, error)
 	Delete(id string) error
 }
 
@@ -28,6 +29,15 @@ func NewChatMessageRepository() IChatMessageRepository {
 func (r *chatMessageRepository) GetByProjectIDAndUserID(projectID, userID string) ([]models.ChatMessage, error) {
 	var chatMessages []models.ChatMessage
 	err := r.db.Where("project_id = ? AND user_id = ?", projectID, userID).Find(&chatMessages).Error
+	return chatMessages, err
+}
+
+func (r *chatMessageRepository) GetLatestMessagesByProjectIDAndUserID(projectID, userID string, limit int) ([]models.ChatMessage, error) {
+	var chatMessages []models.ChatMessage
+	err := r.db.Where("project_id = ? AND user_id = ?", projectID, userID).
+		Order("created_at DESC").
+		Limit(limit).
+		Find(&chatMessages).Error
 	return chatMessages, err
 }
 

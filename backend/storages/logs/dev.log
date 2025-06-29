@@ -220,3 +220,142 @@
 {"level":"INFO","time":"2025-06-29T11:37:04.502+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
 {"level":"INFO","time":"2025-06-29T11:37:04.814+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
 {"level":"INFO","time":"2025-06-29T11:37:04.814+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:20:47.998+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:20:48.003+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:20:48.004+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:20:48.218+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:20:48.218+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:23:34.222+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:23:34.228+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:23:34.230+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:23:34.542+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:23:34.543+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:26:23.357+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:26:23.362+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:26:23.363+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:26:23.577+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:26:23.577+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:27:20.834+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:27:20.839+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:27:20.840+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:27:21.046+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:27:21.046+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:28:13.491+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:28:13.496+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:28:13.497+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:28:13.707+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:28:13.707+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:28:59.340+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:28:59.345+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:28:59.345+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:28:59.556+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:28:59.556+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:30:20.028+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:30:20.033+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:30:20.033+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:30:20.240+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:30:20.241+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T12:30:59.181+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T12:30:59.187+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T12:30:59.188+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T12:30:59.405+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T12:30:59.405+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:19:09.679+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:19:09.684+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:19:09.685+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:19:09.900+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:19:09.901+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:24:34.750+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:24:34.755+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:24:34.755+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:24:34.966+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:24:34.966+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:30:15.894+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:30:15.901+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:30:15.902+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:30:16.211+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:30:16.211+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:33:46.902+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:33:46.909+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:33:46.910+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:33:47.269+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:33:47.270+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:37:17.730+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:37:17.736+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:37:17.737+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:37:17.943+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:37:17.944+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:39:14.194+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:39:14.201+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:39:14.202+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:39:14.542+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:39:14.543+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:39:39.200+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:39:39.207+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:39:39.208+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:39:39.533+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:39:39.534+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:40:48.803+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:40:48.809+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:40:48.810+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:40:49.133+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:40:49.134+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T13:44:31.232+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T13:44:31.240+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T13:44:31.241+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T13:44:31.555+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T13:44:31.556+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:20:19.119+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:20:19.132+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:20:19.134+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:20:19.343+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:20:19.343+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:39:19.488+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:39:19.493+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:39:19.493+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"ERROR","time":"2025-06-29T14:39:19.540+0700","caller":"initialize/migration.go:38","msg":"Failed to migrate database: ERROR: relation \"responses\" does not exist (SQLSTATE 42P01)","stacktrace":"github.com/RustPyGo/hackathon-education-system/backend/internal/initialize.AutoMigrate\n\t/Users/macbook/Documents/Hackathon/education-system/backend/internal/initialize/migration.go:38\ngithub.com/RustPyGo/hackathon-education-system/backend/internal/initialize.Init\n\t/Users/macbook/Documents/Hackathon/education-system/backend/internal/initialize/run.go:14\nmain.main\n\t/Users/macbook/Documents/Hackathon/education-system/backend/cmd/server/main.go:27\nruntime.main\n\t/usr/local/Cellar/go/1.24.2/libexec/src/runtime/proc.go:283"}
+{"level":"INFO","time":"2025-06-29T14:44:31.836+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:44:31.842+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:44:31.843+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:44:32.024+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:44:32.025+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:49:13.269+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:49:13.286+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:49:13.288+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:49:13.465+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:49:13.466+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:51:14.414+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:51:14.418+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:51:14.419+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:51:14.637+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:51:14.638+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:54:32.168+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:54:32.173+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:54:32.174+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:54:32.394+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:54:32.394+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T14:57:44.705+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T14:57:44.710+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T14:57:44.710+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T14:57:44.780+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T14:57:44.780+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T15:02:28.307+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T15:02:28.312+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T15:02:28.313+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T15:02:28.528+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T15:02:28.528+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T15:07:25.634+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T15:07:25.639+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T15:07:25.639+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T15:07:25.846+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T15:07:25.846+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T15:08:00.491+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T15:08:00.496+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T15:08:00.497+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T15:08:00.711+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T15:08:00.711+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}
+{"level":"INFO","time":"2025-06-29T15:10:03.383+0700","caller":"initialize/redis.go:48","msg":"Value from Redis","key":"key","value":"value"}
+{"level":"INFO","time":"2025-06-29T15:10:03.388+0700","caller":"initialize/database.go:33","msg":"Database connected successfully"}
+{"level":"INFO","time":"2025-06-29T15:10:03.388+0700","caller":"initialize/migration.go:15","msg":"UUID extension enabled successfully"}
+{"level":"INFO","time":"2025-06-29T15:10:03.597+0700","caller":"initialize/migration.go:42","msg":"Database migration completed successfully"}
+{"level":"INFO","time":"2025-06-29T15:10:03.598+0700","caller":"initialize/run.go:19","msg":"Server starting on port 3001"}

@@ -22,16 +22,16 @@ func AutoMigrate() {
 		panic("Failed to enable UUID extension: " + err.Error())
 	}
 
-	// Auto migrate all models
+	// Auto migrate all models in dependency order
 	err := global.DB.AutoMigrate(
-		&models.User{},
-		&models.Project{},
-		&models.ChatMessage{},
-		&models.Question{},
-		&models.Answer{},
-		&models.Response{},
-		&models.Document{},
-		&models.QuestionChoice{},
+		&models.User{},           // No dependencies
+		&models.Project{},        // Depends on User
+		&models.Document{},       // Depends on Project
+		&models.Question{},       // Depends on Project
+		&models.QuestionChoice{}, // Depends on Question
+		&models.Response{},       // Depends on Project and User
+		&models.Answer{},         // Depends on Response, Question, and QuestionChoice
+		&models.ChatMessage{},    // Depends on Project
 	)
 
 	if err != nil {

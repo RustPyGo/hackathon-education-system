@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/RustPyGo/hackathon-education-system/backend/global"
 	"github.com/sirupsen/logrus"
 )
 
@@ -38,8 +39,15 @@ type AIQuestionChoice struct {
 }
 
 type AIChatRequest struct {
-	Message   string `json:"message"`
-	ProjectID string `json:"project_id"`
+	Message     string        `json:"message"`
+	ProjectID   string        `json:"project_id"`
+	Files       []FileInfo    `json:"files"`
+	HistoryChat []ChatHistory `json:"history_chat"`
+}
+
+type ChatHistory struct {
+	Message string `json:"message"`
+	Sender  string `json:"sender"`
 }
 
 type AIChatResponse struct {
@@ -58,9 +66,9 @@ type AIService struct {
 }
 
 func NewAIService() IAIService {
-	// TODO: Load from config
-	apiURL := "https://e2e5-118-69-69-187.ngrok-free.app" // Change to your AI API base URL
-	apiKey := "1234567890"                                // Change to your API key
+	// Load from global config
+	apiURL := global.Config.AI.APIURL
+	apiKey := global.Config.AI.APIKey
 
 	return &AIService{
 		apiURL: apiURL,
@@ -156,20 +164,21 @@ func (ai *AIService) GenerateChatResponse(request *AIChatRequest) (*AIChatRespon
 		"operation":      "GenerateChatResponse",
 		"project_id":     request.ProjectID,
 		"message_length": len(request.Message),
-		"api_url":        ai.apiURL + "/chat",
+		"api_url":        ai.apiURL + "/api/chat",
 	})
 
 	logEntry.Info("Starting AI chat response generation")
 
-	// Prepare request body
-	requestBody, err := json.Marshal(request)
+	// Prepare request body (wrap in {"data": ...})
+	wrapped := map[string]interface{}{"data": request}
+	requestBody, err := json.Marshal(wrapped)
 	if err != nil {
 		logEntry.WithError(err).Error("Failed to marshal chat request")
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	// Create HTTP request
-	req, err := http.NewRequest("POST", ai.apiURL+"/chat", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", ai.apiURL+"/api/chat", bytes.NewBuffer(requestBody))
 	if err != nil {
 		logEntry.WithError(err).Error("Failed to create HTTP request for chat")
 		return nil, fmt.Errorf("failed to create request: %w", err)
@@ -195,6 +204,9 @@ func (ai *AIService) GenerateChatResponse(request *AIChatRequest) (*AIChatRespon
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
+	// Log raw response body for debugging
+	logEntry.WithField("raw_response", string(body)).Info("Raw AI response body")
+
 	// Check response status
 	if resp.StatusCode != http.StatusOK {
 		logEntry.WithFields(logrus.Fields{
@@ -204,11 +216,23 @@ func (ai *AIService) GenerateChatResponse(request *AIChatRequest) (*AIChatRespon
 		return nil, fmt.Errorf("AI API returned status %d: %s", resp.StatusCode, string(body))
 	}
 
-	// Parse response
+	// Parse response - try both formats
 	var aiResponse AIChatResponse
-	if err := json.Unmarshal(body, &aiResponse); err != nil {
-		logEntry.WithError(err).WithField("response_body", string(body)).Error("Failed to unmarshal AI chat response")
-		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+
+	// First, try to parse as direct response
+	if err := json.Unmarshal(body, &aiResponse); err == nil && aiResponse.Message != "" {
+		logEntry.Info("Successfully parsed direct response format")
+	} else {
+		// If direct parsing failed or message is empty, try wrapped format
+		var wrapper struct {
+			Data AIChatResponse `json:"data"`
+		}
+		if err := json.Unmarshal(body, &wrapper); err != nil {
+			logEntry.WithError(err).WithField("response_body", string(body)).Error("Failed to unmarshal AI chat response")
+			return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+		}
+		aiResponse = wrapper.Data
+		logEntry.Info("Successfully parsed wrapped response format")
 	}
 
 	duration := time.Since(start)

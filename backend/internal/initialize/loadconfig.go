@@ -43,6 +43,10 @@ func LoadConfig() {
 			SecretKey: getEnv("AWS_SECRET_KEY", ""),
 			Endpoint:  getEnv("AWS_ENDPOINT", ""),
 		},
+		AI: setting.AISetting{
+			APIURL: getEnv("AI_API_URL", "https://7342-118-69-69-187.ngrok-free.app"),
+			APIKey: getEnv("AI_API_KEY", "1234567890"),
+		},
 		CORS: setting.CORSSetting{
 			AllowOrigins:     []string{"http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5173", "http://127.0.0.1:3000"},
 			AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},

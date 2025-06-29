@@ -30,7 +30,7 @@ func (r *questionRepository) Create(question *models.Question) error {
 
 func (r *questionRepository) GetByID(id string) (*models.Question, error) {
 	var question models.Question
-	err := r.db.First(&question, "id = ?", id).Error
+	err := r.db.Preload("Choices").First(&question, "id = ?", id).Error
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (r *questionRepository) GetByID(id string) (*models.Question, error) {
 
 func (r *questionRepository) GetByProjectID(projectID string) ([]models.Question, error) {
 	var questions []models.Question
-	err := r.db.Where("project_id = ?", projectID).Find(&questions).Error
+	err := r.db.Preload("Choices").Where("project_id = ?", projectID).Find(&questions).Error
 	return questions, err
 }
 

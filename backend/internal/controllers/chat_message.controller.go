@@ -21,38 +21,40 @@ func NewChatMessageController(chatMessageService services.IChatMessageService) *
 
 // CreateChatMessage godoc
 // @Summary Create a new chat message
-// @Description Create a new chat message and get AI response
+// @Description Create a new chat message and get AI response with context from project documents and chat history
 // @Tags chat-messages
 // @Accept json
 // @Produce json
-// @Param message body models.ChatMessage true "Chat message"
-// @Success 201 {object} response.Response{data=[]models.ChatMessage}
+// @Param request body services.ChatMessageCreateRequest true "Chat message request"
+// @Success 201 {object} response.Response{data=services.ChatMessageCreateResult}
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
 // @Router /chat-message/ [post]
 func (cmc *ChatMessageController) CreateChatMessage(c *gin.Context) {
-	var chatMessage models.ChatMessage
-	if err := c.ShouldBindJSON(&chatMessage); err != nil {
-		response.ErrorResponse(c, http.StatusBadRequest, "Invalid request body")
+	var request services.ChatMessageCreateRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, "Invalid request body: "+err.Error())
 		return
 	}
 
-	// Ensure the message is marked as from user
-	chatMessage.Sender = "user"
-
 	// Validate required fields
-	if chatMessage.ProjectID == "" {
+	if request.ProjectID == "" {
 		response.ErrorResponse(c, http.StatusBadRequest, "Project ID is required")
 		return
 	}
 
-	if chatMessage.Message == "" {
+	if request.UserID == "" {
+		response.ErrorResponse(c, http.StatusBadRequest, "User ID is required")
+		return
+	}
+
+	if request.Message == "" {
 		response.ErrorResponse(c, http.StatusBadRequest, "Message is required")
 		return
 	}
 
 	// Create chat message with AI response
-	result, err := cmc.chatMessageService.CreateChatMessage(&chatMessage)
+	result, err := cmc.chatMessageService.CreateChatMessage(&request)
 	if err != nil {
 		response.ErrorResponse(c, http.StatusInternalServerError, "Failed to create chat message: "+err.Error())
 		return
